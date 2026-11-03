@@ -1,728 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark" style="--font-display: 'Syne', sans-serif; --font-body: 'Plus Jakarta Sans', sans-serif; --font-clock: 'Syne', sans-serif; --font-letter-spacing: -0.03em; --c-bg-1: #291C0E; --c-bg-2: #6E473B; --c-primary: #A78D78; --c-secondary: #BEB5A9; --c-tertiary: #E1D4C2;"><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
-        window.__firebase_config = firebaseConfig;
-        window.__initial_auth_token = initialAuthToken;
-        window.__app_id = appId;
-            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIwMjU2OTI2OTEzNjMwOTUxODQ2NSIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2NmYTNhNDk4NjBkODM0ZWJfaW5kZXguaHRtbC0yNTQifSwiZXhwIjoxNzkzNTQ5MTc2LCJpYXQiOjE3OTM1NDU1NzYsImFsZyI6IlJTMjU2In0.N9YfBhbeizj09cTkqLt_u9gGOB-wER7bu4CL8WmMn5sbJlhQKq8SqOhOle4OTxVrJgRe5fBAe8o0BYQvQ1W3eXzEJRbbQ8GLp9ieNMLCzrtVyXAjl-dxgO015sDOYGlHdfIuMPBNnsaoDfx6SHcNGW1XF7-nQdBlpRjxk1wh-XGpRw3qHrnlknC7L_emlG_UMnLQYYuOtJz6gdZqIPPsPE8z4tFCYEFxwvUAid1JsX2T_1iVDMmWT8YsNv30g7vp91kjv30FvtKxd6WQ5_AiNtc-P3mV3MbpdzNxfkeMGsl1vyacITF_88oqSu2aX0sbt891-OlarPwLXhUja5oV2w","c_cfa3a49860d834eb_index.html-254")</script><script data-bard-client-injected="true">
-  document.addEventListener('input', (event) => {
-    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
-      const clonedDoc = document.cloneNode(true);
-      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
-      injectedScripts.forEach(el => el.remove());
-      window.parent.postMessage({
-        type: 'inlineEdit',
-        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
-      }, '*');
-    }
-  });
-</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const SCROLL_KEYS = new Set([
-    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
-    ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End',
-  ]);
-  const HORIZONTAL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
-
-  function isTextEntryTarget(target) {
-    if (!target) return false;
-    const tagName = target.tagName;
-    return tagName === 'INPUT' || tagName === 'TEXTAREA' ||
-        tagName === 'SELECT' || target.isContentEditable === true;
-  }
-
-  // An element absorbs the key only if it both overflows on the axis being
-  // scrolled and is configured to scroll on that axis. The cheap dimension
-  // test runs first because getComputedStyle forces a style recalc, and this
-  // runs on every keypress. Each axis is read from its own longhand: the
-  // 'overflow' shorthand serializes as two values when the axes differ, which
-  // is the common 'overflow-x: hidden; overflow-y: auto' pane.
-  function canScroll(node, horizontal) {
-    const overflows = horizontal ? node.scrollWidth > node.clientWidth
-                                 : node.scrollHeight > node.clientHeight;
-    if (!overflows) return false;
-    const style = window.getComputedStyle(node);
-    const overflow = horizontal ? style.overflowX : style.overflowY;
-    return overflow === 'auto' || overflow === 'scroll';
-  }
-
-  // Walks up from the event target so nested scrollers keep their behavior.
-  // <body> is included because pages that pin the root height make it the
-  // scroll container.
-  function hasScrollableAncestor(target, horizontal) {
-    let node = target;
-    while (node && node !== document.documentElement) {
-      if (canScroll(node, horizontal)) return true;
-      node = node.parentElement;
-    }
-    return false;
-  }
-
-  function rootCanScroll(horizontal) {
-    const scroller = document.scrollingElement || document.documentElement;
-    if (!scroller) return false;
-    // Tolerate a pixel of rounding so subpixel layouts do not look scrollable.
-    return horizontal ? scroller.scrollWidth > window.innerWidth + 1
-                      : scroller.scrollHeight > window.innerHeight + 1;
-  }
-
-  window.addEventListener('keydown', function(event) {
-    if (!SCROLL_KEYS.has(event.key)) return;
-    if (event.defaultPrevented) return;
-    // Alt and Meta turn arrows into browser history navigation, and Ctrl is
-    // reserved for shortcuts, so none of them are scroll intent.
-    if (event.altKey || event.metaKey || event.ctrlKey) return;
-
-    const target = event.target;
-    if (isTextEntryTarget(target)) return;
-
-    // Anything that can still absorb the scroll gets to keep it.
-    const horizontal = HORIZONTAL_KEYS.has(event.key);
-    if (rootCanScroll(horizontal)) return;
-    if (hasScrollableAncestor(target, horizontal)) return;
-
-    event.preventDefault();
-  }, {capture: true, passive: false});
-})();</script><script data-bard-client-injected="true">(function() {
-  // Ensure this script is executed only once
-  if (window.firebaseAuthBridgeScriptLoaded) {
-    return;
-  }
-  window.firebaseAuthBridgeScriptLoaded = true;
-
-  let nextTokenPromiseId = 0;
-
-  // Stores { resolve, reject } for ongoing token requests
-  const pendingTokenPromises = {};
-
-  // Listen for messages from the Host Application
-  window.addEventListener('message', function(event) {
-
-    const messageData = event.data;
-
-  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
-      const { success, token, error, promiseId } = messageData ?? {};
-      if (pendingTokenPromises[promiseId]) {
-        if (success) {
-          pendingTokenPromises[promiseId].resolve(token);
-        } else {
-          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
-        }
-        delete pendingTokenPromises[promiseId];
-      }
-    }
-  });
-
-  // Expose a function for the Generated App to request a new Firebase token
-  window.requestNewFirebaseToken = function() {
-    const currentPromiseId = nextTokenPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingTokenPromises[currentPromiseId] = { resolve, reject };
-    });
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'REQUEST_NEW_FIREBASE_TOKEN',
-        promiseId: currentPromiseId
-      }, '*');
-    } else {
-      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
-      delete pendingTokenPromises[currentPromiseId];
-    }
-    return promise;
-  };
-})();</script><script data-bard-client-injected="true">
-let realOriginalGetUserMedia = null;
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-}
-
-(function() {
-  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
-    try {
-      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
-        get: function() {
-          return undefined; // Or throw an error
-        },
-        configurable: false
-      });
-    } catch (error) {
-      console.error("Error defining prototype getter:", error);
-    }
-  }
-})();
-
-(function() {
-  const pendingMediaResolvers = {};
-  let nextMediaPromiseId = 0;
-
-  function requestMediaPermissions(constraints) {
-    const mediaPromiseId = nextMediaPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingMediaResolvers[mediaPromiseId] = (granted) => {
-        delete pendingMediaResolvers[mediaPromiseId];
-        resolve(granted);
-      };
-    });
-
-    window.parent.postMessage({
-      type: 'requestMediaPermission',
-      constraints: constraints,
-      promiseId: mediaPromiseId,
-    }, '*');
-
-    return promise;
-  }
-
-  let originalGetUserMedia = realOriginalGetUserMedia;
-
-  function interceptGetUserMedia() {
-    if (navigator.mediaDevices) {
-      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
-        value: function(constraints) {
-          return requestMediaPermissions(constraints).then((granted) => {
-            if (granted) {
-              if (originalGetUserMedia) {
-                return originalGetUserMedia(constraints);
-              } else {
-                throw new Error("Original getUserMedia not available.");
-              }
-            } else {
-              throw new DOMException('Permission denied', 'NotAllowedError');
-            }
-          });
-        },
-        writable: false,
-        configurable: false
-      });
-    }
-  }
-
-  interceptGetUserMedia();
-
-  const observer = new MutationObserver(function(mutationsList, observer) {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'childList' && mutation.addedNodes) {
-        mutation.addedNodes.forEach(node => {
-          if (node === navigator.mediaDevices) {
-            interceptGetUserMedia();
-          }
-        });
-      }
-    }
-  });
-
-  function interceptSpeechRecognition() {
-    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-      return;
-    }
-
-    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    const SpeechRecognitionWrapper = function(...args) {
-      const recognizer = new OriginalSpeechRecognition(...args);
-      const originalStart = recognizer.start.bind(recognizer);
-
-      recognizer.start = function() {
-        requestMediaPermissions({ audio: true }).then(granted => {
-          if (granted) {
-            originalStart();
-          } else {
-            const errorEvent = new SpeechRecognitionErrorEvent('error');
-            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
-            recognizer.dispatchEvent(errorEvent);
-          }
-        });
-      };
-
-      return recognizer;
-    };
-
-    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
-    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
-
-    if (window.SpeechRecognition) {
-      window.SpeechRecognition = SpeechRecognitionWrapper;
-    }
-    if (window.webkitSpeechRecognition) {
-      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
-    }
-  }
-
-  interceptSpeechRecognition();
-
-  window.addEventListener('message', function(event) {
-    if (event.data) {
-      if (event.data.type === 'resolveMediaPermission') {
-        const { promiseId, granted } = event.data;
-        if (pendingMediaResolvers[promiseId]) {
-          pendingMediaResolvers[promiseId](granted);
-        }
-      }
-    }
-  });
-
-})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
-function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
-
- Copyright The Closure Library Authors.
- SPDX-License-Identifier: Apache-2.0
-*/
-function A(b,d){function e(){}e.prototype=d.prototype;b.j=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
-let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
-null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.i="";var l=0,t=null,r=null,q=[],F=new TextEncoder,G=new TextDecoder;
-c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*16|0;return(f===
-"x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;(g=t)==null||g.postMessage(a)}};
-Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
-(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
-url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
-</script><script data-bard-client-injected="true">((function(modelInformation) {
-  const originalFetch = window.fetch;
-  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
-  let googleLlmBaseApiUrls = [
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
-  ];
-  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-    );
-  });
-  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-
-  const pendingFetchResolvers = {};
-  let nextPromiseId = 0;
-
-  function handleStringInput(input, optionsArgument) {
-    const actualUrl = input;
-    const fetchCallArgs = [actualUrl, optionsArgument];
-    const effectiveOptions = optionsArgument || {};
-    const bodyForApiKeyCheck = effectiveOptions.body;
-    const bodyForPostMessage = effectiveOptions.body;
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  function handleRequestInput(input, optionsArgument) {
-    const actualUrl = input.url;
-    const fetchCallArgs = [input, optionsArgument];
-    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (optionsArgument) {
-      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
-      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
-      if ('body' in optionsArgument) {
-        bodyForApiKeyCheck = optionsArgument.body;
-        bodyForPostMessage = optionsArgument.body;
-      } else {
-        bodyForApiKeyCheck = undefined;
-        bodyForPostMessage = input.body;
-      }
-    } else {
-      bodyForApiKeyCheck = undefined;
-      bodyForPostMessage = input.body;
-    }
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  window.fetch = function(input, optionsArgument) {
-    let actualUrl;
-    let fetchCallArgs;
-    let effectiveOptions = {};
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (typeof input === 'string') {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
-    } else if (input instanceof Request) {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
-    } else {
-      return originalFetch.apply(window, [input, optionsArgument]);
-    }
-
-    effectiveOptions.method = effectiveOptions.method || 'GET';
-    if (!effectiveOptions.headers) {
-      effectiveOptions.headers = new Headers();
-    }
-
-
-    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
-      let apiKeyIsNull = true;
-
-      const regex = new RegExp("models/([^:]+)");
-      const modelNameMatch = actualUrl.match(regex);
-      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
-
-
-      try {
-        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
-        const apiKeyParam = urlObject.searchParams.get('key');
-        if (apiKeyParam) {
-          apiKeyIsNull = false;
-        }
-      } catch (e) {
-        // Continue checks even if URL parsing fails
-      }
-
-      if (apiKeyIsNull && effectiveOptions.headers) {
-        const h = new Headers(effectiveOptions.headers);
-        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
-        if (apiKeyHeaderValue) {
-          apiKeyIsNull = false;
-          return originalFetch.apply(window, fetchCallArgs);
-        }
-      }
-
-      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
-        try {
-          const bodyData = JSON.parse(bodyForApiKeyCheck);
-          if (bodyData && bodyData.apiKey) {
-            apiKeyIsNull = false;
-            return originalFetch.apply(window, fetchCallArgs);
-          }
-        } catch (e) {
-          // Ignore JSON parsing errors
-        }
-      }
-
-      if(apiKeyIsNull) {
-        const promiseId = nextPromiseId++;
-        const promise = new Promise((resolve) => {
-          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
-            delete pendingFetchResolvers[promiseId];
-            resolve(resolvedResponse);
-          };
-        });
-
-        let serializedBodyForPostMessage;
-        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
-            serializedBodyForPostMessage = bodyForPostMessage;
-        } else if (bodyForPostMessage instanceof ReadableStream) {
-            serializedBodyForPostMessage = null;
-        } else {
-            try {
-                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
-            } catch (e) {
-                serializedBodyForPostMessage = null;
-            }
-        }
-
-        const messageOptions = {
-            method: effectiveOptions.method,
-            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
-            body: serializedBodyForPostMessage
-        };
-
-        window.parent.postMessage({
-          type: 'requestFetch',
-          url: actualUrl,
-          modelName: modelName,
-          options: messageOptions,
-          promiseId: promiseId,
-        }, '*');
-
-        return promise;
-      }
-      return originalFetch.apply(window, fetchCallArgs);
-    }
-    return originalFetch.apply(window, fetchCallArgs);
-  };
-
-  window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'resolveFetch') {
-      const { promiseId, response } = event.data;
-      if (pendingFetchResolvers[promiseId]) {
-        try {
-          const reconstructedResponse = new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers: new Headers(response.headers),
-          });
-          pendingFetchResolvers[promiseId](reconstructedResponse);
-        } catch (error) {
-          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
-        }
-      }
-    }
-  });
-
-}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
-  function normalizeSlug(str) {
-    try {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^p{L}p{N}s_-]/gu, '')
-        .replace(/s+/g, '-');
-    } catch (e) {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9s_-]/g, '')
-        .replace(/s+/g, '-');
-    }
-  }
-
-  function findTargetElement(hash) {
-    if (!hash || hash === '#') {
-      return null;
-    }
-    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
-    let decodedId = rawId;
-    try {
-      decodedId = decodeURIComponent(rawId);
-    } catch (e) {
-      // Ignore URI malformed errors.
-    }
-
-    // 1. Direct ID match (raw and decoded).
-    let target = document.getElementById(rawId) || document.getElementById(decodedId);
-    if (target) {
-      return target;
-    }
-
-    // 2. Name attribute match (<a name="...">).
-    try {
-      if (typeof CSS !== 'undefined' && CSS.escape) {
-        target =
-          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
-          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
-      } else {
-        const namedElements = document.getElementsByName(rawId);
-        if (namedElements && namedElements.length > 0) {
-          return namedElements[0];
-        }
-      }
-    } catch (e) {
-      // Ignore querySelector syntax errors.
-    }
-    if (target) {
-      return target;
-    }
-
-    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
-    const targetSlug = normalizeSlug(decodedId);
-    if (targetSlug) {
-      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
-        if (normalizeSlug(heading.textContent || '') === targetSlug) {
-          return heading;
-        }
-      }
-    }
-
-    return null;
-  }
-
-  document.addEventListener('click', function(event) {
-    const target = event.target;
-    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
-    if (!anchor) {
-      return;
-    }
-
-    const href = anchor.getAttribute('href');
-    if (
-      !href ||
-      href.trim().toLowerCase().startsWith('javascript:') ||
-      anchor.hasAttribute('download')
-    ) {
-      return;
-    }
-
-    // Check if the link is an in-page hash / anchor link.
-    if (href.startsWith('#')) {
-      event.preventDefault();
-      const targetElement = findTargetElement(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-      }
-      return;
-    }
-
-    // Check if the URL has the same origin/pathname but with a hash.
-    try {
-      const url = new URL(anchor.href, window.location.href);
-      if (
-        url.hash &&
-        url.origin === window.location.origin &&
-        url.pathname === window.location.pathname
-      ) {
-        event.preventDefault();
-        const targetElement = findTargetElement(url.hash);
-        if (targetElement) {
-          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-        return;
-      }
-    } catch (e) {
-      // Fall through if URL parsing fails.
-    }
-
-    // For all external or full navigation links, prevent iframe-level navigation
-    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
-    // safely in a new tab/window.
-    if (anchor.target !== '_blank') {
-      event.preventDefault();
-      window.open(anchor.href, '_blank', 'noopener,noreferrer');
-    }
-  }, {capture: true});
-})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const originalConsoleLog = console.log;
-  const originalConsoleError = console.error;
-
-    /**
-   * Normalizes an error event or a promise rejection reason into a structured error object.
-   * @param {*} errorEventOrReason The error object or reason.
-   * @return {object} Structured error data { message, name, stack }.
-   */
-  function getErrorObject(errorEventOrReason) {
-    if (errorEventOrReason instanceof Error) {
-      return {
-        message: errorEventOrReason.message,
-        name: errorEventOrReason.name,
-        stack: errorEventOrReason.stack,
-      };
-    }
-    // Fallback for non-Error objects.
-    try {
-      return {
-        message: JSON.stringify(errorEventOrReason),
-        name: 'UnknownErrorType',
-        stack: null,
-      };
-    } catch (e) {
-      return {
-        message: String(errorEventOrReason),
-        name: 'UnknownErrorTypeNonStringifiable',
-        stack: null,
-      };
-    }
-  }
-
-  /**
-   * Converts an array of arguments (from log/error) into a single string.
-   * Handles Error objects specially to include their message and stack.
-   * @param {Array<*>} args - Arguments passed to console methods.
-   * @return {string} A string representation of the arguments.
-   */
-  function stringifyArgs(args) {
-    return args
-      .map((arg) => {
-        if (arg instanceof Error) {
-          const {message, stack} = arg;
-          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
-        }
-        if (typeof arg === 'object' && arg !== null) {
-          try {
-            return JSON.stringify(arg);
-          } catch (error) {
-            return '[Circular Object]';
-          }
-        } else {
-          return String(arg);
-        }
-      })
-      .join(' ');
-  }
-
-  console.log = function(...args) {
-    const logString = stringifyArgs(args);
-    window.parent.postMessage({ type: 'log', message: logString }, '*');
-    originalConsoleLog.apply(console, args);
-  };
-
-  console.error = function(...args) {
-    let errorData;
-    if (args.length > 0 && args[0] instanceof Error) {
-      const err = args[0];
-      // If the first arg is an Error, capture its details.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        ...getErrorObject(err),
-        rawArgsString: stringifyArgs(args.slice(1)),
-        timestamp: new Date().toISOString(),
-      };
-    } else {
-      // If not an Error object, treat all args as a general error message.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        message: stringifyArgs(args),
-        name: 'ConsoleLoggedError',
-        stack: null,
-        timestamp: new Date().toISOString(),
-      };
-    }
-    window.parent.postMessage(errorData, '*');
-    originalConsoleError.apply(console, args);
-  };
-
-  // Listen for global unhandled synchronous errors.
-  window.addEventListener('error', function(event) {
-    const errorDetails = event.error ? getErrorObject(event.error) : {
-      message: event.message,
-      name: 'GlobalError',
-      stack: null,
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno,
-    };
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'global',
-      ...errorDetails,
-      message: errorDetails.message || event.message,
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-  // Listen for unhandled promise rejections (asynchronous errors).
-  window.addEventListener('unhandledrejection', function(event) {
-    const errorDetails = getErrorObject(event.reason);
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'unhandledrejection',
-      ...errorDetails,
-      message: errorDetails.message || 'Unhandled Promise Rejection',
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-})();</script>
+<html lang="en" class="dark" style="--font-display: 'Syne', sans-serif; --font-body: 'Plus Jakarta Sans', sans-serif; --font-clock: 'Syne', sans-serif; --font-letter-spacing: -0.03em; --c-bg-1: #291C0E; --c-bg-2: #6E473B; --c-primary: #A78D78; --c-secondary: #BEB5A9; --c-tertiary: #E1D4C2;"><head>
     <meta charset="UTF-8">
     <!-- Fullscreen Mobile & Standalone PWA Meta Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -1019,6 +296,79 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.32);
         }
+    
+        /* Human Studio Editorial Polish & Material Depth */
+        body {
+            background-color: #060a08;
+            background-image: 
+                radial-gradient(at 10% 12%, rgba(34, 76, 56, 0.45) 0px, transparent 48%),
+                radial-gradient(at 90% 15%, rgba(181, 136, 99, 0.18) 0px, transparent 42%),
+                radial-gradient(at 50% 88%, rgba(16, 45, 36, 0.55) 0px, transparent 52%);
+            color: #f5f8f6;
+            letter-spacing: -0.01em;
+        }
+
+        /* Tactile studio surface with physical specular highlight */
+        .glass-panel {
+            background: rgba(14, 21, 18, 0.72) !important;
+            backdrop-filter: blur(28px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.09) !important;
+            box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .glass-pill:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            transform: translateY(-1px);
+        }
+        .glass-pill:active {
+            transform: scale(0.97) !important;
+        }
+
+        /* Tactile phone hardware chassis */
+        .phone-chassis {
+            box-shadow: 
+                0 40px 90px -15px rgba(0, 0, 0, 0.85),
+                0 0 0 1.5px rgba(255, 255, 255, 0.14),
+                inset 0 0 0 1px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Long press widget removal hint & active vibration state */
+        .removable-item {
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+        }
+        .removable-item:active {
+            transform: scale(0.98);
+        }
+
+        /* Floating widget contextual action menu */
+        .widget-popup-pill {
+            animation: popupReveal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes popupReveal {
+            from { opacity: 0; transform: translate(-50%, 8px) scale(0.92); }
+            to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+
+        /* Undo Toast Banner */
+        #widgetUndoBanner {
+            animation: undoSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes undoSlideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
     </style>
 <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:var(--font-body), sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:"JetBrains Mono", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-\[11px\]{inset:11px}.inset-x-0{left:0px;right:0px}.-left-24{left:-6rem}.-top-24{top:-6rem}.bottom-0{bottom:0px}.bottom-6{bottom:1.5rem}.right-3{right:0.75rem}.right-6{right:1.5rem}.top-0{top:0px}.top-20{top:5rem}.top-3{top:0.75rem}.z-0{z-index:0}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.z-\[120\]{z-index:120}.z-\[130\]{z-index:130}.z-20{z-index:20}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-2\.5{margin-bottom:0.625rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.ml-1{margin-left:0.25rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-4{margin-top:1rem}.mt-0\.5{margin-top:0.125rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-96{height:24rem}.h-full{height:100%}.h-1\.5{height:0.375rem}.h-11{height:2.75rem}.h-3\.5{height:0.875rem}.h-9{height:2.25rem}.max-h-72{max-height:18rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-16{width:4rem}.w-48{width:12rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-96{width:24rem}.w-full{width:100%}.w-1\.5{width:0.375rem}.w-11{width:2.75rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-9{width:2.25rem}.min-w-0{min-width:0px}.min-w-max{min-width:max-content}.min-w-\[42px\]{min-width:42px}.max-w-\[1640px\]{max-width:1640px}.max-w-\[420px\]{max-width:420px}.max-w-full{max-width:100%}.max-w-lg{max-width:32rem}.max-w-xl{max-width:36rem}.max-w-\[64px\]{max-width:64px}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.translate-y-4{--tw-translate-y:1rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-0\.5{gap:0.125rem}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-x-2{column-gap:0.5rem}.gap-y-3{row-gap:0.75rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-\[14\%\]{border-radius:14%}.rounded-\[26\%\]{border-radius:26%}.rounded-\[42px\]{border-radius:42px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-\[28px\]{border-radius:28px}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-400\/30{border-color:rgb(251 191 36 / 0.3)}.border-amber-400\/35{border-color:rgb(251 191 36 / 0.35)}.border-amber-400\/40{border-color:rgb(251 191 36 / 0.4)}.border-emerald-400\/30{border-color:rgb(52 211 153 / 0.3)}.border-emerald-400\/35{border-color:rgb(52 211 153 / 0.35)}.border-emerald-400\/40{border-color:rgb(52 211 153 / 0.4)}.border-rose-400\/30{border-color:rgb(251 113 133 / 0.3)}.border-rose-400\/40{border-color:rgb(251 113 133 / 0.4)}.border-sky-400\/30{border-color:rgb(56 189 248 / 0.3)}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/15{border-color:rgb(255 255 255 / 0.15)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-white\/25{border-color:rgb(255 255 255 / 0.25)}.border-amber-400{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.bg-amber-400\/20{background-color:rgb(251 191 36 / 0.2)}.bg-amber-400\/80{background-color:rgb(251 191 36 / 0.8)}.bg-amber-500\/10{background-color:rgb(245 158 11 / 0.1)}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-black\/30{background-color:rgb(0 0 0 / 0.3)}.bg-black\/35{background-color:rgb(0 0 0 / 0.35)}.bg-black\/40{background-color:rgb(0 0 0 / 0.4)}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-black\/75{background-color:rgb(0 0 0 / 0.75)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-black\/85{background-color:rgb(0 0 0 / 0.85)}.bg-emerald-400\/20{background-color:rgb(52 211 153 / 0.2)}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-emerald-500\/25{background-color:rgb(16 185 129 / 0.25)}.bg-rose-500\/20{background-color:rgb(244 63 94 / 0.2)}.bg-sky-500\/20{background-color:rgb(14 165 233 / 0.2)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/15{background-color:rgb(255 255 255 / 0.15)}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.bg-white\/40{background-color:rgb(255 255 255 / 0.4)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-emerald-400{--tw-gradient-from:#34d399 var(--tw-gradient-from-position);--tw-gradient-to:rgb(52 211 153 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-amber-300{--tw-gradient-to:rgb(252 211 77 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fcd34d var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-amber-300{--tw-gradient-to:#fcd34d var(--tw-gradient-to-position)}.to-emerald-400{--tw-gradient-to:#34d399 var(--tw-gradient-to-position)}.p-1{padding:0.25rem}.p-1\.5{padding:0.375rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2{padding:0.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.pb-1{padding-bottom:0.25rem}.pb-24{padding-bottom:6rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pt-2{padding-top:0.5rem}.pt-5{padding-top:1.25rem}.pt-1{padding-top:0.25rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:"JetBrains Mono", monospace}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[9px\]{font-size:9px}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-none{line-height:1}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.text-amber-300\/90{color:rgb(252 211 77 / 0.9)}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-800\/40{color:rgb(6 95 70 / 0.4)}.text-gray-950{--tw-text-opacity:1;color:rgb(3 7 18 / var(--tw-text-opacity, 1))}.text-rose-200{--tw-text-opacity:1;color:rgb(254 205 211 / var(--tw-text-opacity, 1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.text-sky-200{--tw-text-opacity:1;color:rgb(186 230 253 / var(--tw-text-opacity, 1))}.text-sky-300{--tw-text-opacity:1;color:rgb(125 211 252 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-300\/80{color:rgb(203 213 225 / 0.8)}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/70{color:rgb(255 255 255 / 0.7)}.text-white\/75{color:rgb(255 255 255 / 0.75)}.text-white\/85{color:rgb(255 255 255 / 0.85)}.text-white\/90{color:rgb(255 255 255 / 0.9)}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.accent-amber-400{accent-color:#fbbf24}.opacity-0{opacity:0}.opacity-25{opacity:0.25}.opacity-60{opacity:0.6}.opacity-80{opacity:0.8}.opacity-90{opacity:0.9}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_25px_rgba\(16\2c 185\2c 129\2c 0\.5\)\]{--tw-shadow:0 0 25px rgba(16,185,129,0.5);--tw-shadow-colored:0 0 25px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-amber-400\/30{--tw-ring-color:rgb(251 191 36 / 0.3)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.selection\:bg-amber-500\/30 *::selection{background-color:rgb(245 158 11 / 0.3)}.selection\:text-amber-200 *::selection{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.selection\:bg-amber-500\/30::selection{background-color:rgb(245 158 11 / 0.3)}.selection\:text-amber-200::selection{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-white\/25:hover{border-color:rgb(255 255 255 / 0.25)}.hover\:bg-amber-500\/25:hover{background-color:rgb(245 158 11 / 0.25)}.hover\:bg-rose-500\/20:hover{background-color:rgb(244 63 94 / 0.2)}.hover\:bg-sky-500\/30:hover{background-color:rgb(14 165 233 / 0.3)}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:block{display:block}.sm\:inline{display:inline}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.sm\:grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}}@media (min-width: 768px){.md\:inline{display:inline}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.lg\:grid-cols-9{grid-template-columns:repeat(9, minmax(0, 1fr))}.lg\:justify-center{justify-content:center}.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1280px){.xl\:col-span-5{grid-column:span 5 / span 5}.xl\:col-span-7{grid-column:span 7 / span 7}.xl\:hidden{display:none}.xl\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.xl\:pb-8{padding-bottom:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:var(--font-body), sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:"JetBrains Mono", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-\[11px\]{inset:11px}.inset-x-0{left:0px;right:0px}.-left-24{left:-6rem}.-top-24{top:-6rem}.right-3{right:0.75rem}.top-0{top:0px}.top-3{top:0.75rem}.bottom-0{bottom:0px}.bottom-6{bottom:1.5rem}.right-6{right:1.5rem}.top-20{top:5rem}.z-0{z-index:0}.z-10{z-index:10}.z-40{z-index:40}.z-\[120\]{z-index:120}.z-20{z-index:20}.z-50{z-index:50}.z-\[130\]{z-index:130}.mx-auto{margin-left:auto;margin-right:auto}.mb-2\.5{margin-bottom:0.625rem}.mb-3{margin-bottom:0.75rem}.mt-1{margin-top:0.25rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.ml-1{margin-left:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1\.5{margin-top:0.375rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-96{height:24rem}.h-1\.5{height:0.375rem}.h-11{height:2.75rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-3\.5{height:0.875rem}.h-full{height:100%}.max-h-72{max-height:18rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-96{width:24rem}.w-1\.5{width:0.375rem}.w-11{width:2.75rem}.w-16{width:4rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-48{width:12rem}.w-full{width:100%}.min-w-0{min-width:0px}.min-w-\[42px\]{min-width:42px}.min-w-max{min-width:max-content}.max-w-\[1640px\]{max-width:1640px}.max-w-full{max-width:100%}.max-w-\[420px\]{max-width:420px}.max-w-\[64px\]{max-width:64px}.max-w-lg{max-width:32rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.translate-y-4{--tw-translate-y:1rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-0\.5{gap:0.125rem}.gap-x-2{column-gap:0.5rem}.gap-y-3{row-gap:0.75rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-\[14\%\]{border-radius:14%}.rounded-\[26\%\]{border-radius:26%}.rounded-\[28px\]{border-radius:28px}.rounded-\[42px\]{border-radius:42px}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-400{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.border-amber-400\/30{border-color:rgb(251 191 36 / 0.3)}.border-amber-400\/40{border-color:rgb(251 191 36 / 0.4)}.border-emerald-400\/30{border-color:rgb(52 211 153 / 0.3)}.border-rose-400\/30{border-color:rgb(251 113 133 / 0.3)}.border-rose-400\/40{border-color:rgb(251 113 133 / 0.4)}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/15{border-color:rgb(255 255 255 / 0.15)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-amber-400\/35{border-color:rgb(251 191 36 / 0.35)}.border-emerald-400\/35{border-color:rgb(52 211 153 / 0.35)}.border-emerald-400\/40{border-color:rgb(52 211 153 / 0.4)}.border-sky-400\/30{border-color:rgb(56 189 248 / 0.3)}.border-white\/25{border-color:rgb(255 255 255 / 0.25)}.bg-amber-500\/10{background-color:rgb(245 158 11 / 0.1)}.bg-black\/30{background-color:rgb(0 0 0 / 0.3)}.bg-black\/35{background-color:rgb(0 0 0 / 0.35)}.bg-black\/40{background-color:rgb(0 0 0 / 0.4)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-emerald-500\/25{background-color:rgb(16 185 129 / 0.25)}.bg-rose-500\/20{background-color:rgb(244 63 94 / 0.2)}.bg-transparent{background-color:transparent}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/15{background-color:rgb(255 255 255 / 0.15)}.bg-amber-400\/20{background-color:rgb(251 191 36 / 0.2)}.bg-amber-400\/80{background-color:rgb(251 191 36 / 0.8)}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-black\/75{background-color:rgb(0 0 0 / 0.75)}.bg-black\/85{background-color:rgb(0 0 0 / 0.85)}.bg-emerald-400\/20{background-color:rgb(52 211 153 / 0.2)}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-sky-500\/20{background-color:rgb(14 165 233 / 0.2)}.bg-white\/40{background-color:rgb(255 255 255 / 0.4)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-emerald-400{--tw-gradient-from:#34d399 var(--tw-gradient-from-position);--tw-gradient-to:rgb(52 211 153 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-amber-300{--tw-gradient-to:rgb(252 211 77 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fcd34d var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-emerald-400{--tw-gradient-to:#34d399 var(--tw-gradient-to-position)}.to-amber-300{--tw-gradient-to:#fcd34d var(--tw-gradient-to-position)}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-1\.5{padding:0.375rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.pb-1{padding-bottom:0.25rem}.pb-24{padding-bottom:6rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pt-1{padding-top:0.25rem}.pt-5{padding-top:1.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:"JetBrains Mono", monospace}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[9px\]{font-size:9px}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.leading-tight{line-height:1.25}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.text-amber-300\/90{color:rgb(252 211 77 / 0.9)}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-800\/40{color:rgb(6 95 70 / 0.4)}.text-gray-950{--tw-text-opacity:1;color:rgb(3 7 18 / var(--tw-text-opacity, 1))}.text-rose-200{--tw-text-opacity:1;color:rgb(254 205 211 / var(--tw-text-opacity, 1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-300\/80{color:rgb(203 213 225 / 0.8)}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-sky-200{--tw-text-opacity:1;color:rgb(186 230 253 / var(--tw-text-opacity, 1))}.text-sky-300{--tw-text-opacity:1;color:rgb(125 211 252 / var(--tw-text-opacity, 1))}.text-white\/70{color:rgb(255 255 255 / 0.7)}.text-white\/75{color:rgb(255 255 255 / 0.75)}.text-white\/85{color:rgb(255 255 255 / 0.85)}.text-white\/90{color:rgb(255 255 255 / 0.9)}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.accent-amber-400{accent-color:#fbbf24}.opacity-25{opacity:0.25}.opacity-60{opacity:0.6}.opacity-0{opacity:0}.opacity-80{opacity:0.8}.opacity-90{opacity:0.9}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_0_25px_rgba\(16\2c 185\2c 129\2c 0\.5\)\]{--tw-shadow:0 0 25px rgba(16,185,129,0.5);--tw-shadow-colored:0 0 25px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-amber-400\/30{--tw-ring-color:rgb(251 191 36 / 0.3)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.selection\:bg-amber-500\/30 *::selection{background-color:rgb(245 158 11 / 0.3)}.selection\:text-amber-200 *::selection{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.selection\:bg-amber-500\/30::selection{background-color:rgb(245 158 11 / 0.3)}.selection\:text-amber-200::selection{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-white\/25:hover{border-color:rgb(255 255 255 / 0.25)}.hover\:bg-amber-500\/25:hover{background-color:rgb(245 158 11 / 0.25)}.hover\:bg-rose-500\/20:hover{background-color:rgb(244 63 94 / 0.2)}.hover\:bg-sky-500\/30:hover{background-color:rgb(14 165 233 / 0.3)}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:block{display:block}.sm\:inline{display:inline}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.sm\:grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}}@media (min-width: 768px){.md\:inline{display:inline}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-9{grid-template-columns:repeat(9, minmax(0, 1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.lg\:justify-center{justify-content:center}.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1280px){.xl\:col-span-7{grid-column:span 7 / span 7}.xl\:col-span-5{grid-column:span 5 / span 5}.xl\:hidden{display:none}.xl\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.xl\:pb-8{padding-bottom:2rem}}</style></head>
 <body class="botanical-bg min-h-screen text-slate-100 selection:bg-amber-500/30 selection:text-amber-200 mobile-view-phone">
@@ -1057,9 +407,9 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="text-lg md:text-xl font-bold tracking-tight text-white font-stylish-display">ChromaOS Studio</h1>
-                        <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold">Runnable Phone OS</span>
+                        <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold">Bespoke Mobile Architecture</span>
                     </div>
-                    <p class="text-xs text-slate-300/80 hidden sm:block">8 Flagship OS Launchers • Working Mini-Apps • 1-Tap Phone Download • '🚫 None' Engine</p>
+                    <p class="text-xs text-slate-300/80 hidden sm:block">Human-Crafted OS Environments • Long-Press Any Widget to Remove • Tactile Themes</p>
                 </div>
             </div>
 
@@ -1179,7 +529,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
                 <button onclick="switchStudioTab('palettes')" id="tabBtn-palettes" class="studio-tab active glass-pill px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 shrink-0">
                     <i class="ph-fill ph-palette text-base"></i>
-                    <span>10 Pill-Stack Palettes</span>
+                    <span>10 Studio Harmonies</span>
                 </button>
                 <button onclick="switchStudioTab('visibility')" id="tabBtn-visibility" class="studio-tab glass-pill px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 shrink-0 border-rose-400/40 text-rose-200">
                     <i class="ph-fill ph-prohibit text-base text-rose-400"></i>
@@ -1203,7 +553,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             <div id="tabContent-palettes" class="studio-tab-content glass-panel rounded-3xl p-5 space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
                     <div>
-                        <h3 class="text-base font-bold text-white font-stylish-display">Curated Pill-Stack Color Harmonies</h3>
+                        <h3 class="text-base font-bold text-white font-stylish-display">Studio Color Harmonies & Material Swatches</h3>
                         <p class="text-xs text-slate-300/80">Click any palette to apply its 5-tone HEX stack across the active OS, or copy individual HEX swatches.</p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -2969,7 +2319,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
                     <div class="px-4 flex-1 flex flex-col justify-start gap-3 overflow-y-auto pt-1">
                         
-                    <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" style="background: rgba(20, 26, 30, 0.5720000000000001); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
+                    <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" data-removable-id="heroWidget" data-removable-title="Hero Clock Widget" style="background: rgba(20, 26, 30, 0.5720000000000001); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
                         
                         <div>
                             <span class="text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full" style="background:#A78D7833; color:#BEB5A9;">Android 17 Expressive</span>
@@ -2983,7 +2333,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                     </div>
                 
                         
-                <div class="removable-item relative grid grid-cols-2 gap-2.5">
+                <div class="removable-item relative grid grid-cols-2 gap-2.5" data-removable-id="secondaryWidget" data-removable-title="Quick Status Cards">
                     
                     <div class="rounded-2xl p-3 flex items-center gap-2.5" style="background: rgba(25, 32, 36, 0.528); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.14);">
                         <div class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-950 font-bold shrink-0" style="background:#BEB5A9">
@@ -3008,7 +2358,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         
                 <div class="grid grid-cols-4 gap-y-3 gap-x-2 py-1">
                     
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('phone')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('phone')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #A78D78, #E1D4C2); color:#ffffff; ">
                             <i class="ph-fill ph-phone-call text-xl"></i>
@@ -3016,7 +2366,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Phone</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('calculator')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('calculator')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #BEB5A9, #A78D78); color:#111827; ">
                             <i class="ph-fill ph-calculator text-xl"></i>
@@ -3024,7 +2374,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Calculator</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('camera')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('camera')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #6E473B, #E1D4C2); color:#ffffff; ">
                             <i class="ph-fill ph-camera text-xl"></i>
@@ -3032,7 +2382,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Camera</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('notes')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('notes')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #A78D78, #E1D4C2); color:#ffffff; ">
                             <i class="ph-fill ph-notepad text-xl"></i>
@@ -3040,7 +2390,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Notes</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('music')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('music')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #6E473B, #E1D4C2); color:#ffffff; ">
                             <i class="ph-fill ph-music-notes text-xl"></i>
@@ -3048,7 +2398,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Music</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('clock')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('clock')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #291C0E, #6E473B); color:#ffffff; ">
                             <i class="ph-fill ph-alarm text-xl"></i>
@@ -3056,7 +2406,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Clock</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('settings')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('settings')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #291C0E, #6E473B); color:#ffffff; ">
                             <i class="ph-fill ph-gear-six text-xl"></i>
@@ -3064,7 +2414,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                         <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Settings</span>
                     </div>
                 
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('messages')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('messages')">
                         
                         <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #BEB5A9, #A78D78); color:#111827; ">
                             <i class="ph-fill ph-chat-circle-dots text-xl"></i>
@@ -3078,7 +2428,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
                     <div class="px-4 pt-1 flex flex-col gap-2 relative z-20">
                         
-                <div class="removable-item relative rounded-full px-3.5 py-2 flex items-center justify-between text-xs text-white/85 shadow" style="background: rgba(20, 26, 30, 0.72); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
+                <div class="removable-item relative rounded-full px-3.5 py-2 flex items-center justify-between text-xs text-white/85 shadow" data-removable-id="searchBar" data-removable-title="Home Search Bar" style="background: rgba(20, 26, 30, 0.72); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
                     
                     <div class="flex items-center gap-2">
                         <i class="ph-bold ph-magnifying-glass" style="color:#A78D78"></i>
@@ -3091,7 +2441,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 </div>
             
                         
-                <div class="removable-item relative flex items-center justify-center gap-1.5 py-0.5">
+                <div class="removable-item relative flex items-center justify-center gap-1.5 py-0.5" data-removable-id="pageDots" data-removable-title="Page Indicator">
                     
                     <span class="w-4 h-1.5 rounded-full" style="background:#A78D78"></span>
                     <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
@@ -3099,7 +2449,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 </div>
             
                         
-                <div class="removable-item relative rounded-[28px] p-2.5 flex items-center justify-around shadow-xl" style="background: rgba(18, 24, 28, 0.68); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.16);">
+                <div class="removable-item relative rounded-[28px] p-2.5 flex items-center justify-around shadow-xl" data-removable-id="dock" data-removable-title="Favorites Dock" style="background: rgba(18, 24, 28, 0.68); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.16);">
                     
                     
                         <div onclick="openMiniApp('phone')" class="cookie-shape w-11 h-11 flex items-center justify-center text-white shadow border border-white/20 cursor-pointer active:scale-95 transition-transform" style="background: linear-gradient(135deg, #A78D78, #6E473B); ">
@@ -3247,6 +2597,90 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
     </div>
 
     <!-- EXPORT / APPLY MODAL -->
+    
+    <!-- REAL-TIME BATTERY & CONNECTED DEVICES HUB MODAL -->
+    <div id="batteryHubModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl max-w-lg w-full p-6 border border-white/20 space-y-4">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold bg-emerald-500/25 border border-emerald-400/30 shadow-lg">
+                        <i class="ph-fill ph-battery-charging text-xl text-emerald-300"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white font-stylish-display">Battery & Connected Devices Hub</h3>
+                        <p class="text-[11px] text-slate-300">Real-time hardware telemetry for phone & Bluetooth accessories</p>
+                    </div>
+                </div>
+                <button onclick="closeBatteryHubModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <!-- Phone Main Battery Card -->
+            <div class="p-4 rounded-2xl bg-black/45 border border-white/15 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-fill ph-device-mobile text-lg text-amber-300"></i>
+                        <span class="text-xs font-bold text-white">Phone Battery Status</span>
+                    </div>
+                    <span id="hubPhoneBatteryStatus" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                        Charging Fast
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="text-3xl font-extrabold text-white font-mono" id="hubPhoneBatteryPct">85%</div>
+                    <div class="flex-1 space-y-1.5">
+                        <div class="flex justify-between text-[10px] text-slate-300">
+                            <span>Level</span>
+                            <span id="hubPhonePlug" class="font-mono">AC Fast</span>
+                        </div>
+                        <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full rounded-full bg-gradient-to-r from-emerald-400 to-amber-300" style="width:85%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-1 border-t border-white/10 text-[11px]">
+                    <div class="flex justify-between text-slate-300">
+                        <span>Temperature:</span>
+                        <span id="hubPhoneTemp" class="font-bold text-white">26.4°C</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300">
+                        <span>Battery Health:</span>
+                        <span id="hubPhoneHealth" class="font-bold text-emerald-300">Good</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connected Accessories Section -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                        <i class="ph-fill ph-bluetooth"></i> Connected Devices & Accessories
+                    </span>
+                    <button onclick="window.AndroidBridge && window.AndroidBridge.openBluetoothSettings ? window.AndroidBridge.openBluetoothSettings() : triggerApplyToast('Bluetooth Settings Opened')" class="text-[10px] text-sky-300 hover:underline flex items-center gap-1">
+                        <span>+ Pair / Settings</span>
+                    </button>
+                </div>
+
+                <div id="hubConnectedDevicesList" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-white/10">
+                <button onclick="window.AndroidBridge && window.AndroidBridge.openBatterySettings ? window.AndroidBridge.openBatterySettings() : triggerApplyToast('Battery Settings')" class="py-2.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/15 text-white flex items-center justify-center gap-1.5 border border-white/15">
+                    <i class="ph-bold ph-lightning text-amber-300"></i> Battery Usage
+                </button>
+                <button onclick="window.AndroidBridge && window.AndroidBridge.openBluetoothSettings ? window.AndroidBridge.openBluetoothSettings() : triggerApplyToast('Bluetooth Settings')" class="py-2.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/15 text-white flex items-center justify-center gap-1.5 border border-white/15">
+                    <i class="ph-bold ph-bluetooth text-sky-300"></i> Bluetooth Hub
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="exportModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-panel rounded-3xl max-w-xl w-full p-6 border border-white/20 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-3">
@@ -3660,6 +3094,22 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             stopwatchSeconds: 0,
             stopwatchRunning: false,
             capturedPhotos: [],
+            battery: {
+                phone: {
+                    percentage: 85,
+                    isCharging: false,
+                    isFull: false,
+                    plugType: 'On Battery',
+                    temperature: '26.4°C',
+                    health: 'Good Condition',
+                    statusText: 'Discharging (Adaptive)'
+                },
+                connectedDevices: [
+                    { id: 'earbuds', name: 'Chroma Buds Pro (L/R)', type: 'headphones', battery: 92, status: 'Active (ANC On)', icon: 'ph-headphones', connected: true },
+                    { id: 'watch', name: 'Chroma Watch Ultra', type: 'watch', battery: 74, status: 'Synced • 74%', icon: 'ph-watch', connected: true },
+                    { id: 'stylus', name: 'Smart Stylus Pen', type: 'stylus', battery: 100, status: 'Docked • 100%', icon: 'ph-pencil-simple', connected: true }
+                ]
+            },
 
             // Custom OS Lab Per-Component Mapping (Can be any of the 8 OS IDs OR 'none')
             customComponents: {
@@ -3705,6 +3155,19 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
            ========================================================================== */
 
         function initApp() {
+            try {
+                let saved = null;
+                if (window.AndroidBridge && window.AndroidBridge.loadPreferences) {
+                    saved = window.AndroidBridge.loadPreferences();
+                }
+                if (!saved) {
+                    saved = localStorage.getItem('chromaos_state');
+                }
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    Object.assign(state, parsed);
+                }
+            } catch (e) {}
             setupSingleFilePWA();
             if (window.innerWidth < 1280) {
                 document.body.classList.add('mobile-view-phone');
@@ -3720,6 +3183,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             renderFontCards();
             renderPhoneStage();
             startLiveClockTicker();
+            setupBatteryTelemetry();
         }
 
         function startLiveClockTicker() {
@@ -4272,6 +3736,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                     state.customComponents,
                     state.screenViewMode === 'lock'
                 );
+                setTimeout(attachLongPressHandlersToWidgets, 30);
             }
         }
 
@@ -4411,6 +3876,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                     <div class="px-4 flex-1 flex flex-col justify-start gap-3 overflow-y-auto pt-1">
                         ${buildHeroWidgetHTML(compMap.heroWidget)}
                         ${buildSecondaryWidgetHTML(compMap.secondaryWidget)}
+                        ${buildConnectedDevicesWidgetHTML()}
                         ${buildAppIconsGridHTML(compMap.icons)}
                     </div>
 
@@ -4853,7 +4319,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
 
             if (heroOs === 'android17') {
                 return `
-                    <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" style="${glassBg}">
+                    <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" data-removable-id="heroWidget" data-removable-title="Hero Clock Widget" style="${glassBg}">
                         ${quickHideBadge('heroWidget')}
                         <div>
                             <span class="text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full" style="background:${c3}33; color:${c4};">Android 17 Expressive</span>
@@ -4869,7 +4335,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             }
             if (heroOs === 'pixel') {
                 return `
-                    <div class="removable-item relative py-2 px-1 flex items-center justify-between">
+                    <div class="removable-item relative py-2 px-1 flex items-center justify-between" data-removable-id="heroWidget" data-removable-title="At-a-Glance Clock">
                         ${quickHideBadge('heroWidget')}
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-1.5">
@@ -4884,7 +4350,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             }
             if (heroOs === 'nothing') {
                 return `
-                    <div class="removable-item relative rounded-3xl p-4 bg-black/85 border border-white/20 dot-matrix-bg flex items-center justify-between">
+                    <div class="removable-item relative rounded-3xl p-4 bg-black/85 border border-white/20 dot-matrix-bg flex items-center justify-between" data-removable-id="heroWidget" data-removable-title="Nothing Clock">
                         ${quickHideBadge('heroWidget')}
                         <div>
                             <span class="text-[10px] ndot-text text-red-500 font-bold">● NOTHING OS 3.0</span>
@@ -4899,7 +4365,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             }
             if (heroOs === 'poco') {
                 return `
-                    <div class="removable-item relative rounded-3xl p-3.5 bg-zinc-950/90 border border-yellow-400/50 flex items-center justify-between">
+                    <div class="removable-item relative rounded-3xl p-3.5 bg-zinc-950/90 border border-yellow-400/50 flex items-center justify-between" data-removable-id="heroWidget" data-removable-title="POCO Turbo Chrono">
                         ${quickHideBadge('heroWidget')}
                         <div>
                             <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-yellow-400 text-black font-extrabold">POCO TURBO</span>
@@ -4913,7 +4379,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 `;
             }
             return `
-                <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" style="${glassBg}">
+                <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" data-removable-id="heroWidget" data-removable-title="Hero Clock Widget" style="${glassBg}">
                     ${quickHideBadge('heroWidget')}
                     <div>
                         <span class="text-[10px] font-semibold uppercase tracking-wider" style="color:${c4}">${OS_PRESETS[heroOs]?.name || 'OS Clock'}</span>
@@ -4936,7 +4402,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             const glassBg = `background: rgba(25, 32, 36, ${state.widgetOpacity * 0.6}); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.14);`;
 
             return `
-                <div class="removable-item relative grid grid-cols-2 gap-2.5">
+                <div class="removable-item relative grid grid-cols-2 gap-2.5" data-removable-id="secondaryWidget" data-removable-title="Quick Status Cards">
                     ${quickHideBadge('secondaryWidget')}
                     <div class="rounded-2xl p-3 flex items-center gap-2.5" style="${glassBg}">
                         <div class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-950 font-bold shrink-0" style="background:${c4}">
@@ -4958,6 +4424,154 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                     </div>
                 </div>
             `;
+        }
+
+        
+        function buildConnectedDevicesWidgetHTML() {
+            if (state.customComponents?.connectedDevicesWidget === 'none') return '';
+            const [c1, c2, c3, c4, c5] = state.colors;
+            const glassBg = `background: rgba(18, 24, 28, ${state.widgetOpacity * 0.72}); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);`;
+
+            const phone = state.battery?.phone || { percentage: 85, isCharging: false, statusText: 'On Battery' };
+            const devices = state.battery?.connectedDevices || [];
+
+            const devItemsHTML = devices.map(d => {
+                const isHigh = d.battery >= 60;
+                const isMed = d.battery >= 25 && d.battery < 60;
+                const badgeColor = isHigh ? 'text-emerald-300' : (isMed ? 'text-amber-300' : 'text-rose-400');
+                return `
+                    <div class="flex-1 bg-black/45 rounded-xl p-2 border border-white/10 flex flex-col items-center justify-center text-center gap-1 min-w-[72px] hover:border-white/25 transition-all">
+                        <div class="flex items-center gap-1 text-[11px] font-bold ${badgeColor}">
+                            <i class="ph-fill ${d.icon || 'ph-bluetooth'} text-xs"></i>
+                            <span>${d.battery}%</span>
+                        </div>
+                        <span class="text-[9px] text-white/85 truncate w-full font-semibold">${d.name.split(' ')[0]}</span>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="removable-item relative rounded-2xl p-3 flex flex-col gap-2 shadow-lg cursor-pointer hover:border-white/25 transition-all" data-removable-id="connectedDevicesWidget" data-removable-title="Live Battery & Devices Hub" style="${glassBg}" onclick="openBatteryHubModal()">
+                    ${quickHideBadge('connectedDevicesWidget')}
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full ${phone.isCharging ? 'bg-emerald-400 animate-ping' : 'bg-emerald-400'}"></span>
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-white/95">Live Battery & Connected Devices</span>
+                        </div>
+                        <span class="text-[9px] text-amber-300 font-mono font-bold flex items-center gap-1 hover:text-white">
+                            <i class="ph-bold ph-sliders"></i> Details
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Phone Main Battery Gauge -->
+                        <div class="flex items-center gap-2 bg-black/50 rounded-xl px-2.5 py-1.5 border border-white/10 shrink-0">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white ${phone.isCharging ? 'bg-emerald-500 animate-pulse' : ''}" style="${!phone.isCharging ? `background:${c3}` : ''}">
+                                <i class="ph-fill ${phone.isCharging ? 'ph-lightning' : 'ph-device-mobile'} text-sm"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-white leading-none block">${phone.percentage}%</span>
+                                <span class="text-[8px] text-emerald-300 uppercase tracking-widest font-extrabold">${phone.isCharging ? '⚡ Charging' : 'Phone'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Connected Bluetooth Devices Row -->
+                        <div class="flex-1 flex items-center gap-1.5 overflow-x-auto">
+                            ${devItemsHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openBatteryHubModal() {
+            updateBatteryModalUI();
+            const modal = document.getElementById('batteryHubModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeBatteryHubModal() {
+            const modal = document.getElementById('batteryHubModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function updateBatteryModalUI() {
+            const phone = state.battery?.phone || { percentage: 85, isCharging: false };
+            const pctEl = document.getElementById('hubPhoneBatteryPct');
+            if (pctEl) pctEl.textContent = `${phone.percentage}%`;
+            const statEl = document.getElementById('hubPhoneBatteryStatus');
+            if (statEl) statEl.textContent = phone.statusText || (phone.isCharging ? 'Charging' : 'On Battery');
+            const tempEl = document.getElementById('hubPhoneTemp');
+            if (tempEl) tempEl.textContent = phone.temperature || '26°C';
+            const healthEl = document.getElementById('hubPhoneHealth');
+            if (healthEl) healthEl.textContent = phone.health || 'Good Condition';
+            const plugEl = document.getElementById('hubPhonePlug');
+            if (plugEl) plugEl.textContent = phone.plugType || 'AC Fast';
+
+            const listEl = document.getElementById('hubConnectedDevicesList');
+            if (listEl) {
+                const devs = state.battery?.connectedDevices || [];
+                listEl.innerHTML = devs.map(d => `
+                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white bg-white/10">
+                                <i class="ph-fill ${d.icon || 'ph-bluetooth'} text-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-white">${d.name}</h5>
+                                <span class="text-[10px] text-slate-400">${d.status || 'Connected'}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-16 h-2 rounded-full bg-white/10 overflow-hidden">
+                                <div class="h-full rounded-full ${d.battery >= 60 ? 'bg-emerald-400' : (d.battery >= 25 ? 'bg-amber-400' : 'bg-rose-500')}" style="width:${d.battery}%"></div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-white min-w-[32px] text-right">${d.battery}%</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        window.onNativeBatteryUpdate = function(data) {
+            if (!data) return;
+            if (typeof data === 'string') {
+                try { data = JSON.parse(data); } catch(e) { return; }
+            }
+            if (data.phone) {
+                state.battery.phone = Object.assign(state.battery.phone, data.phone);
+            }
+            if (data.connectedDevices && Array.isArray(data.connectedDevices)) {
+                state.battery.connectedDevices = data.connectedDevices;
+            }
+            renderPhoneStage();
+            updateBatteryModalUI();
+        };
+
+        function setupBatteryTelemetry() {
+            if (window.AndroidBridge && window.AndroidBridge.getBatteryInfo) {
+                try {
+                    const info = window.AndroidBridge.getBatteryInfo();
+                    if (info) {
+                        window.onNativeBatteryUpdate(info);
+                    }
+                } catch(e) {}
+            }
+            if (navigator.getBattery) {
+                navigator.getBattery().then(batt => {
+                    function updateWebBattery() {
+                        const pct = Math.round(batt.level * 100);
+                        state.battery.phone.percentage = pct;
+                        state.battery.phone.isCharging = batt.charging;
+                        state.battery.phone.statusText = batt.charging ? 'Charging (Web API)' : 'On Battery';
+                        renderPhoneStage();
+                        updateBatteryModalUI();
+                    }
+                    updateWebBattery();
+                    batt.addEventListener('levelchange', updateWebBattery);
+                    batt.addEventListener('chargingchange', updateWebBattery);
+                }).catch(() => {});
+            }
         }
 
         function buildAppIconsGridHTML(iconsOs) {
@@ -4983,7 +4597,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 const textColor = app.role === 'secondary' && iconsOs !== 'nothing' ? '#111827' : '#ffffff';
 
                 return `
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" onclick="openMiniApp('${app.id}')">
+                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('${app.id}')">
                         ${quickHideBadge(app.id, true)}
                         <div class="${isCookie ? 'cookie-shape' : ''} flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95"
                              style="width:${state.iconScale}px; height:${state.iconScale}px; background:${bg}; color:${textColor}; ${radiusStyle}">
@@ -5005,7 +4619,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             if (searchOs === 'none') return '';
             const [c1, c2, c3, c4] = state.colors;
             return `
-                <div class="removable-item relative rounded-full px-3.5 py-2 flex items-center justify-between text-xs text-white/85 shadow"
+                <div class="removable-item relative rounded-full px-3.5 py-2 flex items-center justify-between text-xs text-white/85 shadow" data-removable-id="searchBar" data-removable-title="Home Search Bar"
                      style="background: rgba(20, 26, 30, 0.72); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
                     ${quickHideBadge('searchBar')}
                     <div class="flex items-center gap-2">
@@ -5024,7 +4638,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             if (dotsOs === 'none') return '';
             const [c1, c2, c3] = state.colors;
             return `
-                <div class="removable-item relative flex items-center justify-center gap-1.5 py-0.5">
+                <div class="removable-item relative flex items-center justify-center gap-1.5 py-0.5" data-removable-id="pageDots" data-removable-title="Page Indicator">
                     ${quickHideBadge('pageDots')}
                     <span class="w-4 h-1.5 rounded-full" style="background:${c3}"></span>
                     <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
@@ -5043,7 +4657,7 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
             const radiusStyle = isCookie ? '' : `border-radius: ${state.iconRadius};`;
 
             return `
-                <div class="removable-item relative rounded-[28px] p-2.5 flex items-center justify-around shadow-xl"
+                <div class="removable-item relative rounded-[28px] p-2.5 flex items-center justify-around shadow-xl" data-removable-id="dock" data-removable-title="Favorites Dock"
                      style="background: rgba(18, 24, 28, 0.68); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.16);">
                     ${quickHideBadge('dock')}
                     ${dockApps.map((app, idx) => `
@@ -5248,6 +4862,237 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
                 banner.classList.add('opacity-0', 'translate-y-4');
                 banner.classList.remove('opacity-100', 'translate-y-0');
             }, 2600);
+        }
+
+        
+        function persistChromaState() {
+            try {
+                const data = {
+                    activeOs: state.activeOs,
+                    isCustomRemix: state.isCustomRemix,
+                    activePaletteIndex: state.activePaletteIndex,
+                    colors: state.colors,
+                    activeFontPack: state.activeFontPack,
+                    wallpaperMode: state.wallpaperMode,
+                    iconRadius: state.iconRadius,
+                    iconScale: state.iconScale,
+                    widgetOpacity: state.widgetOpacity,
+                    customComponents: state.customComponents,
+                    visibility: state.visibility,
+                    appVisibility: state.appVisibility
+                };
+                const jsonStr = JSON.stringify(data);
+                localStorage.setItem('chromaos_state', jsonStr);
+                if (window.AndroidBridge && window.AndroidBridge.savePreferences) {
+                    window.AndroidBridge.savePreferences(jsonStr);
+                }
+            } catch(e) {}
+        }
+
+        window.handleAndroidBack = function() {
+            if (document.getElementById('longPressWidgetPopup')) { dismissWidgetPopup(); return true; }
+            
+            if (document.getElementById('batteryHubModal') && !document.getElementById('batteryHubModal').classList.contains('hidden')) {
+                closeBatteryHubModal();
+                return true;
+            }
+            if (document.getElementById('exportModal') && !document.getElementById('exportModal').classList.contains('hidden')) {
+                closeExportModal();
+                return true;
+            }
+            if (document.getElementById('pwaInstallModal') && !document.getElementById('pwaInstallModal').classList.contains('hidden')) {
+                closePwaModal();
+                return true;
+            }
+            if (state.activeMiniApp) {
+                closeMiniApp();
+                return true;
+            }
+            if (document.body.classList.contains('fullscreen-phone-mode')) {
+                exitFullscreenPhoneMode();
+                return true;
+            }
+            return false;
+        };
+
+        
+        /* ==========================================================================
+           UNIVERSAL LONG-TAP WIDGET REMOVAL & UNDO ENGINE (HUMAN-DESIGNED UX)
+           ========================================================================== */
+
+        let lastRemovedWidget = null;
+        let undoBannerTimer = null;
+
+        function attachLongPressHandlersToWidgets() {
+            const container = document.getElementById('mainPhoneScreen');
+            if (!container) return;
+            const items = container.querySelectorAll('.removable-item');
+
+            items.forEach(el => {
+                const compId = el.getAttribute('data-removable-id');
+                if (!compId) return;
+                const isApp = el.getAttribute('data-is-app') === 'true';
+                const title = el.getAttribute('data-removable-title') || compId;
+
+                let pressTimer = null;
+                let isLongPressed = false;
+                let startX = 0, startY = 0;
+
+                function startPress(e) {
+                    isLongPressed = false;
+                    const pt = e.touches ? e.touches[0] : e;
+                    startX = pt.clientX;
+                    startY = pt.clientY;
+                    clearTimeout(pressTimer);
+                    pressTimer = setTimeout(() => {
+                        isLongPressed = true;
+                        if (navigator.vibrate) {
+                            try { navigator.vibrate([45, 35]); } catch(err) {}
+                        }
+                        showWidgetLongPressAction(el, compId, isApp, title);
+                    }, 420);
+                }
+
+                function cancelPress() {
+                    clearTimeout(pressTimer);
+                }
+
+                function movePress(e) {
+                    const pt = e.touches ? e.touches[0] : e;
+                    if (Math.abs(pt.clientX - startX) > 12 || Math.abs(pt.clientY - startY) > 12) {
+                        clearTimeout(pressTimer);
+                    }
+                }
+
+                el.addEventListener('touchstart', startPress, { passive: true });
+                el.addEventListener('touchend', cancelPress);
+                el.addEventListener('touchcancel', cancelPress);
+                el.addEventListener('touchmove', movePress, { passive: true });
+
+                el.addEventListener('mousedown', startPress);
+                el.addEventListener('mouseup', cancelPress);
+                el.addEventListener('mouseleave', cancelPress);
+                el.addEventListener('mousemove', movePress);
+
+                // Prevent standard click if long press triggered
+                el.addEventListener('click', (e) => {
+                    if (isLongPressed) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        isLongPressed = false;
+                    }
+                }, true);
+            });
+        }
+
+        function showWidgetLongPressAction(targetEl, compId, isApp, title) {
+            dismissWidgetPopup();
+
+            const rect = targetEl.getBoundingClientRect();
+            const popup = document.createElement('div');
+            popup.id = 'longPressWidgetPopup';
+            popup.className = 'fixed z-[150] widget-popup-pill flex items-center gap-1.5 p-2 rounded-2xl bg-zinc-950/95 backdrop-blur-2xl border border-white/20 shadow-2xl text-white';
+
+            // Position centered above the widget
+            const topPos = Math.max(16, rect.top - 52);
+            const leftPos = Math.min(window.innerWidth - 180, Math.max(16, rect.left + (rect.width / 2)));
+            popup.style.top = `${topPos}px`;
+            popup.style.left = `${leftPos}px`;
+            popup.style.transform = 'translateX(-50%)';
+
+            popup.innerHTML = `
+                <div class="px-2 py-0.5 text-[11px] font-bold text-amber-300 font-mono flex items-center gap-1 border-r border-white/10 pr-2">
+                    <i class="ph-fill ph-dots-six-vertical text-slate-400"></i>
+                    <span>${title}</span>
+                </div>
+                <button onclick="executeWidgetRemoval('${compId}', ${isApp}, '${title}')" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-1 shadow transition-all active:scale-95">
+                    <i class="ph-bold ph-trash"></i>
+                    <span>Remove</span>
+                </button>
+                <button onclick="dismissWidgetPopup()" class="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 flex items-center justify-center">
+                    <i class="ph-bold ph-x text-[10px]"></i>
+                </button>
+            `;
+
+            document.body.appendChild(popup);
+
+            // Auto dismiss on outside click
+            setTimeout(() => {
+                document.addEventListener('pointerdown', handleOutsidePopupClick, { once: true });
+            }, 50);
+        }
+
+        function handleOutsidePopupClick(e) {
+            const popup = document.getElementById('longPressWidgetPopup');
+            if (popup && !popup.contains(e.target)) {
+                dismissWidgetPopup();
+            }
+        }
+
+        function dismissWidgetPopup() {
+            const p = document.getElementById('longPressWidgetPopup');
+            if (p) p.remove();
+        }
+
+        function executeWidgetRemoval(compId, isApp, title) {
+            dismissWidgetPopup();
+            if (isApp) {
+                lastRemovedWidget = { id: compId, isApp: true, title: title };
+                state.appVisibility[compId] = false;
+            } else {
+                lastRemovedWidget = { id: compId, isApp: false, title: title, prevVal: state.customComponents[compId] || state.activeOs };
+                state.customComponents[compId] = 'none';
+            }
+
+            renderPhoneStage();
+            persistChromaState();
+            showUndoRemovalToast(title);
+        }
+
+        function showUndoRemovalToast(title) {
+            const existing = document.getElementById('widgetUndoBanner');
+            if (existing) existing.remove();
+            clearTimeout(undoBannerTimer);
+
+            const toast = document.createElement('div');
+            toast.id = 'widgetUndoBanner';
+            toast.className = 'fixed bottom-6 inset-x-4 max-w-sm mx-auto z-[150] glass-panel px-4 py-3 rounded-2xl border border-amber-400/40 shadow-2xl flex items-center justify-between gap-3 text-white';
+            toast.innerHTML = `
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-7 h-7 rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center shrink-0">
+                        <i class="ph-bold ph-eye-slash text-sm"></i>
+                    </div>
+                    <span class="text-xs font-semibold truncate">Removed <strong>${title}</strong></span>
+                </div>
+                <button onclick="undoLastWidgetRemoval()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-400 text-black hover:bg-amber-300 active:scale-95 transition-all flex items-center gap-1 shrink-0 shadow">
+                    <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                    <span>Undo</span>
+                </button>
+            `;
+            document.body.appendChild(toast);
+
+            undoBannerTimer = setTimeout(() => {
+                if (toast) toast.remove();
+            }, 6000);
+        }
+
+        function undoLastWidgetRemoval() {
+            const toast = document.getElementById('widgetUndoBanner');
+            if (toast) toast.remove();
+            clearTimeout(undoBannerTimer);
+
+            if (!lastRemovedWidget) return;
+            if (lastRemovedWidget.isApp) {
+                state.appVisibility[lastRemovedWidget.id] = true;
+            } else {
+                state.customComponents[lastRemovedWidget.id] = lastRemovedWidget.prevVal || state.activeOs;
+            }
+
+            const title = lastRemovedWidget.title;
+            lastRemovedWidget = null;
+            renderPhoneStage();
+            persistChromaState();
+            triggerApplyToast(`Restored ${title} to Home!`);
         }
 
         window.addEventListener('DOMContentLoaded', initApp);
