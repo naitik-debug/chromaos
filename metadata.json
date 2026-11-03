@@ -1,0 +1,6 @@
+{
+  "name": "ChromaOS Launcher",
+  "description": "Native Android Home launcher inspired by ChromaOS with 8 OS presets, 10 pill-stack palettes, app drawer, and Theme Studio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
