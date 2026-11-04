@@ -88,42 +88,42 @@
             font-family: var(--font-clock);
         }
 
-        /* Botanical Forest Ambient Background */
+        /* Sophisticated Human-Centred Dark Theme */
         .botanical-bg {
-            background-color: #07110d;
+            background-color: #0D0F12;
             background-image: 
-                radial-gradient(at 12% 15%, rgba(24, 68, 48, 0.55) 0px, transparent 50%),
-                radial-gradient(at 88% 20%, rgba(212, 163, 89, 0.18) 0px, transparent 45%),
-                radial-gradient(at 50% 85%, rgba(16, 52, 42, 0.65) 0px, transparent 55%),
-                radial-gradient(at 80% 80%, rgba(240, 139, 81, 0.14) 0px, transparent 50%);
+                radial-gradient(at 15% 15%, rgba(35, 40, 48, 0.45) 0px, transparent 50%),
+                radial-gradient(at 85% 20%, rgba(42, 38, 34, 0.35) 0px, transparent 45%),
+                radial-gradient(at 50% 85%, rgba(22, 26, 32, 0.6) 0px, transparent 55%),
+                radial-gradient(at 80% 80%, rgba(38, 34, 30, 0.25) 0px, transparent 50%);
             position: relative;
         }
 
-        /* Frosted Glass Cards */
+        /* Frosted Glass Panels - Subtle, clean, balanced */
         .glass-panel {
-            background: rgba(14, 29, 23, 0.62);
-            backdrop-filter: blur(24px) saturate(160%);
-            -webkit-backdrop-filter: blur(24px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.11);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            background: rgba(18, 20, 24, 0.78);
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .glass-pill {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
         }
         .glass-pill:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.18);
             transform: translateY(-1px);
         }
         .glass-pill.active {
             background: linear-gradient(135deg, var(--c-primary), var(--c-tertiary));
             color: #fff;
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 25px -4px var(--c-primary);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
         }
 
         /* None / Hide Option Special Styling */
@@ -437,10 +437,10 @@
 
             <!-- Right Global Actions (Prominent 1-Tap Download Runnable App + Fullscreen Phone) -->
             <div class="flex items-center gap-2 flex-wrap">
-                <!-- PROMINENT GLOWING DOWNLOAD RUNNABLE APP BUTTON -->
-                <button onclick="openDownloadHubModal()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 text-gray-950 bg-gradient-to-r from-emerald-400 via-amber-300 to-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all">
-                    <i class="ph-bold ph-download-simple text-sm"></i>
-                    <span>📲 Download Runnable App</span>
+                <!-- RELEASE NOTES SYSTEM ACTION BUTTON -->
+                <button onclick="openReleaseNotesModal()" class="glass-pill px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 text-slate-200 border-white/10 bg-white/5 hover:bg-white/10 active:scale-95 transition-all" title="View ChromaOS Release Notes, Changelog & Specifications">
+                    <i class="ph-bold ph-newspaper text-sm text-amber-300"></i>
+                    <span>📋 Release Notes</span>
                 </button>
 
                 <!-- Fullscreen Phone Launcher Mode Button -->
@@ -525,7 +525,67 @@
             </div>
             </div>
 
-            <!-- MAIN STUDIO NAVIGATION TABS -->
+                        <!-- OS CONTROL PANEL & NOTIFICATION PANEL CHANGER CARD -->
+            <div id="osControlPanelCard" class="glass-panel rounded-3xl p-5 border border-amber-400/25 shadow-2xl relative overflow-hidden space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold bg-amber-500/20 border border-amber-400/40 shadow-lg">
+                            <i class="ph-fill ph-sliders-horizontal text-xl text-amber-300"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-bold uppercase tracking-wider text-white font-stylish-display">Control &amp; Notification Panel Changer</h3>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-400/20 text-amber-300 border border-amber-400/30">Live Hub</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300 mt-0.5">Transforms toggles, sliders, and notification cards according to the selected OS</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- Mode Switcher: Control Center vs Notifications -->
+                        <div class="flex items-center bg-black/50 p-1 rounded-2xl border border-white/10">
+                            <button onclick="setControlPanelMode('control')" id="btnControlModeToggle" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-amber-400 text-black shadow">
+                                <i class="ph-bold ph-faders"></i> Controls
+                            </button>
+                            <button onclick="setControlPanelMode('notification')" id="btnNotificationModeToggle" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white">
+                                <i class="ph-bold ph-bell-simple"></i> Notifications
+                            </button>
+                        </div>
+                        <!-- Test Full Overlay Button -->
+                        <button onclick="openControlPanelOverlay()" class="px-3.5 py-2 rounded-2xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 border border-amber-400/40 text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all">
+                            <i class="ph-bold ph-arrows-out-simple"></i>
+                            <span>Open on Phone</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OS Control Center Style Switcher Pills -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs text-slate-300">
+                        <span class="font-bold flex items-center gap-1.5 text-amber-300/90">
+                            <i class="ph-fill ph-palette"></i> Active Style Theme:
+                        </span>
+                        <span id="activeControlStyleLabel" class="font-mono text-amber-300 font-bold">Android 17 Expressive</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2" id="controlPanelOsSelectorGrid">
+                        <!-- Generated via JS -->
+                    </div>
+                </div>
+
+                <!-- Live Embedded Interactive Preview Box -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-[11px] text-slate-300">
+                        <span class="font-semibold flex items-center gap-1 text-slate-400">
+                            <i class="ph-bold ph-eye"></i> Live Interactive Mini-Preview:
+                        </span>
+                        <span class="text-[10px] text-slate-400">Tap toggles & sliders to test interactive behavior</span>
+                    </div>
+                    <div id="controlPanelMiniPreviewContainer" class="rounded-2xl bg-black/60 border border-white/15 p-4 shadow-inner max-h-[360px] overflow-y-auto">
+                        <!-- Live Mini Preview Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+<!-- MAIN STUDIO NAVIGATION TABS -->
             <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
                 <button onclick="switchStudioTab('palettes')" id="tabBtn-palettes" class="studio-tab active glass-pill px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 shrink-0">
                     <i class="ph-fill ph-palette text-base"></i>
@@ -2298,183 +2358,140 @@
             <!-- SINGLE PHONE STAGE (HOME OR LOCK) -->
             <div id="singlePhoneContainer" class="flex flex-col items-center">
                 <div id="mainPhoneChassis" class="phone-chassis">
-                    <div id="mainPhoneScreen" class="phone-screen ">
-                <div class="w-full h-full flex flex-col justify-between pb-3 relative" style="background: radial-gradient(circle at 80% 18%, #A78D7866 0%, transparent 48%), radial-gradient(circle at 18% 82%, #BEB5A944 0%, transparent 52%), linear-gradient(165deg, #291C0E 0%, #6E473B 55%, #E1D4C2 100%);">
-                    
-                    <div class="px-5 pt-3 pb-1 flex items-center justify-between text-[11px] font-semibold text-white/90 relative z-20">
-                        <div class="removable-item relative min-w-[42px]">
-                            <span>21:31</span>
+                    <div id="mainPhoneScreen" class="phone-screen">
+                    <div class="w-full h-full flex flex-col justify-between pb-3 relative" style="background: radial-gradient(circle at 80% 18%, #A78D7866 0%, transparent 48%), radial-gradient(circle at 18% 82%, #BEB5A944 0%, transparent 52%), linear-gradient(165deg, #291C0E 0%, #6E473B 55%, #E1D4C2 100%);" data-phone-canvas="true">
+                        <!-- Top Edge Status Bar with Tap Trigger for Control Center -->
+                        <div onclick="openControlPanelOverlay()" class="px-5 pt-3 pb-1 flex items-center justify-between text-[11px] font-semibold text-white/90 relative z-20 cursor-pointer group select-none hover:bg-white/5 transition-colors" title="Tap to pull down Control Center & Notifications">
+                            <div class="removable-item relative min-w-[42px]">
+                                <span>21:31</span>
+                            </div>
+                            <div class="flex justify-center">
+                                <div class="removable-item relative w-3.5 h-3.5 rounded-full bg-black border border-white/20 shadow-inner"></div>
+                            </div>
+                            <div class="removable-item relative flex items-center gap-1.5 min-w-[42px] justify-end">
+                                <i class="ph-bold ph-cell-signal-full"></i>
+                                <i class="ph-bold ph-wifi-high"></i>
+                                <i class="ph-fill ph-battery-high text-emerald-400"></i>
+                            </div>
                         </div>
-                        <div class="flex justify-center">
-                            
-                        <div class="removable-item relative w-3.5 h-3.5 rounded-full bg-black border border-white/20 shadow-inner">
-                            
-                        </div>
-                        </div>
-                        <div class="removable-item relative flex items-center gap-1.5 min-w-[42px] justify-end">
-                            <i class="ph-bold ph-cell-signal-full"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i>
-                        </div>
-                    </div>
-                
 
-                    <div class="px-4 flex-1 flex flex-col justify-start gap-3 overflow-y-auto pt-1">
-                        
-                    <div class="removable-item relative rounded-3xl p-4 flex items-center justify-between shadow-lg" data-removable-id="heroWidget" data-removable-title="Hero Clock Widget" style="background: rgba(20, 26, 30, 0.5720000000000001); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
-                        
-                        <div>
-                            <span class="text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full" style="background:#A78D7833; color:#BEB5A9;">Android 17 Expressive</span>
-                            <div class="text-4xl font-extrabold text-white mt-1 phone-clock-font leading-none">09:41</div>
-                            <span class="text-[11px] text-white/75 mt-1 block">Sun, Nov 1 • 24°C Botanical</span>
-                        </div>
-                        <div class="w-16 h-16 cookie-shape flex flex-col items-center justify-center text-gray-950 font-bold shadow-md" style="background: linear-gradient(135deg, #A78D78, #BEB5A9);">
-                            <i class="ph-fill ph-sun-dim text-xl"></i>
-                            <span class="text-[10px]">72°F</span>
-                        </div>
-                    </div>
-                
-                        
-                <div class="removable-item relative grid grid-cols-2 gap-2.5" data-removable-id="secondaryWidget" data-removable-title="Quick Status Cards">
-                    
-                    <div class="rounded-2xl p-3 flex items-center gap-2.5" style="background: rgba(25, 32, 36, 0.528); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.14);">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-950 font-bold shrink-0" style="background:#BEB5A9">
-                            <i class="ph-fill ph-headphones text-lg"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[11px] font-bold text-white block truncate">Botanical Beats</span>
-                            <span class="text-[9px] text-white/70 block truncate">Hi-Res Lossless</span>
-                        </div>
-                    </div>
-                    <div class="rounded-2xl p-3 flex items-center gap-2.5" style="background: rgba(25, 32, 36, 0.528); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.14);">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold shrink-0" style="background:#E1D4C2">
-                            <i class="ph-fill ph-lightning text-lg"></i>
-                        </div>
-                        <div>
-                            <span class="text-[11px] font-bold text-white block">94% Charged</span>
-                            <span class="text-[9px] text-emerald-300 block">Adaptive Care</span>
-                        </div>
-                    </div>
-                </div>
-            
-                        
-                <div class="grid grid-cols-4 gap-y-3 gap-x-2 py-1">
-                    
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('phone')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #A78D78, #E1D4C2); color:#ffffff; ">
-                            <i class="ph-fill ph-phone-call text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Phone</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('calculator')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #BEB5A9, #A78D78); color:#111827; ">
-                            <i class="ph-fill ph-calculator text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Calculator</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('camera')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #6E473B, #E1D4C2); color:#ffffff; ">
-                            <i class="ph-fill ph-camera text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Camera</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('notes')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #A78D78, #E1D4C2); color:#ffffff; ">
-                            <i class="ph-fill ph-notepad text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Notes</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('music')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #6E473B, #E1D4C2); color:#ffffff; ">
-                            <i class="ph-fill ph-music-notes text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Music</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('clock')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #291C0E, #6E473B); color:#ffffff; ">
-                            <i class="ph-fill ph-alarm text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Clock</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('settings')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #291C0E, #6E473B); color:#ffffff; ">
-                            <i class="ph-fill ph-gear-six text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Settings</span>
-                    </div>
-                
-                    <div class="removable-item relative flex flex-col items-center gap-1 group cursor-pointer" data-removable-id="${app.id}" data-is-app="true" data-removable-title="${app.name}" onclick="openMiniApp('messages')">
-                        
-                        <div class="cookie-shape flex items-center justify-center shadow-md border border-white/20 transition-transform group-hover:scale-105 active:scale-95" style="width:54px; height:54px; background:linear-gradient(135deg, #BEB5A9, #A78D78); color:#111827; ">
-                            <i class="ph-fill ph-chat-circle-dots text-xl"></i>
-                        </div>
-                        <span class="text-[10px] font-medium text-white/90 truncate max-w-[64px]">Messages</span>
-                    </div>
-                
-                </div>
-            
-                    </div>
+                        <!-- Clean Phone Canvas Area: Only Real-Time Battery & Devices Widget By Default -->
+                        <div class="px-4 flex-1 flex flex-col justify-start gap-3 overflow-y-auto pt-1" data-canvas-area="true">
+                            <!-- Real-Time Battery & Connected Devices Hub Widget -->
+                            <div class="removable-item relative rounded-3xl p-4 flex flex-col gap-3.5 shadow-2xl cursor-pointer hover:border-amber-400/40 transition-all group"
+                                 data-removable-id="connectedDevicesWidget"
+                                 data-removable-title="Real-Time Battery & Connected Devices Hub"
+                                 style="background: rgba(18, 24, 28, 0.76); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 16px 36px -10px rgba(0,0,0,0.6);"
+                                 onclick="openBatteryHubModal()">
 
-                    <div class="px-4 pt-1 flex flex-col gap-2 relative z-20">
-                        
-                <div class="removable-item relative rounded-full px-3.5 py-2 flex items-center justify-between text-xs text-white/85 shadow" data-removable-id="searchBar" data-removable-title="Home Search Bar" style="background: rgba(20, 26, 30, 0.72); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);">
-                    
-                    <div class="flex items-center gap-2">
-                        <i class="ph-bold ph-magnifying-glass" style="color:#A78D78"></i>
-                        <span class="text-[11px] text-white/75">Search A17 Expressive...</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class="ph-fill ph-microphone text-white/75"></i>
-                        <i class="ph-fill ph-camera" style="color:#BEB5A9"></i>
-                    </div>
-                </div>
-            
-                        
-                <div class="removable-item relative flex items-center justify-center gap-1.5 py-0.5" data-removable-id="pageDots" data-removable-title="Page Indicator">
-                    
-                    <span class="w-4 h-1.5 rounded-full" style="background:#A78D78"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-                </div>
-            
-                        
-                <div class="removable-item relative rounded-[28px] p-2.5 flex items-center justify-around shadow-xl" data-removable-id="dock" data-removable-title="Favorites Dock" style="background: rgba(18, 24, 28, 0.68); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.16);">
-                    
-                    
-                        <div onclick="openMiniApp('phone')" class="cookie-shape w-11 h-11 flex items-center justify-center text-white shadow border border-white/20 cursor-pointer active:scale-95 transition-transform" style="background: linear-gradient(135deg, #A78D78, #6E473B); ">
-                            <i class="ph-fill ph-phone-call text-lg"></i>
+                                <!-- Widget Header -->
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="relative flex items-center justify-center">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping absolute opacity-75"></span>
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                                        </div>
+                                        <span class="text-[11px] uppercase tracking-wider font-extrabold text-white font-stylish-display">Real-Time Battery Telemetry</span>
+                                    </div>
+                                    <span class="text-[10px] text-amber-300 font-mono font-bold flex items-center gap-1 group-hover:text-white transition-colors">
+                                        <i class="ph-bold ph-sliders"></i> Details
+                                    </span>
+                                </div>
+
+                                <!-- Phone Telemetry Hero -->
+                                <div class="flex items-center justify-between p-3 rounded-2xl bg-black/45 border border-white/10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="relative w-12 h-12 flex items-center justify-center shrink-0">
+                                            <svg class="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                                                <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3"></circle>
+                                                <circle cx="18" cy="18" r="14" fill="none" stroke="#34D399" stroke-width="3.5" stroke-dasharray="88" stroke-dashoffset="13" stroke-linecap="round"></circle>
+                                            </svg>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <i class="ph-fill ph-lightning text-emerald-300 text-lg animate-pulse"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-baseline gap-1">
+                                                <span class="text-2xl font-black text-white phone-clock-font leading-none" id="heroBatteryPct">85%</span>
+                                                <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-300">● Charging</span>
+                                            </div>
+                                            <span class="text-[10px] text-slate-300 block mt-0.5">Adaptive Battery Care</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-[10px] font-mono text-amber-300 font-bold block">26.4°C</span>
+                                        <span class="text-[9px] text-emerald-400 font-semibold block">Good Health</span>
+                                    </div>
+                                </div>
+
+                                <!-- Connected Bluetooth Accessories Row -->
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center justify-between text-[10px] text-slate-400 px-1">
+                                        <span class="font-bold flex items-center gap-1 text-slate-300">
+                                            <i class="ph-fill ph-bluetooth text-sky-400"></i> Connected Accessories (3)
+                                        </span>
+                                        <span class="text-[9px] text-sky-300 hover:underline">+ Pair / Refresh</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 overflow-x-auto pb-0.5">
+                                        <div class="flex-1 min-w-[92px] bg-black/40 hover:bg-black/60 rounded-2xl p-2.5 border border-white/10 flex flex-col justify-between gap-1.5 shadow-sm">
+                                            <div class="flex items-center justify-between">
+                                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-white/90">
+                                                    <i class="ph-fill ph-headphones text-xs"></i>
+                                                </div>
+                                                <span class="text-[11px] font-mono font-bold text-emerald-300">92%</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-white block truncate leading-tight">Chroma Buds Pro</span>
+                                                <span class="text-[8px] text-slate-400 block truncate">Active (ANC)</span>
+                                            </div>
+                                            <div class="w-full h-1 rounded-full bg-white/10 overflow-hidden">
+                                                <div class="h-full rounded-full bg-emerald-400" style="width: 92%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1 min-w-[92px] bg-black/40 hover:bg-black/60 rounded-2xl p-2.5 border border-white/10 flex flex-col justify-between gap-1.5 shadow-sm">
+                                            <div class="flex items-center justify-between">
+                                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-white/90">
+                                                    <i class="ph-fill ph-watch text-xs"></i>
+                                                </div>
+                                                <span class="text-[11px] font-mono font-bold text-emerald-300">74%</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-white block truncate leading-tight">Watch Ultra</span>
+                                                <span class="text-[8px] text-slate-400 block truncate">Synced</span>
+                                            </div>
+                                            <div class="w-full h-1 rounded-full bg-white/10 overflow-hidden">
+                                                <div class="h-full rounded-full bg-emerald-400" style="width: 74%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1 min-w-[92px] bg-black/40 hover:bg-black/60 rounded-2xl p-2.5 border border-white/10 flex flex-col justify-between gap-1.5 shadow-sm">
+                                            <div class="flex items-center justify-between">
+                                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-white/90">
+                                                    <i class="ph-fill ph-pencil-simple text-xs"></i>
+                                                </div>
+                                                <span class="text-[11px] font-mono font-bold text-emerald-300">100%</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-white block truncate leading-tight">Smart Stylus</span>
+                                                <span class="text-[8px] text-slate-400 block truncate">Docked</span>
+                                            </div>
+                                            <div class="w-full h-1 rounded-full bg-white/10 overflow-hidden">
+                                                <div class="h-full rounded-full bg-emerald-400" style="width: 100%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    
-                        <div onclick="openMiniApp('calculator')" class="cookie-shape w-11 h-11 flex items-center justify-center text-white shadow border border-white/20 cursor-pointer active:scale-95 transition-transform" style="background: linear-gradient(135deg, #E1D4C2, #6E473B); ">
-                            <i class="ph-fill ph-calculator text-lg"></i>
+
+                        <!-- Clean Edge Hint (Press & Hold anywhere to open Widget Catalog) -->
+                        <div class="px-5 py-1 text-center select-none opacity-50 hover:opacity-100 transition-opacity">
+                            <span class="text-[9px] text-white/60 font-mono tracking-widest uppercase">Hold Screen to Place Widgets</span>
                         </div>
-                    
-                        <div onclick="openMiniApp('camera')" class="cookie-shape w-11 h-11 flex items-center justify-center text-white shadow border border-white/20 cursor-pointer active:scale-95 transition-transform" style="background: linear-gradient(135deg, #A78D78, #6E473B); ">
-                            <i class="ph-fill ph-camera text-lg"></i>
-                        </div>
-                    
-                        <div onclick="openMiniApp('notes')" class="cookie-shape w-11 h-11 flex items-center justify-center text-white shadow border border-white/20 cursor-pointer active:scale-95 transition-transform" style="background: linear-gradient(135deg, #E1D4C2, #6E473B); ">
-                            <i class="ph-fill ph-notepad text-lg"></i>
-                        </div>
-                    
-                </div>
-            
                     </div>
                 </div>
             </div>
 
-                    <!-- Animated On-Device Theme Apply Progress Overlay -->
+            <!-- Animated On-Device Theme Apply Progress Overlay -->
                     <div id="applyProgressOverlay" class="hidden absolute inset-[11px] rounded-[42px] bg-black/85 backdrop-blur-xl z-40 flex flex-col items-center justify-center p-6 text-center">
                         <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-4 shadow-2xl border border-white/25 animate-bounce" style="background: linear-gradient(135deg, var(--c-primary), var(--c-tertiary));">
                             <i class="ph-fill ph-paint-brush-broad text-3xl text-white"></i>
@@ -2502,9 +2519,6 @@
                     <span id="summaryConfigLabel" class="font-bold text-white font-stylish-display truncate block">Android 17 • Espresso Roast</span>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button onclick="downloadStandaloneAppFile()" class="glass-pill px-3 py-2 rounded-xl text-xs font-bold text-emerald-300 border-emerald-400/35 flex items-center gap-1" title="1-Tap Direct HTML App Download">
-                        <i class="ph-bold ph-download-simple"></i> Save App
-                    </button>
                     <button onclick="triggerMasterApplyFlow()" class="px-3.5 py-2 rounded-xl text-xs font-bold text-white shadow flex items-center gap-1" style="background: linear-gradient(135deg, var(--c-primary), var(--c-tertiary));">
                         <i class="ph-bold ph-check"></i> Apply OS
                     </button>
@@ -2599,6 +2613,158 @@
     <!-- EXPORT / APPLY MODAL -->
     
     <!-- REAL-TIME BATTERY & CONNECTED DEVICES HUB MODAL -->
+    
+    <!-- TACTILE WIDGET CATALOG DRAWER (HUMAN-DESIGNED) -->
+    <div id="widgetCatalogSheet" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-panel rounded-t-[36px] sm:rounded-3xl max-w-xl w-full p-6 border border-white/20 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold bg-amber-500/20 border border-amber-400/30 shadow-lg">
+                        <i class="ph-fill ph-plus-circle text-xl text-amber-300"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-white font-stylish-display">Widget Catalog</h3>
+                        <p class="text-[11px] text-slate-300">Select any widget to place it onto your Home Screen</p>
+                    </div>
+                </div>
+                <button onclick="closeWidgetCatalogSheet()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 text-white">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <!-- Widget Catalog Items Scroll Area -->
+            <div class="overflow-y-auto space-y-3 pr-1 flex-1">
+                <!-- 1. Real-Time Battery Indicator -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-battery-charging text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Real-Time Battery Indicator</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Real phone battery % + dynamic charging & health reporting</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('batteryWidget', 'batteryWidget', 'Real-Time Battery')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 2. Pixel At-a-Glance Clock -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-calendar-blank text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Pixel At-a-Glance Clock</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Date, weather pill, and clean digital time display</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('heroWidget', 'pixel', 'Pixel Clock')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 3. Android 17 Split Clock -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-android-logo text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Android 17 Organic Split Clock</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Bold expressive typography with cookie-shape weather capsule</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('heroWidget', 'android17', 'A17 Clock')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 4. Nothing OS Dot Matrix Clock -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 border border-red-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-dots-nine text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Nothing OS Dot Matrix Clock</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Industrial cyber dot-matrix typography with red accent</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('heroWidget', 'nothing', 'Nothing Clock')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 5. Connected Bluetooth Device Indicator -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-sky-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-bluetooth text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Bluetooth Device Indicator</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Dynamically shows connected headphones or watch; auto-hides when disconnected</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('bluetoothWidget', 'bluetoothWidget', 'Bluetooth Device')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 6. Home Search Bar Pill -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-magnifying-glass text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Home Search Bar Pill</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Minimalist search pill with voice command triggers</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('searchBar', 'searchBar', 'Search Pill')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 7. Core App Grid -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-squares-four text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Home App Icons Grid</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Interactive app icon grid with custom shape masks</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('icons', 'icons', 'App Grid')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+
+                <!-- 8. Favorites Dock Bar -->
+                <div class="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 hover:border-amber-400/40 transition-all">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-dock text-xl"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">Bottom Favorites Dock Bar</h4>
+                            <p class="text-[10px] text-slate-300 mt-0.5">Frosted glass bottom dock hosting pinned core applications</p>
+                        </div>
+                    </div>
+                    <button onclick="addWidgetFromCatalog('dock', 'dock', 'Favorites Dock')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 shrink-0 active:scale-95 transition-all">
+                        + Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="batteryHubModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-panel rounded-3xl max-w-lg w-full p-6 border border-white/20 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-3">
@@ -2681,7 +2847,144 @@
         </div>
     </div>
 
-    <div id="exportModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+        <!-- FULL INTERACTIVE CONTROL CENTER & NOTIFICATION PANEL DRAWER (MODAL OVERLAY) -->
+    <div id="controlPanelDrawerModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-panel rounded-t-[36px] sm:rounded-3xl max-w-lg w-full p-5 border border-white/20 space-y-4 max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden" id="controlPanelDrawerInner">
+            <!-- Dismiss Drag Handle -->
+            <div class="w-12 h-1 rounded-full bg-white/30 mx-auto -mt-1 mb-1 sm:hidden"></div>
+
+            <!-- Drawer Header -->
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold bg-amber-500/20 border border-amber-400/30 shadow">
+                        <i id="drawerHeaderIcon" class="ph-fill ph-sliders-horizontal text-lg text-amber-300"></i>
+                    </div>
+                    <div>
+                        <h4 id="drawerHeaderTitle" class="text-sm font-bold text-white font-stylish-display">Control Center</h4>
+                        <span id="drawerHeaderSubtitle" class="text-[10px] text-amber-300 font-mono">Pixel 10 Material You</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center bg-black/50 p-0.5 rounded-xl border border-white/10 text-xs">
+                        <button onclick="setControlPanelMode('control')" id="drawerToggleControlBtn" class="px-2.5 py-1 rounded-lg font-bold bg-amber-400 text-black">Control</button>
+                        <button onclick="setControlPanelMode('notification')" id="drawerToggleNotifBtn" class="px-2.5 py-1 rounded-lg font-bold text-slate-300">Notifs</button>
+                    </div>
+                    <button onclick="closeControlPanelOverlay()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+                        <i class="ph-bold ph-x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Drawer Body -->
+            <div id="controlPanelDrawerBody" class="overflow-y-auto space-y-3 flex-1 pr-1">
+                <!-- Dynamically rendered full control panel / notification panel -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHROMAOS SYSTEM RELEASE NOTES MODAL -->
+    <div id="releaseNotesModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+        <div class="glass-panel rounded-3xl max-w-xl w-full p-5 sm:p-6 border border-white/15 space-y-4 max-h-[90vh] flex flex-col shadow-2xl overflow-hidden bg-[#101317]">
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-amber-300 font-bold bg-white/5 border border-white/10 shadow-sm">
+                        <i class="ph-bold ph-newspaper text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-base font-bold text-white font-stylish-display">ChromaOS Release Notes</h3>
+                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30">v2.1.0 Stable</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Release Date: November 2026 • Official Build</p>
+                    </div>
+                </div>
+                <button onclick="closeReleaseNotesModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 text-white transition-all">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <!-- Content Scroll Area -->
+            <div class="overflow-y-auto space-y-4 pr-1 flex-1 text-xs text-slate-300 leading-relaxed">
+                <!-- System Specifications Card -->
+                <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                    <span class="text-[11px] font-bold text-white flex items-center gap-1.5 uppercase tracking-wider">
+                        <i class="ph-fill ph-cpu text-amber-400"></i> System Specifications
+                    </span>
+                    <div class="grid grid-cols-2 gap-2 text-[11px]">
+                        <div><span class="text-slate-400">App Name:</span> <span class="text-white font-semibold">ChromaOS</span></div>
+                        <div><span class="text-slate-400">Version:</span> <span class="text-white font-semibold">2.1.0 (Build 2)</span></div>
+                        <div><span class="text-slate-400">Min Android Version:</span> <span class="text-white font-semibold">Android 7.0+ (API 24)</span></div>
+                        <div><span class="text-slate-400">Target Platform:</span> <span class="text-white font-semibold">Android 10 - 16 (API 36)</span></div>
+                        <div><span class="text-slate-400">Architecture:</span> <span class="text-white font-semibold">Native Broadcast + Kotlin</span></div>
+                        <div><span class="text-slate-400">Theme System:</span> <span class="text-white font-semibold">Obsidian Dark (Human-Centred)</span></div>
+                    </div>
+                </div>
+
+                <!-- New Features -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="ph-fill ph-sparkle text-emerald-400"></i> New Features
+                    </h4>
+                    <div class="space-y-2">
+                        <div class="p-3 rounded-xl bg-black/40 border border-white/5">
+                            <span class="font-bold text-white block text-[11px]">1. Real-Time Battery Indicator Widget</span>
+                            <p class="text-slate-400 text-[10px] mt-0.5">Direct native Android broadcast receiver tracking battery percentage, charging state, charger type (AC/USB/Qi), temperature, and health telemetry. Zero simulated or fake values.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-black/40 border border-white/5">
+                            <span class="font-bold text-white block text-[11px]">2. Dynamic Bluetooth Device Indicator</span>
+                            <p class="text-slate-400 text-[10px] mt-0.5">Queries real connected audio devices, headsets, and peripherals. Completely hidden when no device is connected; automatically renders device name and status when connected.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-black/40 border border-white/5">
+                            <span class="font-bold text-white block text-[11px]">3. Dark Human-Centred Design System</span>
+                            <p class="text-slate-400 text-[10px] mt-0.5">Sophisticated charcoal, graphite, deep grey, and muted warm stone tones. Eliminates neon glow clutter and generic AI dashboard aesthetic in favor of balanced commercial design.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Improvements & Optimizations -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="ph-fill ph-wrench text-sky-400"></i> Improvements & Optimizations
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-300">
+                        <li>Event-driven architecture: Updates instantly on native broadcasts rather than expensive background polling loops.</li>
+                        <li>Clean canvas default: Clean home screen canvas with widget hold-to-remove and intuitive catalog sheet.</li>
+                        <li>Hardware-accelerated rendering: GPU-backed surface layers for 60fps/120fps transitions.</li>
+                        <li>Automated reproducible release workflow configured with direct APK build output.</li>
+                    </ul>
+                </div>
+
+                <!-- Bug Fixes -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="ph-fill ph-check-circle text-amber-400"></i> Bug Fixes
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-300">
+                        <li>Removed legacy non-realtime battery widget and "Chroma High Resolution" placeholder cards.</li>
+                        <li>Removed redundant "Download Runnable App" and "Save App" action buttons.</li>
+                        <li>Properly isolated Bluetooth permissions for Android 10-11 (<code class="text-amber-200">BLUETOOTH</code>) and Android 12-16 (<code class="text-amber-200">BLUETOOTH_CONNECT</code>).</li>
+                    </ul>
+                </div>
+
+                <!-- Known Limitations -->
+                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-400/20 text-[11px]">
+                    <span class="font-bold text-amber-300 block mb-1">Known Limitations</span>
+                    <p class="text-slate-300">Bluetooth accessory name resolution on Android 12+ requires runtime permission approval. Battery temperature precision depends on OEM hardware sensor capabilities.</p>
+                </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="pt-2 border-t border-white/10 flex items-center justify-between shrink-0">
+                <span class="text-[10px] text-slate-400 font-mono">ChromaOS Lab • Build 2026.11</span>
+                <button onclick="closeReleaseNotesModal()" class="px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/15 text-white active:scale-95 transition-all">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+<div id="exportModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-panel rounded-3xl max-w-xl w-full p-6 border border-white/20 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-3">
                 <div class="flex items-center gap-2">
@@ -3075,7 +3378,7 @@
             isCustomRemix: false,
             activePaletteIndex: 0,
             colors: [...PALETTES[0].colors],
-            activeFontPack: 'syne',
+            activeFontPack: 'editorial',
             screenViewMode: 'home', // 'home' | 'lock' | 'compare'
             activeMiniApp: null, // null | 'phone' | 'calculator' | 'camera' | 'clock' | 'notes' | 'music' | 'settings'
             directHideMode: false,
@@ -3112,17 +3415,40 @@
             },
 
             // Custom OS Lab Per-Component Mapping (Can be any of the 8 OS IDs OR 'none')
+            controlPanelStyle: 'android17', // 'android17' | 'pixel' | 'ios' | 'hyperos' | 'nothing'
+            controlPanelMode: 'control', // 'control' | 'notification'
+            controlToggles: {
+                wifi: true,
+                bluetooth: true,
+                airplane: false,
+                flashlight: false,
+                dnd: false,
+                batterySaver: false,
+                autoRotate: true,
+                hotspot: false
+            },
+            controlBrightness: 82,
+            controlVolume: 74,
+            notificationsList: [
+                { id: 'notif-1', app: 'Messages', title: 'Liam Vance', body: 'The new obsidian editorial glass theme looks incredible on this display!', time: '2m ago', icon: 'ph-chat-circle-dots', color: '#BEB5A9' },
+                { id: 'notif-2', app: 'Chroma OS', title: 'Battery Telemetry Synced', body: 'Phone: 85% • Chroma Buds Pro: 92% • Chroma Watch Ultra: 74%', time: '12m ago', icon: 'ph-battery-charging', color: '#10B981' },
+                { id: 'notif-3', app: 'Calendar', title: 'Design Review: Android 17', body: 'Starts in 25 minutes • Design Studio Room 4', time: '25m ago', icon: 'ph-calendar-blank', color: '#F59E0B' }
+            ],
+            // Custom OS Lab Per-Component Mapping (Real-Time Battery indicator active on clean canvas)
             customComponents: {
-                cutout: 'android17',
-                statusBar: 'android17',
+                cutout: 'none',
+                statusBar: 'none',
                 lockClock: 'android17',
                 lockShortcuts: 'android17',
-                heroWidget: 'android17',
-                secondaryWidget: 'android17',
-                icons: 'android17',
-                dock: 'android17',
-                searchBar: 'android17',
-                pageDots: 'android17'
+                heroWidget: 'none',
+                secondaryWidget: 'none',
+                batteryWidget: 'batteryWidget', // Dedicated real-time battery indicator
+                bluetoothWidget: 'bluetoothWidget', // Active only when Bluetooth device is connected
+                connectedDevicesWidget: 'none',
+                icons: 'none',
+                dock: 'none',
+                searchBar: 'none',
+                pageDots: 'none'
             },
 
             // Extra granular visibility toggles (true = visible, false = 'None' / hidden)
@@ -3181,6 +3507,7 @@
             renderCustomOsBuilder();
             renderWidgetsTabSelectors();
             renderFontCards();
+            renderControlPanelStudioBox();
             renderPhoneStage();
             startLiveClockTicker();
             setupBatteryTelemetry();
@@ -3312,6 +3639,7 @@
             state.activeOs = osId;
             state.isCustomRemix = false;
             state.iconRadius = OS_PRESETS[osId].defaultRadius;
+            state.controlPanelStyle = osId;
 
             // Sync non-'none' components to the selected OS, preserving user's explicit 'none' choices
             Object.keys(state.customComponents).forEach(key => {
@@ -3325,6 +3653,7 @@
             renderCustomOsBuilder();
             renderWidgetsTabSelectors();
             renderPhoneStage();
+            renderControlPanelStudioBox();
             updateSummaryLabels();
         }
 
@@ -3736,7 +4065,7 @@
                     state.customComponents,
                     state.screenViewMode === 'lock'
                 );
-                setTimeout(attachLongPressHandlersToWidgets, 30);
+                setTimeout(() => { attachLongPressHandlersToWidgets(); attachCanvasLongPress(); }, 30);
             }
         }
 
@@ -3827,7 +4156,7 @@
             let topBarHTML = '';
             if (statusStyle !== 'none' || cutoutStyle !== 'none') {
                 topBarHTML = `
-                    <div class="px-5 pt-3 pb-1 flex items-center justify-between text-[11px] font-semibold text-white/90 relative z-20">
+                    <div onclick="openControlPanelOverlay()" class="px-5 pt-3 pb-1 flex items-center justify-between text-[11px] font-semibold text-white/90 relative z-20 cursor-pointer group select-none hover:bg-white/5 transition-colors" title="Tap to pull down Control Center & Notifications">
                         <div class="removable-item relative min-w-[42px]">
                             ${statusStyle !== 'none' ? `<span>${nowStr}</span>${quickHideBadge('statusBar')}` : ''}
                         </div>
@@ -3835,7 +4164,7 @@
                             ${cutoutHTML}
                         </div>
                         <div class="removable-item relative flex items-center gap-1.5 min-w-[42px] justify-end">
-                            ${statusStyle !== 'none' ? `<i class="ph-bold ph-cell-signal-full"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i>` : ''}
+                            ${statusStyle !== 'none' ? `<i class="ph-bold ph-cell-signal-full"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high text-emerald-400"></i>` : ''}
                         </div>
                     </div>
                 `;
@@ -3869,14 +4198,36 @@
                 `;
             }
 
-            return `
-                <div class="w-full h-full flex flex-col justify-between pb-3 relative" style="${bgStyle}">
-                    ${topBarHTML}
+            const hasBtConnected = state.battery?.connectedDevices && state.battery.connectedDevices.length > 0;
+            const hasAnyWidget = compMap.heroWidget !== 'none' ||
+                                 (compMap.batteryWidget && compMap.batteryWidget !== 'none') ||
+                                 (compMap.connectedDevicesWidget && compMap.connectedDevicesWidget !== 'none') ||
+                                 (compMap.bluetoothWidget && compMap.bluetoothWidget !== 'none' && hasBtConnected) ||
+                                 compMap.icons !== 'none' ||
+                                 compMap.dock !== 'none' ||
+                                 compMap.searchBar !== 'none';
 
-                    <div class="px-4 flex-1 flex flex-col justify-start gap-3 overflow-y-auto pt-1">
+            let homeContentHTML = '';
+            if (!hasAnyWidget) {
+                homeContentHTML = `
+                    <div class="empty-home-canvas flex-1 flex flex-col items-center justify-center p-6 text-center select-none" data-canvas-empty="true">
+                        <div class="w-16 h-16 rounded-3xl flex items-center justify-center mb-3 bg-white/5 border border-white/10 shadow-2xl backdrop-blur-md">
+                            <i class="ph-light ph-hand-tap text-3xl text-amber-300/90 animate-pulse"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-white font-stylish-display tracking-tight">Clean Editorial Canvas</h3>
+                        <p class="text-xs text-slate-300/80 mt-1.5 max-w-[240px] leading-relaxed">Press &amp; hold anywhere on this screen to open the Widget Catalog and place widgets.</p>
+                        <button onclick="openWidgetCatalogSheet()" class="mt-4 px-4 py-2 rounded-2xl bg-amber-400/20 hover:bg-amber-400/30 text-xs font-bold text-amber-200 border border-amber-400/40 flex items-center gap-1.5 shadow-sm active:scale-95 transition-all">
+                            <i class="ph-bold ph-plus-circle"></i>
+                            <span>Add Widgets</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                homeContentHTML = `
+                    <div class="px-4 flex-1 flex flex-col justify-start gap-3 overflow-y-auto pt-1" data-canvas-area="true">
                         ${buildHeroWidgetHTML(compMap.heroWidget)}
-                        ${buildSecondaryWidgetHTML(compMap.secondaryWidget)}
-                        ${buildConnectedDevicesWidgetHTML()}
+                        ${buildRealtimeBatteryWidgetHTML()}
+                        ${buildBluetoothDeviceWidgetHTML()}
                         ${buildAppIconsGridHTML(compMap.icons)}
                     </div>
 
@@ -3885,6 +4236,13 @@
                         ${buildPageDotsHTML(compMap.pageDots)}
                         ${buildBottomDockHTML(compMap.dock)}
                     </div>
+                `;
+            }
+
+            return `
+                <div class="w-full h-full flex flex-col justify-between pb-3 relative" style="${bgStyle}" data-phone-canvas="true">
+                    ${topBarHTML}
+                    ${homeContentHTML}
                 </div>
             `;
         }
@@ -4397,91 +4755,142 @@
         }
 
         function buildSecondaryWidgetHTML(secOs) {
-            if (secOs === 'none') return '';
-            const [c1, c2, c3, c4, c5] = state.colors;
-            const glassBg = `background: rgba(25, 32, 36, ${state.widgetOpacity * 0.6}); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.14);`;
+            // Unwanted legacy widgets ('Chroma High Resolution' & non-realtime battery card) permanently removed
+            return '';
+        }
+
+        function buildRealtimeBatteryWidgetHTML() {
+            if (state.customComponents?.batteryWidget === 'none') return '';
+            const phone = state.battery?.phone || { percentage: 85, isCharging: false, statusText: 'On Battery', plugType: 'Discharging' };
+            const pct = (typeof phone.percentage === 'number' && phone.percentage >= 0) ? phone.percentage : 85;
+            const isCharging = !!phone.isCharging;
+            const isFull = !!phone.isFull || pct === 100;
+
+            // Sophisticated dark graphite container adhering to human-centred dark design
+            const cardBg = `background: rgba(18, 20, 24, ${state.widgetOpacity * 0.88}); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 24px -6px rgba(0,0,0,0.45);`;
+
+            // Subtle battery icon
+            let battIcon = 'ph-battery-high';
+            if (isCharging) {
+                battIcon = 'ph-lightning';
+            } else if (pct <= 15) {
+                battIcon = 'ph-battery-warning';
+            } else if (pct <= 40) {
+                battIcon = 'ph-battery-low';
+            } else if (pct <= 75) {
+                battIcon = 'ph-battery-medium';
+            }
+
+            const stateColor = isCharging ? 'text-emerald-400' : (pct <= 15 ? 'text-rose-400' : 'text-slate-300');
+            const barFillColor = isCharging ? 'bg-emerald-400' : (pct <= 15 ? 'bg-rose-500' : 'bg-amber-200/80');
 
             return `
-                <div class="removable-item relative grid grid-cols-2 gap-2.5" data-removable-id="secondaryWidget" data-removable-title="Quick Status Cards">
-                    ${quickHideBadge('secondaryWidget')}
-                    <div class="rounded-2xl p-3 flex items-center gap-2.5" style="${glassBg}">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-950 font-bold shrink-0" style="background:${c4}">
-                            <i class="ph-fill ph-headphones text-lg"></i>
+                <div class="removable-item relative rounded-2xl p-4 flex flex-col gap-2.5 transition-all select-none cursor-pointer hover:border-white/20 active:scale-[0.99]"
+                     data-removable-id="batteryWidget"
+                     data-removable-title="Real-Time Battery Indicator"
+                     style="${cardBg}"
+                     onclick="window.AndroidBridge && window.AndroidBridge.openBatterySettings ? window.AndroidBridge.openBatterySettings() : openBatteryHubModal()">
+                    ${quickHideBadge('batteryWidget')}
+
+                    <!-- Header Row: Minimal Label & Telemetry -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full ${isCharging ? 'bg-emerald-400 animate-ping' : 'bg-emerald-400'}"></span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-slate-400 font-stylish-display">Phone Battery</span>
                         </div>
-                        <div class="min-w-0">
-                            <span class="text-[11px] font-bold text-white block truncate">Botanical Beats</span>
-                            <span class="text-[9px] text-white/70 block truncate">Hi-Res Lossless</span>
+                        <span class="text-[10px] text-slate-400 font-mono font-medium flex items-center gap-1">
+                            ${phone.temperature ? `<span>${phone.temperature}</span> • ` : ''}
+                            <span>${phone.health || 'Good'}</span>
+                        </span>
+                    </div>
+
+                    <!-- Main Battery Status -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-extrabold text-white font-mono leading-none">${pct}%</span>
+                            <span class="text-[11px] font-semibold text-slate-300">${phone.statusText || (isCharging ? 'Charging' : 'Discharging')}</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center ${stateColor}">
+                            <i class="ph-fill ${battIcon} text-lg"></i>
                         </div>
                     </div>
-                    <div class="rounded-2xl p-3 flex items-center gap-2.5" style="${glassBg}">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold shrink-0" style="background:${c5}">
-                            <i class="ph-fill ph-lightning text-lg"></i>
-                        </div>
-                        <div>
-                            <span class="text-[11px] font-bold text-white block">94% Charged</span>
-                            <span class="text-[9px] text-emerald-300 block">Adaptive Care</span>
-                        </div>
+
+                    <!-- Subtle Horizontal Level Bar -->
+                    <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                        <div class="h-full rounded-full ${barFillColor} transition-all duration-500" style="width: ${pct}%"></div>
                     </div>
                 </div>
             `;
         }
 
-        
-        function buildConnectedDevicesWidgetHTML() {
-            if (state.customComponents?.connectedDevicesWidget === 'none') return '';
-            const [c1, c2, c3, c4, c5] = state.colors;
-            const glassBg = `background: rgba(18, 24, 28, ${state.widgetOpacity * 0.72}); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.16);`;
-
-            const phone = state.battery?.phone || { percentage: 85, isCharging: false, statusText: 'On Battery' };
+        function buildBluetoothDeviceWidgetHTML() {
+            if (state.customComponents?.bluetoothWidget === 'none') return '';
             const devices = state.battery?.connectedDevices || [];
 
-            const devItemsHTML = devices.map(d => {
-                const isHigh = d.battery >= 60;
-                const isMed = d.battery >= 25 && d.battery < 60;
-                const badgeColor = isHigh ? 'text-emerald-300' : (isMed ? 'text-amber-300' : 'text-rose-400');
+            // STRICT REQUIREMENT: If no Bluetooth device is connected, hide the widget completely!
+            if (!devices || devices.length === 0) {
+                return '';
+            }
+
+            const cardBg = `background: rgba(18, 20, 24, ${state.widgetOpacity * 0.88}); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 24px -6px rgba(0,0,0,0.45);`;
+
+            const devCards = devices.map(d => {
+                const icon = d.icon || (d.type === 'headphones' ? 'ph-headphones' : 'ph-bluetooth');
+                const hasBatt = typeof d.battery === 'number' && d.battery >= 0;
                 return `
-                    <div class="flex-1 bg-black/45 rounded-xl p-2 border border-white/10 flex flex-col items-center justify-center text-center gap-1 min-w-[72px] hover:border-white/25 transition-all">
-                        <div class="flex items-center gap-1 text-[11px] font-bold ${badgeColor}">
-                            <i class="ph-fill ${d.icon || 'ph-bluetooth'} text-xs"></i>
-                            <span>${d.battery}%</span>
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-400/20 text-sky-300 flex items-center justify-center shrink-0">
+                                <i class="ph-fill ${icon} text-base"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-xs font-bold text-white block truncate">${d.name || 'Bluetooth Device'}</span>
+                                <span class="text-[10px] text-slate-400 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                                    <span>${d.status || 'Connected'}</span>
+                                </span>
+                            </div>
                         </div>
-                        <span class="text-[9px] text-white/85 truncate w-full font-semibold">${d.name.split(' ')[0]}</span>
+                        ${hasBatt ? `
+                            <div class="text-right shrink-0">
+                                <span class="text-xs font-mono font-bold text-emerald-300">${d.battery}%</span>
+                                <div class="w-10 h-1 rounded-full bg-white/10 overflow-hidden mt-1">
+                                    <div class="h-full rounded-full bg-emerald-400" style="width: ${d.battery}%"></div>
+                                </div>
+                            </div>
+                        ` : `
+                            <span class="text-[10px] text-slate-400 font-mono">Active</span>
+                        `}
                     </div>
                 `;
             }).join('');
 
             return `
-                <div class="removable-item relative rounded-2xl p-3 flex flex-col gap-2 shadow-lg cursor-pointer hover:border-white/25 transition-all" data-removable-id="connectedDevicesWidget" data-removable-title="Live Battery & Devices Hub" style="${glassBg}" onclick="openBatteryHubModal()">
-                    ${quickHideBadge('connectedDevicesWidget')}
-                    <div class="flex items-center justify-between">
+                <div class="removable-item relative rounded-2xl p-3.5 flex flex-col gap-2 select-none cursor-pointer hover:border-white/20 transition-all active:scale-[0.99]"
+                     data-removable-id="bluetoothWidget"
+                     data-removable-title="Connected Bluetooth Device"
+                     style="${cardBg}"
+                     onclick="window.AndroidBridge && window.AndroidBridge.openBluetoothSettings ? window.AndroidBridge.openBluetoothSettings() : null">
+                    ${quickHideBadge('bluetoothWidget')}
+
+                    <div class="flex items-center justify-between px-0.5">
                         <div class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full ${phone.isCharging ? 'bg-emerald-400 animate-ping' : 'bg-emerald-400'}"></span>
-                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-white/95">Live Battery & Connected Devices</span>
+                            <i class="ph-fill ph-bluetooth text-sky-400 text-xs"></i>
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-slate-400 font-stylish-display">Connected Bluetooth Device</span>
                         </div>
-                        <span class="text-[9px] text-amber-300 font-mono font-bold flex items-center gap-1 hover:text-white">
-                            <i class="ph-bold ph-sliders"></i> Details
-                        </span>
+                        <span class="text-[9px] text-sky-300 font-mono">Linked</span>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <!-- Phone Main Battery Gauge -->
-                        <div class="flex items-center gap-2 bg-black/50 rounded-xl px-2.5 py-1.5 border border-white/10 shrink-0">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white ${phone.isCharging ? 'bg-emerald-500 animate-pulse' : ''}" style="${!phone.isCharging ? `background:${c3}` : ''}">
-                                <i class="ph-fill ${phone.isCharging ? 'ph-lightning' : 'ph-device-mobile'} text-sm"></i>
-                            </div>
-                            <div>
-                                <span class="text-xs font-bold text-white leading-none block">${phone.percentage}%</span>
-                                <span class="text-[8px] text-emerald-300 uppercase tracking-widest font-extrabold">${phone.isCharging ? '⚡ Charging' : 'Phone'}</span>
-                            </div>
-                        </div>
-
-                        <!-- Connected Bluetooth Devices Row -->
-                        <div class="flex-1 flex items-center gap-1.5 overflow-x-auto">
-                            ${devItemsHTML}
-                        </div>
+                    <div class="flex flex-col gap-1.5">
+                        ${devCards}
                     </div>
                 </div>
             `;
+        }
+
+        function buildConnectedDevicesWidgetHTML() {
+            // Backward-compatibility wrapper delegating to real-time widgets
+            return buildRealtimeBatteryWidgetHTML() + buildBluetoothDeviceWidgetHTML();
         }
 
         function openBatteryHubModal() {
@@ -4492,6 +4901,16 @@
 
         function closeBatteryHubModal() {
             const modal = document.getElementById('batteryHubModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function openReleaseNotesModal() {
+            const modal = document.getElementById('releaseNotesModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeReleaseNotesModal() {
+            const modal = document.getElementById('releaseNotesModal');
             if (modal) modal.classList.add('hidden');
         }
 
@@ -4511,25 +4930,37 @@
             const listEl = document.getElementById('hubConnectedDevicesList');
             if (listEl) {
                 const devs = state.battery?.connectedDevices || [];
-                listEl.innerHTML = devs.map(d => `
-                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white bg-white/10">
-                                <i class="ph-fill ${d.icon || 'ph-bluetooth'} text-lg"></i>
+                if (devs.length === 0) {
+                    listEl.innerHTML = `
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-2">
+                            <i class="ph-light ph-bluetooth text-2xl text-slate-400"></i>
+                            <p class="text-xs text-slate-300">No Bluetooth accessories currently connected.</p>
+                            <button onclick="window.AndroidBridge && window.AndroidBridge.openBluetoothSettings ? window.AndroidBridge.openBluetoothSettings() : null" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] font-bold text-sky-300 border border-sky-400/20 active:scale-95 transition-all">
+                                Open Bluetooth Settings
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    listEl.innerHTML = devs.map(d => `
+                        <div class="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white bg-white/10">
+                                    <i class="ph-fill ${d.icon || 'ph-bluetooth'} text-lg"></i>
+                                </div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-white">${d.name}</h5>
+                                    <span class="text-[10px] text-slate-400">${d.status || 'Connected'}</span>
+                                </div>
                             </div>
-                            <div>
-                                <h5 class="text-xs font-bold text-white">${d.name}</h5>
-                                <span class="text-[10px] text-slate-400">${d.status || 'Connected'}</span>
+                            <div class="flex items-center gap-2">
+                                <div class="w-16 h-2 rounded-full bg-white/10 overflow-hidden">
+                                    <div class="h-full rounded-full ${d.battery >= 60 ? 'bg-emerald-400' : (d.battery >= 25 ? 'bg-amber-400' : 'bg-rose-500')}" style="width:${d.battery >= 0 ? d.battery : 100}%"></div>
+                                </div>
+                                <span class="text-xs font-mono font-bold text-white min-w-[32px] text-right">${d.battery >= 0 ? `${d.battery}%` : 'Active'}</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-16 h-2 rounded-full bg-white/10 overflow-hidden">
-                                <div class="h-full rounded-full ${d.battery >= 60 ? 'bg-emerald-400' : (d.battery >= 25 ? 'bg-amber-400' : 'bg-rose-500')}" style="width:${d.battery}%"></div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-white min-w-[32px] text-right">${d.battery}%</span>
-                        </div>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
             }
         }
 
@@ -4890,8 +5321,17 @@
         }
 
         window.handleAndroidBack = function() {
+            if (document.getElementById('controlPanelDrawerModal') && !document.getElementById('controlPanelDrawerModal').classList.contains('hidden')) {
+                closeControlPanelOverlay();
+                return true;
+            }
+            if (document.getElementById('widgetCatalogSheet') && !document.getElementById('widgetCatalogSheet').classList.contains('hidden')) { closeWidgetCatalogSheet(); return true; }
             if (document.getElementById('longPressWidgetPopup')) { dismissWidgetPopup(); return true; }
             
+            if (document.getElementById('releaseNotesModal') && !document.getElementById('releaseNotesModal').classList.contains('hidden')) {
+                closeReleaseNotesModal();
+                return true;
+            }
             if (document.getElementById('batteryHubModal') && !document.getElementById('batteryHubModal').classList.contains('hidden')) {
                 closeBatteryHubModal();
                 return true;
@@ -4922,6 +5362,79 @@
 
         let lastRemovedWidget = null;
         let undoBannerTimer = null;
+
+        
+        /* ==========================================================================
+           WIDGET CATALOG & EMPTY CANVAS LONG-PRESS HANDLERS
+           ========================================================================== */
+
+        function openWidgetCatalogSheet() {
+            dismissWidgetPopup();
+            const modal = document.getElementById('widgetCatalogSheet');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeWidgetCatalogSheet() {
+            const modal = document.getElementById('widgetCatalogSheet');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function addWidgetFromCatalog(componentKey, value, title) {
+            state.customComponents[componentKey] = value;
+            renderPhoneStage();
+            persistChromaState();
+            closeWidgetCatalogSheet();
+            if (navigator.vibrate) {
+                try { navigator.vibrate([35, 25]); } catch(e) {}
+            }
+            triggerApplyToast(`Added ${title} to Home!`);
+        }
+
+        function attachCanvasLongPress() {
+            const phoneScreen = document.getElementById('mainPhoneScreen');
+            if (!phoneScreen) return;
+
+            let canvasTimer = null;
+            let startX = 0, startY = 0;
+
+            function onCanvasStart(e) {
+                // If touched directly on a removable widget or inside a button, ignore
+                if (e.target.closest('.removable-item') || e.target.closest('button') || e.target.closest('#longPressWidgetPopup')) {
+                    return;
+                }
+                const pt = e.touches ? e.touches[0] : e;
+                startX = pt.clientX;
+                startY = pt.clientY;
+                clearTimeout(canvasTimer);
+                canvasTimer = setTimeout(() => {
+                    if (navigator.vibrate) {
+                        try { navigator.vibrate([40, 30]); } catch(err) {}
+                    }
+                    openWidgetCatalogSheet();
+                }, 440);
+            }
+
+            function onCanvasCancel() {
+                clearTimeout(canvasTimer);
+            }
+
+            function onCanvasMove(e) {
+                const pt = e.touches ? e.touches[0] : e;
+                if (Math.abs(pt.clientX - startX) > 12 || Math.abs(pt.clientY - startY) > 12) {
+                    clearTimeout(canvasTimer);
+                }
+            }
+
+            phoneScreen.addEventListener('touchstart', onCanvasStart, { passive: true });
+            phoneScreen.addEventListener('touchend', onCanvasCancel);
+            phoneScreen.addEventListener('touchcancel', onCanvasCancel);
+            phoneScreen.addEventListener('touchmove', onCanvasMove, { passive: true });
+
+            phoneScreen.addEventListener('mousedown', onCanvasStart);
+            phoneScreen.addEventListener('mouseup', onCanvasCancel);
+            phoneScreen.addEventListener('mouseleave', onCanvasCancel);
+            phoneScreen.addEventListener('mousemove', onCanvasMove);
+        }
 
         function attachLongPressHandlersToWidgets() {
             const container = document.getElementById('mainPhoneScreen');
@@ -5096,6 +5609,562 @@
         }
 
         window.addEventListener('DOMContentLoaded', initApp);
-    </script>
+    
+        /* ==========================================================================
+           8C. OS-ADAPTIVE CONTROL CENTER & NOTIFICATION PANEL ENGINE
+           ========================================================================== */
+
+        const OS_CONTROL_PANEL_META = {
+            android17: {
+                id: 'android17',
+                name: 'Android 17 Expressive',
+                subtitle: 'Playful organic pills & fluid sliders',
+                icon: 'ph-android-logo',
+                pillRadius: '22px',
+                accentColor: 'var(--c-tertiary, #BEB5A9)'
+            },
+            pixel: {
+                id: 'pixel',
+                name: 'Pixel 10 Material You',
+                subtitle: '2-column dynamic capsule toggles',
+                icon: 'ph-google-logo',
+                pillRadius: '18px',
+                accentColor: 'var(--c-primary, #6E473B)'
+            },
+            ios: {
+                id: 'ios',
+                name: 'iPhone iOS 19 Liquid Glass',
+                subtitle: 'Frosted connectivity island & vertical faders',
+                icon: 'ph-apple-logo',
+                pillRadius: '24px',
+                accentColor: '#38BDF8'
+            },
+            hyperos: {
+                id: 'hyperos',
+                name: 'Xiaomi HyperOS 2.0',
+                subtitle: 'Expanded hero pills & smart media control',
+                icon: 'ph-stack',
+                pillRadius: '20px',
+                accentColor: '#F59E0B'
+            },
+            nothing: {
+                id: 'nothing',
+                name: 'Nothing OS 3.0 Dot-Matrix',
+                subtitle: 'Monochrome glyph tiles & circular dot toggles',
+                icon: 'ph-dots-nine',
+                pillRadius: '16px',
+                accentColor: '#EF4444'
+            }
+        };
+
+        function setControlPanelStyle(styleId) {
+            state.controlPanelStyle = styleId;
+            renderControlPanelStudioBox();
+            renderControlPanelDrawerModal();
+            persistChromaState();
+            triggerApplyToast(`Switched Control Center to ${OS_CONTROL_PANEL_META[styleId]?.name || styleId}`);
+        }
+
+        function setControlPanelMode(mode) {
+            state.controlPanelMode = mode;
+            renderControlPanelStudioBox();
+            renderControlPanelDrawerModal();
+        }
+
+        function toggleControlTile(tileKey) {
+            if (state.controlToggles[tileKey] !== undefined) {
+                state.controlToggles[tileKey] = !state.controlToggles[tileKey];
+                renderControlPanelStudioBox();
+                renderControlPanelDrawerModal();
+                if (navigator.vibrate) {
+                    try { navigator.vibrate(25); } catch(e) {}
+                }
+                const label = tileKey.charAt(0).toUpperCase() + tileKey.slice(1);
+                triggerApplyToast(`${label}: ${state.controlToggles[tileKey] ? 'ON' : 'OFF'}`);
+            }
+        }
+
+        function setControlBrightness(val) {
+            state.controlBrightness = parseInt(val, 10);
+            renderControlPanelStudioBox();
+            renderControlPanelDrawerModal();
+        }
+
+        function setControlVolume(val) {
+            state.controlVolume = parseInt(val, 10);
+            renderControlPanelStudioBox();
+            renderControlPanelDrawerModal();
+        }
+
+        function dismissNotification(notifId) {
+            state.notificationsList = state.notificationsList.filter(n => n.id !== notifId);
+            renderControlPanelStudioBox();
+            renderControlPanelDrawerModal();
+            triggerApplyToast('Notification dismissed');
+        }
+
+        function clearAllNotifications() {
+            state.notificationsList = [];
+            renderControlPanelStudioBox();
+            renderControlPanelDrawerModal();
+            triggerApplyToast('All notifications cleared');
+        }
+
+        function openControlPanelOverlay() {
+            renderControlPanelDrawerModal();
+            const modal = document.getElementById('controlPanelDrawerModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeControlPanelOverlay() {
+            const modal = document.getElementById('controlPanelDrawerModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function renderControlPanelStudioBox() {
+            const selectorGrid = document.getElementById('controlPanelOsSelectorGrid');
+            const previewContainer = document.getElementById('controlPanelMiniPreviewContainer');
+            const styleLabel = document.getElementById('activeControlStyleLabel');
+            const btnCtrl = document.getElementById('btnControlModeToggle');
+            const btnNotif = document.getElementById('btnNotificationModeToggle');
+
+            if (styleLabel) {
+                styleLabel.textContent = OS_CONTROL_PANEL_META[state.controlPanelStyle]?.name || state.controlPanelStyle;
+            }
+
+            if (btnCtrl && btnNotif) {
+                if (state.controlPanelMode === 'control') {
+                    btnCtrl.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-amber-400 text-black shadow';
+                    btnNotif.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white';
+                } else {
+                    btnCtrl.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white';
+                    btnNotif.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-amber-400 text-black shadow';
+                }
+            }
+
+            if (selectorGrid) {
+                selectorGrid.innerHTML = Object.values(OS_CONTROL_PANEL_META).map(meta => {
+                    const isActive = state.controlPanelStyle === meta.id;
+                    return `
+                        <button onclick="setControlPanelStyle('${meta.id}')"
+                                class="p-2 rounded-2xl border transition-all flex flex-col items-center justify-center text-center gap-1 ${isActive ? 'bg-amber-400/20 border-amber-400 text-amber-300 shadow-md scale-[1.02]' : 'bg-black/30 border-white/10 text-slate-300 hover:border-white/25'}">
+                            <i class="ph-fill ${meta.icon} text-lg"></i>
+                            <span class="text-[10px] font-bold truncate w-full">${meta.name.split(' ')[0]}</span>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            if (previewContainer) {
+                previewContainer.innerHTML = buildControlOrNotificationHTML(state.controlPanelStyle, state.controlPanelMode, false);
+            }
+        }
+
+        function renderControlPanelDrawerModal() {
+            const body = document.getElementById('controlPanelDrawerBody');
+            const titleEl = document.getElementById('drawerHeaderTitle');
+            const subEl = document.getElementById('drawerHeaderSubtitle');
+            const iconEl = document.getElementById('drawerHeaderIcon');
+            const btnCtrl = document.getElementById('drawerToggleControlBtn');
+            const btnNotif = document.getElementById('drawerToggleNotifBtn');
+
+            const meta = OS_CONTROL_PANEL_META[state.controlPanelStyle] || OS_CONTROL_PANEL_META.android17;
+
+            if (titleEl) {
+                titleEl.textContent = state.controlPanelMode === 'control' ? `${meta.name} Control Panel` : `${meta.name} Notifications`;
+            }
+            if (subEl) {
+                subEl.textContent = meta.subtitle;
+            }
+            if (iconEl) {
+                iconEl.className = `ph-fill ${meta.icon} text-lg text-amber-300`;
+            }
+
+            if (btnCtrl && btnNotif) {
+                if (state.controlPanelMode === 'control') {
+                    btnCtrl.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-400 text-black';
+                    btnNotif.className = 'px-2.5 py-1 rounded-lg font-bold text-slate-300';
+                } else {
+                    btnCtrl.className = 'px-2.5 py-1 rounded-lg font-bold text-slate-300';
+                    btnNotif.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-400 text-black';
+                }
+            }
+
+            if (body) {
+                body.innerHTML = buildControlOrNotificationHTML(state.controlPanelStyle, state.controlPanelMode, true);
+            }
+        }
+
+        function buildControlOrNotificationHTML(osStyle, mode, isFullDrawer) {
+            const [c1, c2, c3, c4, c5] = state.colors;
+
+            if (mode === 'notification') {
+                return buildNotificationPanelHTML(osStyle, isFullDrawer);
+            }
+
+            // CONTROL CENTER MODES
+            switch (osStyle) {
+                case 'pixel':
+                    return buildPixelControlCenterHTML(isFullDrawer);
+                case 'ios':
+                    return buildIosControlCenterHTML(isFullDrawer);
+                case 'hyperos':
+                    return buildHyperOsControlCenterHTML(isFullDrawer);
+                case 'nothing':
+                    return buildNothingControlCenterHTML(isFullDrawer);
+                case 'android17':
+                default:
+                    return buildAndroid17ControlCenterHTML(isFullDrawer);
+            }
+        }
+
+        /* 1. Android 17 Expressive Control Center */
+        function buildAndroid17ControlCenterHTML(isFull) {
+            const t = state.controlToggles;
+            const [c1, c2, c3, c4, c5] = state.colors;
+
+            const pill = (key, label, sub, icon) => {
+                const on = t[key];
+                return `
+                    <button onclick="toggleControlTile('${key}')"
+                            class="p-3 rounded-3xl flex items-center justify-between border transition-all text-left shadow-md ${on ? 'border-amber-400/40 text-black' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}"
+                            style="${on ? `background: linear-gradient(135deg, ${c3}, ${c5});` : ''}">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-8 h-8 rounded-2xl flex items-center justify-center shrink-0 ${on ? 'bg-black/20 text-black' : 'bg-white/10 text-amber-300'}">
+                                <i class="ph-fill ${icon} text-base"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-xs font-black block truncate leading-tight">${label}</span>
+                                <span class="text-[9px] font-bold block truncate opacity-75">${sub}</span>
+                            </div>
+                        </div>
+                        <span class="w-2 h-2 rounded-full ${on ? 'bg-black/80' : 'bg-white/30'} shrink-0 ml-1"></span>
+                    </button>
+                `;
+            };
+
+            return `
+                <div class="space-y-3 font-sans">
+                    <!-- Quick Header with Live Clock & Battery -->
+                    <div class="flex items-center justify-between px-1 text-xs">
+                        <span class="font-bold text-white font-stylish-display">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })} • Expressive Center</span>
+                        <span class="text-amber-300 font-mono font-bold flex items-center gap-1">
+                            <i class="ph-fill ph-battery-charging text-emerald-400"></i> ${state.battery.phone.percentage}%
+                        </span>
+                    </div>
+
+                    <!-- 2-Column Expressive Pill Grid -->
+                    <div class="grid grid-cols-2 gap-2">
+                        ${pill('wifi', 'Wi-Fi 7', t.wifi ? 'ChromaNet 6G' : 'Off', 'ph-wifi-high')}
+                        ${pill('bluetooth', 'Bluetooth', t.bluetooth ? '3 Connected' : 'Off', 'ph-bluetooth')}
+                        ${pill('flashlight', 'Flashlight', t.flashlight ? 'High Beam' : 'Off', 'ph-flashlight')}
+                        ${pill('dnd', 'Priority DND', t.dnd ? 'Silence All' : 'Normal', 'ph-bell-slash')}
+                        ${pill('batterySaver', 'Battery Care', t.batterySaver ? 'Adaptive ON' : 'Balanced', 'ph-lightning')}
+                        ${pill('autoRotate', 'Auto-Rotate', t.autoRotate ? 'Portrait/Land' : 'Locked', 'ph-device-mobile')}
+                    </div>
+
+                    <!-- Android 17 Fluid Brightness Slider -->
+                    <div class="p-3 rounded-3xl bg-white/5 border border-white/10 space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] text-white">
+                            <span class="font-bold flex items-center gap-1.5"><i class="ph-fill ph-sun text-amber-300"></i> Organic Display Brightness</span>
+                            <span class="font-mono text-amber-300 font-bold">${state.controlBrightness}%</span>
+                        </div>
+                        <input type="range" min="10" max="100" value="${state.controlBrightness}" oninput="setControlBrightness(this.value)"
+                               class="w-full accent-amber-400 cursor-pointer h-2 bg-black/40 rounded-lg">
+                    </div>
+
+                    <!-- Connected Device Media Card -->
+                    <div class="p-3 rounded-3xl bg-black/50 border border-white/10 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-white shrink-0 shadow" style="background: linear-gradient(135deg, ${c2}, ${c4});">
+                                <i class="ph-fill ph-waveform text-xl animate-pulse"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-xs font-bold text-white block truncate">Botanical Waves (Lossless)</span>
+                                <span class="text-[10px] text-amber-300 block truncate">Chroma Buds Pro • Spatial Audio</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="triggerApplyToast('Previous track')" class="w-7 h-7 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"><i class="ph-fill ph-caret-left"></i></button>
+                            <button onclick="triggerApplyToast('Play/Pause toggled')" class="w-8 h-8 rounded-full bg-amber-400 text-black flex items-center justify-center hover:bg-amber-300 shadow font-bold"><i class="ph-fill ph-pause"></i></button>
+                            <button onclick="triggerApplyToast('Next track')" class="w-7 h-7 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20"><i class="ph-fill ph-caret-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* 2. Pixel 10 Quick Settings */
+        function buildPixelControlCenterHTML(isFull) {
+            const t = state.controlToggles;
+            const [c1, c2, c3, c4, c5] = state.colors;
+
+            const pixelPill = (key, title, sub, icon) => {
+                const on = t[key];
+                return `
+                    <button onclick="toggleControlTile('${key}')"
+                            class="p-2.5 rounded-2xl flex items-center gap-2.5 border transition-all text-left shadow-sm ${on ? 'bg-amber-400 text-black border-amber-300' : 'bg-black/50 text-white border-white/10 hover:border-white/20'}">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${on ? 'bg-black/20 text-black' : 'bg-white/10 text-amber-300'}">
+                            <i class="ph-bold ${icon} text-base"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <span class="text-[11px] font-bold block truncate leading-tight">${title}</span>
+                            <span class="text-[9px] block truncate opacity-75">${sub}</span>
+                        </div>
+                    </button>
+                `;
+            };
+
+            return `
+                <div class="space-y-3 font-sans">
+                    <div class="flex items-center justify-between px-1 text-xs">
+                        <span class="font-bold text-white flex items-center gap-1.5"><i class="ph-fill ph-google-logo text-amber-400"></i> Pixel Quick Settings</span>
+                        <span class="text-slate-400 text-[11px]">Material You Tuned</span>
+                    </div>
+
+                    <!-- Pixel 2-Column Capsules -->
+                    <div class="grid grid-cols-2 gap-2">
+                        ${pixelPill('wifi', 'Internet', t.wifi ? 'Wi-Fi 7' : 'Off', 'ph-globe')}
+                        ${pixelPill('bluetooth', 'Bluetooth', t.bluetooth ? 'Active' : 'Off', 'ph-bluetooth')}
+                        ${pixelPill('flashlight', 'Flashlight', t.flashlight ? 'On' : 'Off', 'ph-flashlight')}
+                        ${pixelPill('dnd', 'Do Not Disturb', t.dnd ? 'Active' : 'Off', 'ph-minus-circle')}
+                    </div>
+
+                    <!-- Pixel Slider -->
+                    <div class="p-3 rounded-2xl bg-black/40 border border-white/10 space-y-1">
+                        <div class="flex items-center justify-between text-[11px] text-white">
+                            <span class="font-semibold flex items-center gap-1.5"><i class="ph-fill ph-sun-dim text-amber-300"></i> Brightness</span>
+                            <span class="font-mono text-amber-300 font-bold">${state.controlBrightness}%</span>
+                        </div>
+                        <input type="range" min="10" max="100" value="${state.controlBrightness}" oninput="setControlBrightness(this.value)"
+                               class="w-full accent-amber-400 cursor-pointer h-2 bg-white/10 rounded-lg">
+                    </div>
+                </div>
+            `;
+        }
+
+        /* 3. iOS 19 Liquid Glass Control Center */
+        function buildIosControlCenterHTML(isFull) {
+            const t = state.controlToggles;
+
+            const iconTile = (key, icon, label) => {
+                const on = t[key];
+                return `
+                    <button onclick="toggleControlTile('${key}')"
+                            class="w-12 h-12 rounded-2xl flex flex-col items-center justify-center transition-all ${on ? 'bg-sky-400 text-black shadow-lg shadow-sky-500/25' : 'bg-white/10 text-white hover:bg-white/15'}"
+                            title="${label}">
+                        <i class="ph-fill ${icon} text-xl"></i>
+                    </button>
+                `;
+            };
+
+            return `
+                <div class="space-y-3 font-sans">
+                    <div class="flex items-center justify-between px-1 text-xs">
+                        <span class="font-bold text-white flex items-center gap-1.5"><i class="ph-fill ph-apple-logo text-sky-400"></i> Control Center</span>
+                        <span class="text-sky-300 text-[10px] uppercase font-mono tracking-wider">Liquid Glass</span>
+                    </div>
+
+                    <!-- Top iOS Modular Row: 4-Icon Island + Dual Vertical Sliders -->
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <!-- Connectivity 4-Pack Island -->
+                        <div class="p-3 rounded-3xl bg-black/60 border border-white/15 backdrop-blur-2xl grid grid-cols-2 gap-2 place-items-center">
+                            ${iconTile('airplane', 'ph-airplane', 'Airplane Mode')}
+                            ${iconTile('wifi', 'ph-wifi-high', 'Wi-Fi')}
+                            ${iconTile('bluetooth', 'ph-bluetooth', 'Bluetooth')}
+                            ${iconTile('hotspot', 'ph-broadcast', 'Personal Hotspot')}
+                        </div>
+
+                        <!-- Media Player Capsule -->
+                        <div class="p-3 rounded-3xl bg-black/60 border border-white/15 backdrop-blur-2xl flex flex-col justify-between">
+                            <span class="text-[10px] text-slate-400 font-semibold block">Now Playing</span>
+                            <div class="my-auto">
+                                <span class="text-xs font-bold text-white block truncate">Obsidian Symphony</span>
+                                <span class="text-[9px] text-sky-300 block truncate">AirPlay • Spatial Audio</span>
+                            </div>
+                            <div class="flex items-center justify-around text-white text-sm pt-1 border-t border-white/10">
+                                <i class="ph-fill ph-play cursor-pointer hover:text-sky-300" onclick="triggerApplyToast('AirPlay Playing')"></i>
+                                <i class="ph-fill ph-fast-forward cursor-pointer hover:text-sky-300" onclick="triggerApplyToast('Next track')"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dual Horizontal Glass Sliders (Brightness & Volume) -->
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div class="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-1">
+                            <div class="flex items-center justify-between text-[10px] text-white">
+                                <span class="flex items-center gap-1"><i class="ph-fill ph-sun text-sky-300"></i> Brightness</span>
+                                <span class="font-mono text-sky-300 font-bold">${state.controlBrightness}%</span>
+                            </div>
+                            <input type="range" min="10" max="100" value="${state.controlBrightness}" oninput="setControlBrightness(this.value)"
+                                   class="w-full accent-sky-400 cursor-pointer h-2 bg-white/10 rounded-lg">
+                        </div>
+                        <div class="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-1">
+                            <div class="flex items-center justify-between text-[10px] text-white">
+                                <span class="flex items-center gap-1"><i class="ph-fill ph-speaker-high text-sky-300"></i> Volume</span>
+                                <span class="font-mono text-sky-300 font-bold">${state.controlVolume}%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="${state.controlVolume}" oninput="setControlVolume(this.value)"
+                                   class="w-full accent-sky-400 cursor-pointer h-2 bg-white/10 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* 4. Xiaomi HyperOS 2.0 Control Center */
+        function buildHyperOsControlCenterHTML(isFull) {
+            const t = state.controlToggles;
+
+            return `
+                <div class="space-y-3 font-sans">
+                    <div class="flex items-center justify-between px-1 text-xs">
+                        <span class="font-bold text-white flex items-center gap-1.5"><i class="ph-fill ph-stack text-amber-400"></i> HyperOS 2.0 Center</span>
+                        <span class="text-amber-300 text-[10px] font-mono">Super Island</span>
+                    </div>
+
+                    <!-- Top 2 Big Pill Cards (WLAN & Mobile Data) -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="toggleControlTile('wifi')"
+                                class="p-3 rounded-2xl flex items-center justify-between border transition-all ${t.wifi ? 'bg-amber-400 text-black border-amber-300 shadow' : 'bg-black/50 text-white border-white/10'}">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-wifi-high text-lg"></i>
+                                <div class="text-left">
+                                    <span class="text-xs font-bold block leading-tight">WLAN</span>
+                                    <span class="text-[9px] block opacity-75">${t.wifi ? 'Chroma 6G' : 'Disabled'}</span>
+                                </div>
+                            </div>
+                            <i class="ph-bold ph-caret-right text-xs opacity-60"></i>
+                        </button>
+                        <button onclick="toggleControlTile('bluetooth')"
+                                class="p-3 rounded-2xl flex items-center justify-between border transition-all ${t.bluetooth ? 'bg-amber-400 text-black border-amber-300 shadow' : 'bg-black/50 text-white border-white/10'}">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-bluetooth text-lg"></i>
+                                <div class="text-left">
+                                    <span class="text-xs font-bold block leading-tight">Bluetooth</span>
+                                    <span class="text-[9px] block opacity-75">${t.bluetooth ? 'Connected' : 'Disabled'}</span>
+                                </div>
+                            </div>
+                            <i class="ph-bold ph-caret-right text-xs opacity-60"></i>
+                        </button>
+                    </div>
+
+                    <!-- Compact Quick Icons Grid -->
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="toggleControlTile('flashlight')" class="p-2.5 rounded-xl border flex flex-col items-center gap-1 ${t.flashlight ? 'bg-amber-400 text-black border-amber-300' : 'bg-white/5 text-white border-white/10'}">
+                            <i class="ph-fill ph-flashlight text-base"></i>
+                            <span class="text-[9px] font-semibold">Flash</span>
+                        </button>
+                        <button onclick="toggleControlTile('dnd')" class="p-2.5 rounded-xl border flex flex-col items-center gap-1 ${t.dnd ? 'bg-amber-400 text-black border-amber-300' : 'bg-white/5 text-white border-white/10'}">
+                            <i class="ph-fill ph-bell-slash text-base"></i>
+                            <span class="text-[9px] font-semibold">Mute</span>
+                        </button>
+                        <button onclick="toggleControlTile('autoRotate')" class="p-2.5 rounded-xl border flex flex-col items-center gap-1 ${t.autoRotate ? 'bg-amber-400 text-black border-amber-300' : 'bg-white/5 text-white border-white/10'}">
+                            <i class="ph-fill ph-arrows-clockwise text-base"></i>
+                            <span class="text-[9px] font-semibold">Rotate</span>
+                        </button>
+                        <button onclick="toggleControlTile('batterySaver')" class="p-2.5 rounded-xl border flex flex-col items-center gap-1 ${t.batterySaver ? 'bg-amber-400 text-black border-amber-300' : 'bg-white/5 text-white border-white/10'}">
+                            <i class="ph-fill ph-battery-charging text-base"></i>
+                            <span class="text-[9px] font-semibold">Saver</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* 5. Nothing OS 3.0 Dot-Matrix Center */
+        function buildNothingControlCenterHTML(isFull) {
+            const t = state.controlToggles;
+
+            const dotTile = (key, label, icon) => {
+                const on = t[key];
+                return `
+                    <button onclick="toggleControlTile('${key}')"
+                            class="p-3 rounded-2xl flex items-center justify-between border transition-all text-left font-mono ${on ? 'bg-white text-black border-white shadow-md' : 'bg-black text-white border-white/20 hover:border-white/40'}">
+                        <div class="flex items-center gap-2">
+                            <i class="ph-bold ${icon} text-base"></i>
+                            <span class="text-[11px] font-bold uppercase tracking-wider">${label}</span>
+                        </div>
+                        <span class="w-2 h-2 rounded-full ${on ? 'bg-rose-600' : 'bg-zinc-700'}"></span>
+                    </button>
+                `;
+            };
+
+            return `
+                <div class="space-y-3 font-mono">
+                    <div class="flex items-center justify-between px-1 text-xs">
+                        <span class="font-bold text-white uppercase tracking-widest flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span> (NOTHING) OS 3.0</span>
+                        <span class="text-slate-400 text-[10px]">GLYPH v3</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        ${dotTile('wifi', 'WIFI.07', 'ph-wifi-high')}
+                        ${dotTile('bluetooth', 'BT.SYNC', 'ph-bluetooth')}
+                        ${dotTile('flashlight', 'TORCH', 'ph-flashlight')}
+                        ${dotTile('dnd', 'SILENCE', 'ph-bell-slash')}
+                    </div>
+
+                    <!-- Glyph Slider -->
+                    <div class="p-3 rounded-2xl bg-zinc-950 border border-white/20 space-y-1">
+                        <div class="flex items-center justify-between text-[10px] text-white">
+                            <span class="tracking-wider">LUMEN.CTRL</span>
+                            <span class="text-rose-400 font-bold">${state.controlBrightness}%</span>
+                        </div>
+                        <input type="range" min="10" max="100" value="${state.controlBrightness}" oninput="setControlBrightness(this.value)"
+                               class="w-full accent-rose-600 cursor-pointer h-2 bg-zinc-800 rounded-none">
+                    </div>
+                </div>
+            `;
+        }
+
+        /* 6. OS-Adaptive Notification Panel */
+        function buildNotificationPanelHTML(osStyle, isFull) {
+            const list = state.notificationsList || [];
+
+            if (list.length === 0) {
+                return `
+                    <div class="py-12 flex flex-col items-center justify-center text-center p-6 space-y-2">
+                        <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-amber-300 text-xl">
+                            <i class="ph-fill ph-bell-simple-slash"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-white font-stylish-display">No New Notifications</h4>
+                        <p class="text-xs text-slate-400 max-w-xs">You're all caught up! When updates arrive, they will appear here styled to ${OS_CONTROL_PANEL_META[osStyle]?.name || osStyle}.</p>
+                    </div>
+                `;
+            }
+
+            const notifCards = list.map(n => `
+                <div class="p-3 rounded-2xl bg-black/50 border border-white/10 hover:border-amber-400/30 transition-all flex items-start gap-3 shadow-md relative group">
+                    <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 mt-0.5" style="background:${n.color}33; border: 1px solid ${n.color}66; color: ${n.color};">
+                        <i class="ph-fill ${n.icon} text-base"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 font-mono">${n.app}</span>
+                            <span class="text-[9px] text-slate-400">${n.time}</span>
+                        </div>
+                        <h5 class="text-xs font-bold text-white mt-0.5 truncate">${n.title}</h5>
+                        <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">${n.body}</p>
+                    </div>
+                    <button onclick="dismissNotification('${n.id}')" class="w-6 h-6 rounded-full bg-white/10 text-slate-400 hover:text-white flex items-center justify-center shrink-0" title="Dismiss">
+                        <i class="ph-bold ph-x text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            return `
+                <div class="space-y-3 font-sans">
+                    <div class="flex items-center justify-between px-1 text-xs">
+                        <span class="font-bold text-white flex items-center gap-1.5"><i class="ph-fill ph-bell text-amber-400"></i> ${OS_CONTROL_PANEL_META[osStyle]?.name || osStyle} Notifications</span>
+                        <button onclick="clearAllNotifications()" class="text-[10px] text-amber-300 hover:underline font-mono">Clear All (${list.length})</button>
+                    </div>
+                    <div class="space-y-2">
+                        ${notifCards}
+                    </div>
+                </div>
+            `;
+        }
+
+</script>
 
 </body></html>

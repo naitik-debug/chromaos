@@ -51,6 +51,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var webView: WebView
     private val wallpaperHelper by lazy { WallpaperHelper(this) }
     private var lastBatteryIntent: Intent? = null
+    private val connectedAclDevices = java.util.concurrent.ConcurrentHashMap<String, BluetoothDevice>()
+    private var a2dpProfile: BluetoothProfile? = null
+    private var headsetProfile: BluetoothProfile? = null
 
     val wallpaperPickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -66,6 +69,32 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    val bluetoothPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        notifyBatteryChanged()
+    }
+
+    private val profileListener = object : BluetoothProfile.ServiceListener {
+        override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
+            if (profile == BluetoothProfile.A2DP) {
+                a2dpProfile = proxy
+            } else if (profile == BluetoothProfile.HEADSET) {
+                headsetProfile = proxy
+            }
+            notifyBatteryChanged()
+        }
+
+        override fun onServiceDisconnected(profile: Int) {
+            if (profile == BluetoothProfile.A2DP) {
+                a2dpProfile = null
+            } else if (profile == BluetoothProfile.HEADSET) {
+                headsetProfile = null
+            }
+            notifyBatteryChanged()
+        }
+    }
+
     private val batteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent != null) {
@@ -77,7 +106,38 @@ class MainActivity : ComponentActivity() {
 
     private val bluetoothReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            notifyBatteryChanged()
+            if (intent != null) {
+                val action = intent.action
+                val device: BluetoothDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                }
+
+                if (action == BluetoothDevice.ACTION_ACL_CONNECTED && device != null) {
+                    connectedAclDevices[device.address] = device
+                } else if (action == BluetoothDevice.ACTION_ACL_DISCONNECTED && device != null) {
+                    connectedAclDevices.remove(device.address)
+                }
+                notifyBatteryChanged()
+            }
+        }
+    }
+
+    fun hasBluetoothPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    fun requestBluetoothPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!hasBluetoothPermission()) {
+                bluetoothPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT)
+            }
         }
     }
 
@@ -85,31 +145,48 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Configure edge-to-edge full screen
+        // Configure edge-to-edge full screen with dark human-centred theme
         window.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = Color.parseColor("#07110D")
-            navigationBarColor = Color.parseColor("#07110D")
+            statusBarColor = Color.parseColor("#0D0F12")
+            navigationBarColor = Color.parseColor("#0D0F12")
         }
 
-        // Register battery sticky broadcast receiver
+        // Register battery sticky broadcast receiver safely for Android 10 to 16
         val batteryFilter = IntentFilter().apply {
             addAction(Intent.ACTION_BATTERY_CHANGED)
             addAction(Intent.ACTION_POWER_CONNECTED)
             addAction(Intent.ACTION_POWER_DISCONNECTED)
         }
-        lastBatteryIntent = registerReceiver(batteryReceiver, batteryFilter)
-
-        // Register bluetooth battery and state receiver
         val btFilter = IntentFilter().apply {
             addAction("android.bluetooth.device.action.BATTERY_LEVEL_CHANGED")
             addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
+            addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
             addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            lastBatteryIntent = registerReceiver(batteryReceiver, batteryFilter, RECEIVER_EXPORTED)
+            try {
+                registerReceiver(bluetoothReceiver, btFilter, RECEIVER_EXPORTED)
+            } catch (e: Exception) {}
+        } else {
+            lastBatteryIntent = registerReceiver(batteryReceiver, batteryFilter)
+            try {
+                registerReceiver(bluetoothReceiver, btFilter)
+            } catch (e: Exception) {}
+        }
+
+        // Initialize Bluetooth profile proxy listeners for A2DP and Headset
         try {
-            registerReceiver(bluetoothReceiver, btFilter)
+            val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+            val btAdapter = btManager?.adapter
+            if (btAdapter != null && btAdapter.isEnabled) {
+                btAdapter.getProfileProxy(this, profileListener, BluetoothProfile.A2DP)
+                btAdapter.getProfileProxy(this, profileListener, BluetoothProfile.HEADSET)
+            }
         } catch (e: Exception) {}
 
         webView = WebView(this).apply {
@@ -122,7 +199,7 @@ class MainActivity : ComponentActivity() {
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
             isVerticalScrollBarEnabled = false
             isHorizontalScrollBarEnabled = false
-            setBackgroundColor(Color.parseColor("#07110D"))
+            setBackgroundColor(Color.parseColor("#0D0F12"))
 
             settings.apply {
                 javaScriptEnabled = true
@@ -219,6 +296,13 @@ class MainActivity : ComponentActivity() {
             unregisterReceiver(bluetoothReceiver)
         } catch (e: Exception) {}
 
+        try {
+            val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+            val btAdapter = btManager?.adapter
+            a2dpProfile?.let { btAdapter?.closeProfileProxy(BluetoothProfile.A2DP, it) }
+            headsetProfile?.let { btAdapter?.closeProfileProxy(BluetoothProfile.HEADSET, it) }
+        } catch (e: Exception) {}
+
         if (::webView.isInitialized) {
             (webView.parent as? ViewGroup)?.removeView(webView)
             webView.stopLoading()
@@ -272,13 +356,47 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun createDeviceJsonObject(device: BluetoothDevice, defaultType: String): JSONObject {
+        var devBattery = -1
+        try {
+            val method = device.javaClass.getMethod("getBatteryLevel")
+            val res = method.invoke(device) as? Int
+            if (res != null && res >= 0) {
+                devBattery = res
+            }
+        } catch (e: Exception) {}
+
+        val devName = try {
+            if (hasBluetoothPermission()) device.name ?: "Bluetooth Device" else "Bluetooth Device"
+        } catch (e: Exception) {
+            "Bluetooth Device"
+        }
+
+        val isAudio = try {
+            device.bluetoothClass?.hasService(android.bluetooth.BluetoothClass.Service.AUDIO) == true
+        } catch (e: Exception) { false }
+
+        val icon = if (isAudio || defaultType == "headphones") "ph-headphones" else if (defaultType == "watch") "ph-watch" else "ph-bluetooth"
+
+        return JSONObject().apply {
+            put("id", device.address ?: devName)
+            put("name", devName)
+            put("type", defaultType)
+            put("battery", devBattery)
+            put("hasBattery", devBattery >= 0)
+            put("status", if (devBattery >= 0) "Connected ($devBattery%)" else "Connected")
+            put("icon", icon)
+            put("connected", true)
+        }
+    }
+
     fun getBatteryInfoJson(): String {
         val root = JSONObject()
         val bIntent = lastBatteryIntent ?: registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
 
-        val level = bIntent?.getIntExtra(BatteryManager.EXTRA_LEVEL, 85) ?: 85
-        val scale = bIntent?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100
-        val percentage = if (scale > 0) (level * 100 / scale) else 85
+        val level = bIntent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val scale = bIntent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+        val percentage = if (level >= 0 && scale > 0) (level * 100 / scale) else -1
 
         val status = bIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
         val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
@@ -286,124 +404,82 @@ class MainActivity : ComponentActivity() {
 
         val plugged = bIntent?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
         val plugType = when (plugged) {
-            BatteryManager.BATTERY_PLUGGED_AC -> "Fast AC Charger"
-            BatteryManager.BATTERY_PLUGGED_USB -> "USB Charging"
-            BatteryManager.BATTERY_PLUGGED_WIRELESS -> "Qi Wireless Charging"
-            else -> if (isCharging) "Charging" else "On Battery"
+            BatteryManager.BATTERY_PLUGGED_AC -> "Fast AC"
+            BatteryManager.BATTERY_PLUGGED_USB -> "USB"
+            BatteryManager.BATTERY_PLUGGED_WIRELESS -> "Wireless Qi"
+            else -> if (isCharging) "Charging" else "Discharging"
         }
 
-        val tempTenths = bIntent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 265) ?: 265
-        val temperature = String.format("%.1f°C", tempTenths / 10.0f)
+        val tempTenths = bIntent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) ?: -1
+        val temperature = if (tempTenths > 0) String.format("%.1f°C", tempTenths / 10.0f) else ""
 
-        val healthCode = bIntent?.getIntExtra(BatteryManager.EXTRA_HEALTH, BatteryManager.BATTERY_HEALTH_GOOD) ?: BatteryManager.BATTERY_HEALTH_GOOD
+        val healthCode = bIntent?.getIntExtra(BatteryManager.EXTRA_HEALTH, BatteryManager.BATTERY_HEALTH_UNKNOWN) ?: BatteryManager.BATTERY_HEALTH_UNKNOWN
         val health = when (healthCode) {
+            BatteryManager.BATTERY_HEALTH_GOOD -> "Good"
             BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Overheat"
             BatteryManager.BATTERY_HEALTH_DEAD -> "Critical"
             BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "Over Voltage"
             BatteryManager.BATTERY_HEALTH_COLD -> "Cold"
-            else -> "Good Condition"
+            else -> "Normal"
         }
 
         val phoneObj = JSONObject().apply {
-            put("percentage", percentage)
+            put("percentage", if (percentage >= 0) percentage else 0)
+            put("isAvailable", percentage >= 0)
             put("isCharging", isCharging)
             put("isFull", isFull)
             put("plugType", plugType)
             put("temperature", temperature)
             put("health", health)
-            put("statusText", if (isFull) "Full (100%)" else if (isCharging) "Charging ($plugType)" else "Discharging (Adaptive)")
+            put("statusText", if (percentage < 0) "Reading Battery..." else if (isFull) "Full (100%)" else if (isCharging) "Charging ($plugType)" else "Discharging")
         }
         root.put("phone", phoneObj)
 
-        // Query Connected Bluetooth Devices with battery telemetry
+        // Query REAL Connected Bluetooth Devices without any simulated/fake fallbacks
         val devicesArray = JSONArray()
         try {
             val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
             val btAdapter = btManager?.adapter
 
-            val canAccessBt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
-            } else {
-                true
-            }
+            val canAccessBt = hasBluetoothPermission()
 
-            var foundPhysicalDevices = false
             if (canAccessBt && btAdapter != null && btAdapter.isEnabled) {
-                val pairedDevices = btAdapter.bondedDevices
-                if (pairedDevices != null && pairedDevices.isNotEmpty()) {
-                    for (device in pairedDevices) {
-                        var devBattery = -1
-                        try {
-                            // Read battery level via reflection on BluetoothDevice.getBatteryLevel()
-                            val method = device.javaClass.getMethod("getBatteryLevel")
-                            val res = method.invoke(device) as? Int
-                            if (res != null && res >= 0) {
-                                devBattery = res
-                            }
-                        } catch (e: Exception) {}
+                val seenAddresses = mutableSetOf<String>()
 
-                        val devName = try { device.name ?: "Bluetooth Device" } catch (e: Exception) { "Bluetooth Device" }
-                        val isAudio = device.bluetoothClass?.hasService(android.bluetooth.BluetoothClass.Service.AUDIO) == true
-                        val devType = if (isAudio) "headphones" else "watch"
-
-                        val devObj = JSONObject().apply {
-                            put("id", device.address ?: devName)
-                            put("name", devName)
-                            put("type", devType)
-                            put("battery", if (devBattery >= 0) devBattery else 88)
-                            put("status", if (devBattery >= 0) "Connected ($devBattery%)" else "Paired Device")
-                            put("icon", if (isAudio) "ph-headphones" else "ph-watch")
-                            put("connected", true)
+                // 1. A2DP Connected Devices (Bluetooth Audio)
+                try {
+                    a2dpProfile?.connectedDevices?.forEach { dev ->
+                        if (dev != null && seenAddresses.add(dev.address)) {
+                            devicesArray.put(createDeviceJsonObject(dev, "headphones"))
                         }
-                        devicesArray.put(devObj)
-                        foundPhysicalDevices = true
+                    }
+                } catch (e: Exception) {}
+
+                // 2. Headset Profile Connected Devices
+                try {
+                    headsetProfile?.connectedDevices?.forEach { dev ->
+                        if (dev != null && seenAddresses.add(dev.address)) {
+                            devicesArray.put(createDeviceJsonObject(dev, "headset"))
+                        }
+                    }
+                } catch (e: Exception) {}
+
+                // 3. Tracked ACL Connected Devices (Active Wearables, Accessories)
+                for ((addr, dev) in connectedAclDevices) {
+                    if (seenAddresses.add(addr)) {
+                        val isAudio = try {
+                            dev.bluetoothClass?.hasService(android.bluetooth.BluetoothClass.Service.AUDIO) == true
+                        } catch (e: Exception) { false }
+                        devicesArray.put(createDeviceJsonObject(dev, if (isAudio) "headphones" else "bluetooth"))
                     }
                 }
             }
+        } catch (e: Exception) {}
 
-            // If running on emulator or no physical Bluetooth accessories paired yet, provide default smart devices
-            if (!foundPhysicalDevices) {
-                devicesArray.put(JSONObject().apply {
-                    put("id", "earbuds")
-                    put("name", "Chroma Buds Pro (L / R)")
-                    put("type", "headphones")
-                    put("battery", 92)
-                    put("status", "Active (ANC On)")
-                    put("icon", "ph-headphones")
-                    put("connected", true)
-                })
-                devicesArray.put(JSONObject().apply {
-                    put("id", "watch")
-                    put("name", "Chroma Watch Ultra")
-                    put("type", "watch")
-                    put("battery", 74)
-                    put("status", "Synced • 74%")
-                    put("icon", "ph-watch")
-                    put("connected", true)
-                })
-                devicesArray.put(JSONObject().apply {
-                    put("id", "stylus")
-                    put("name", "Smart Stylus Pen")
-                    put("type", "stylus")
-                    put("battery", 100)
-                    put("status", "Docked • 100%")
-                    put("icon", "ph-pencil-simple")
-                    put("connected", true)
-                })
-            }
-        } catch (e: Exception) {
-            // Fallback device array
-            devicesArray.put(JSONObject().apply {
-                put("id", "earbuds")
-                put("name", "Wireless Audio Buds")
-                put("type", "headphones")
-                put("battery", 90)
-                put("status", "Connected")
-                put("icon", "ph-headphones")
-                put("connected", true)
-            })
-        }
+        // STRICT POLICY: Never add fake or simulated devices. If no devices connected, array remains empty.
         root.put("connectedDevices", devicesArray)
+        root.put("hasBtPermission", hasBluetoothPermission())
+        root.put("canRequestBtPermission", Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasBluetoothPermission())
 
         return root.toString()
     }
@@ -525,6 +601,18 @@ class MainActivity : ComponentActivity() {
         @JavascriptInterface
         fun applySystemWallpaper(primaryHex: String, secondaryHex: String) {
             activity.setSystemWallpaperGradient(primaryHex, secondaryHex)
+        }
+
+        @JavascriptInterface
+        fun requestBluetoothPermission() {
+            activity.runOnUiThread {
+                activity.requestBluetoothPermission()
+            }
+        }
+
+        @JavascriptInterface
+        fun hasBluetoothPermission(): Boolean {
+            return activity.hasBluetoothPermission()
         }
     }
 }
