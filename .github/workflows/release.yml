@@ -4,9 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-    branches:
-      - main
-      - master
   workflow_dispatch:
     inputs:
       tag_name:
@@ -25,24 +22,29 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Set up Java 17
+    - name: Set up Java 21
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
         cache: gradle
 
-    - name: Make Gradlew Executable
-      run: chmod +x gradlew || true
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
     - name: Assemble Debug APK
-      run: gradle assembleDebug --stacktrace || ./gradlew assembleDebug
+      run: ./gradlew assembleDebug --stacktrace
 
-    - name: Prepare Release Asset
+    - name: Verify and Prepare Release Asset
       run: |
+        if [ ! -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+          echo "ERROR: Generated APK not found at app/build/outputs/apk/debug/app-debug.apk"
+          exit 1
+        fi
         mkdir -p release-assets
         cp app/build/outputs/apk/debug/app-debug.apk release-assets/ChromaOS-v2.1.0.apk
-        ls -lh release-assets/
+        echo "Successfully verified APK file:"
+        ls -lh release-assets/ChromaOS-v2.1.0.apk
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4

@@ -8,6 +8,12 @@
 
 ---
 
+## 📥 Direct APK Download Link
+> **[⬇️ Download ChromaOS-v2.1.0.apk (Direct APK Download)](../../releases/latest/download/ChromaOS-v2.1.0.apk)**  
+*(Once downloaded to your Android device, tap the file to install).*
+
+---
+
 ## 🌟 What's New in Version 2.1.0
 
 ### 1. Real-Time Native Battery Indicator Widget
@@ -36,6 +42,7 @@
 ---
 
 ## 🛠️ Bug Fixes & Architectural Optimizations
+- **Fixed GitHub Actions CI/CD (Exit Code 127)**: Configured committed Gradle Wrapper files (`gradlew`, `gradlew.bat`, `gradle/wrapper/gradle-wrapper.jar`, `gradle-wrapper.properties`) and updated runners to Java 21 to match AGP 9.1.1.
 - **Android 14+ Broadcast Security**: Enforced `Context.RECEIVER_EXPORTED` flags for system broadcasts on API 34+ to prevent security exceptions.
 - **Hardware Acceleration**: Set `setLayerType(View.LAYER_TYPE_HARDWARE, null)` on the host WebView to ensure 60fps/120fps UI animations.
 - **Memory Leak Protection**: Closed Bluetooth profile proxies (`closeProfileProxy`) and unregistered receivers cleanly in `onDestroy()`.
@@ -58,7 +65,7 @@
   ```
 - **Build Command**:
   ```bash
-  gradle assembleDebug
+  ./gradlew assembleDebug
   ```
 
 ### Signed Release APK Build Instructions
@@ -70,7 +77,7 @@
    ```
 2. Run the Gradle release task:
    ```bash
-   gradle assembleRelease
+   ./gradlew assembleRelease
    ```
 3. The signed APK will be output to:
    ```bash
@@ -80,5 +87,6 @@
 ### Automated GitHub Actions CI/CD Workflow
 Located at `.github/workflows/release.yml`:
 - Triggers on tag pushes (`v*`) or manual `workflow_dispatch`.
-- Builds the APK via `gradle assembleDebug`.
-- Automatically packages and attaches the APK as a downloadable release asset with this changelog body.
+- Builds the APK via `./gradlew assembleDebug --stacktrace`.
+- Verifies that `app/build/outputs/apk/debug/app-debug.apk` exists before proceeding.
+- Automatically packages and attaches `ChromaOS-v2.1.0.apk` as a downloadable release asset with this changelog body.

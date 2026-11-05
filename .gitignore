@@ -1,18 +1,30 @@
-*.iml
-.gradle
-.kotlin
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
+# Built application binaries & packages (Too large for GitHub commit payloads)
+*.apk
+*.aab
+*.zip
+*.tar.gz
+
+# Build outputs & caches
+build/
+**/build/
+.build-outputs/
+public/
+captures/
 .externalNativeBuild
 .cxx
+
+# Gradle & Kotlin caches
+.gradle/
+.kotlin/
+*.iml
+.idea/
+
+# Android Local & Secret configurations
 local.properties
 .env
 debug.keystore
+
+# Internal scratch files & artifacts
+.aistudio/
+tmp/
+.DS_Store

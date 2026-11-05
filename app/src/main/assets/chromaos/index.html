@@ -16,32 +16,52 @@
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23F08B51'/%3E%3Cstop offset='50%25' stop-color='%23B05239'/%3E%3Cstop offset='100%25' stop-color='%230d1b15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='url(%23g)'/%3E%3Ccircle cx='256' cy='180' r='64' fill='%23FFF8F0' opacity='0.95'/%3E%3Crect x='116' y='276' width='280' height='64' rx='32' fill='%23F7C297' opacity='0.9'/%3E%3Crect x='146' y='356' width='220' height='54' rx='27' fill='%23232A2F' opacity='0.85'/%3E%3C/svg%3E">
     <link rel="manifest" id="pwaManifestLink" href="blob:null/a6b22e21-da37-4650-95fd-47f32f161204">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS (Local Bundled Asset with Safe Fallback) -->
+    <script src="tailwind.cdn.js"></script>
+    <script>
+        if (typeof tailwind === 'undefined') {
+            const fallbackScript = document.createElement('script');
+            fallbackScript.src = "https://cdn.tailwindcss.com";
+            document.head.appendChild(fallbackScript);
+        }
+    </script>
     <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web" crossorigin="anonymous"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css">
     <!-- Google Fonts: Stylish Editorial, Geometric, & Monospace Pairings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@300;400;500;600;700;800&amp;family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Syne:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
     
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['var(--font-body)', 'sans-serif'],
-                        display: ['var(--font-display)', 'sans-serif'],
-                        serif: ['"Cormorant Garamond"', 'serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['var(--font-body)', 'sans-serif'],
+                            display: ['var(--font-display)', 'sans-serif'],
+                            serif: ['"Cormorant Garamond"', 'serif'],
+                            mono: ['"JetBrains Mono"', 'monospace'],
+                        }
                     }
                 }
-            }
+            };
         }
     </script>
 
     <style>
+        /* Essential Offline Resilience Resets */
+        .hidden { display: none !important; }
+        .flex { display: flex !important; }
+        .grid { display: grid !important; }
+        .phone-chassis { display: flex; flex-direction: column; }
         :root {
             /* Dynamic Theme Tokens updated via JS */
             --c-bg-1: #291C0E;
@@ -2532,23 +2552,23 @@
     <nav id="mobileBottomNavBar" class="xl:hidden fixed bottom-0 inset-x-0 z-40 glass-panel border-t border-white/15 px-2 py-2 flex items-center justify-around">
         <button onclick="switchMobileNav('phone')" id="mNav-phone" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-amber-300 font-bold text-[11px]">
             <i class="ph-fill ph-device-mobile text-lg"></i>
-            <span>📱 Live Phone</span>
+            <span>📱 Home</span>
+        </button>
+        <button onclick="switchMobileNav('presets')" id="mNav-presets" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 font-semibold text-[11px]">
+            <i class="ph-fill ph-cpu text-lg"></i>
+            <span>⚡ OS Presets</span>
         </button>
         <button onclick="switchMobileNav('palettes')" id="mNav-palettes" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 font-semibold text-[11px]">
             <i class="ph-fill ph-palette text-lg"></i>
-            <span>🎨 Palettes</span>
+            <span>🎨 Harmonies</span>
         </button>
-        <button onclick="switchMobileNav('customos')" id="mNav-customos" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 font-semibold text-[11px]">
+        <button onclick="switchMobileNav('controls')" id="mNav-controls" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 font-semibold text-[11px]">
             <i class="ph-fill ph-sliders-horizontal text-lg"></i>
-            <span>🛠️ Remix OS</span>
+            <span>🎛️ Controls</span>
         </button>
-        <button onclick="switchMobileNav('visibility')" id="mNav-visibility" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 font-semibold text-[11px]">
-            <i class="ph-fill ph-prohibit text-lg text-rose-400"></i>
-            <span>🚫 None</span>
-        </button>
-        <button onclick="openDownloadHubModal()" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-emerald-300 font-bold text-[11px]">
-            <i class="ph-bold ph-download-simple text-lg"></i>
-            <span>📲 Download</span>
+        <button onclick="switchMobileNav('studio')" id="mNav-studio" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-300 font-semibold text-[11px]">
+            <i class="ph-fill ph-gear-six text-lg"></i>
+            <span>🛠️ Studio</span>
         </button>
     </nav>
 
@@ -3144,7 +3164,7 @@
         }
 
         function switchMobileNav(target) {
-            ['phone', 'palettes', 'customos', 'visibility'].forEach(id => {
+            ['phone', 'presets', 'palettes', 'controls', 'studio'].forEach(id => {
                 const btn = document.getElementById(`mNav-${id}`);
                 if (btn) {
                     btn.classList.toggle('text-amber-300', id === target);
@@ -3156,11 +3176,30 @@
             if (target === 'phone') {
                 document.body.classList.add('mobile-view-phone');
                 document.body.classList.remove('mobile-view-studio');
+                setScreenViewMode('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 document.body.classList.add('mobile-view-studio');
                 document.body.classList.remove('mobile-view-phone');
-                switchStudioTab(target);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (target === 'presets') {
+                    const osBar = document.getElementById('osSelectorGrid');
+                    if (osBar) osBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    else window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (target === 'controls') {
+                    const ctrlCard = document.getElementById('osControlPanelCard');
+                    if (ctrlCard) ctrlCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else if (target === 'palettes') {
+                    switchStudioTab('palettes');
+                    const tab = document.getElementById('tabContent-palettes');
+                    if (tab) tab.scrollIntoView({ behavior: 'smooth' });
+                } else if (target === 'studio') {
+                    switchStudioTab('customos');
+                    const tab = document.getElementById('tabContent-customos');
+                    if (tab) tab.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    switchStudioTab(target);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             }
         }
 
@@ -3434,21 +3473,21 @@
                 { id: 'notif-2', app: 'Chroma OS', title: 'Battery Telemetry Synced', body: 'Phone: 85% • Chroma Buds Pro: 92% • Chroma Watch Ultra: 74%', time: '12m ago', icon: 'ph-battery-charging', color: '#10B981' },
                 { id: 'notif-3', app: 'Calendar', title: 'Design Review: Android 17', body: 'Starts in 25 minutes • Design Studio Room 4', time: '25m ago', icon: 'ph-calendar-blank', color: '#F59E0B' }
             ],
-            // Custom OS Lab Per-Component Mapping (Real-Time Battery indicator active on clean canvas)
+            // Custom OS Lab Per-Component Mapping (Real-Time Battery indicator active alongside authentic OS components)
             customComponents: {
-                cutout: 'none',
-                statusBar: 'none',
+                cutout: 'android17',
+                statusBar: 'android17',
                 lockClock: 'android17',
                 lockShortcuts: 'android17',
-                heroWidget: 'none',
+                heroWidget: 'android17',
                 secondaryWidget: 'none',
                 batteryWidget: 'batteryWidget', // Dedicated real-time battery indicator
                 bluetoothWidget: 'bluetoothWidget', // Active only when Bluetooth device is connected
                 connectedDevicesWidget: 'none',
-                icons: 'none',
-                dock: 'none',
-                searchBar: 'none',
-                pageDots: 'none'
+                icons: 'android17',
+                dock: 'android17',
+                searchBar: 'android17',
+                pageDots: 'android17'
             },
 
             // Extra granular visibility toggles (true = visible, false = 'None' / hidden)
@@ -3494,23 +3533,40 @@
                     Object.assign(state, parsed);
                 }
             } catch (e) {}
-            setupSingleFilePWA();
+
+            // Self-repair: Ensure core components are populated if previously saved as all 'none'
+            if (state.customComponents) {
+                if (state.customComponents.icons === 'none' && state.customComponents.dock === 'none') {
+                    const os = state.activeOs || 'android17';
+                    state.customComponents.cutout = os;
+                    state.customComponents.statusBar = os;
+                    state.customComponents.heroWidget = os;
+                    state.customComponents.icons = os;
+                    state.customComponents.dock = os;
+                    state.customComponents.searchBar = os;
+                    state.customComponents.pageDots = os;
+                    state.customComponents.batteryWidget = 'batteryWidget';
+                    state.customComponents.bluetoothWidget = 'bluetoothWidget';
+                }
+            }
+
+            try { setupSingleFilePWA(); } catch(e) {}
             if (window.innerWidth < 1280) {
                 document.body.classList.add('mobile-view-phone');
             }
-            applyFontPackVariables();
-            applyPaletteVariables();
-            renderOsSelectorGrid();
-            renderPalettesGrid();
-            renderCustomColorPickers();
-            renderVisibilityLab();
-            renderCustomOsBuilder();
-            renderWidgetsTabSelectors();
-            renderFontCards();
-            renderControlPanelStudioBox();
-            renderPhoneStage();
-            startLiveClockTicker();
-            setupBatteryTelemetry();
+            try { applyFontPackVariables(); } catch(e) {}
+            try { applyPaletteVariables(); } catch(e) {}
+            try { renderOsSelectorGrid(); } catch(e) {}
+            try { renderPalettesGrid(); } catch(e) {}
+            try { renderCustomColorPickers(); } catch(e) {}
+            try { renderVisibilityLab(); } catch(e) {}
+            try { renderCustomOsBuilder(); } catch(e) {}
+            try { renderWidgetsTabSelectors(); } catch(e) {}
+            try { renderFontCards(); } catch(e) {}
+            try { renderControlPanelStudioBox(); } catch(e) {}
+            try { renderPhoneStage(); } catch(e) {}
+            try { startLiveClockTicker(); } catch(e) {}
+            try { setupBatteryTelemetry(); } catch(e) {}
         }
 
         function startLiveClockTicker() {
@@ -3638,15 +3694,27 @@
         function selectOsPreset(osId) {
             state.activeOs = osId;
             state.isCustomRemix = false;
-            state.iconRadius = OS_PRESETS[osId].defaultRadius;
+            if (OS_PRESETS[osId]) {
+                state.iconRadius = OS_PRESETS[osId].defaultRadius;
+            }
             state.controlPanelStyle = osId;
 
-            // Sync non-'none' components to the selected OS, preserving user's explicit 'none' choices
-            Object.keys(state.customComponents).forEach(key => {
-                if (state.customComponents[key] !== 'none') {
-                    state.customComponents[key] = osId;
-                }
-            });
+            // Activate the selected OS for all standard UI components
+            state.customComponents = {
+                cutout: osId,
+                statusBar: osId,
+                lockClock: osId,
+                lockShortcuts: osId,
+                heroWidget: osId,
+                secondaryWidget: 'none',
+                batteryWidget: 'batteryWidget',
+                bluetoothWidget: 'bluetoothWidget',
+                connectedDevicesWidget: 'none',
+                icons: osId,
+                dock: osId,
+                searchBar: osId,
+                pageDots: osId
+            };
 
             renderOsSelectorGrid();
             renderVisibilityLab();
@@ -3655,6 +3723,11 @@
             renderPhoneStage();
             renderControlPanelStudioBox();
             updateSummaryLabels();
+            persistChromaState();
+            if (window.AndroidBridge && window.AndroidBridge.vibrate) {
+                try { window.AndroidBridge.vibrate(25); } catch(e) {}
+            }
+            triggerApplyToast(`Switched to ${OS_PRESETS[osId]?.name || osId}`);
         }
 
         function enableCustomRemixMode() {
@@ -4498,8 +4571,44 @@
                                 `).join('')}
                             </div>
                         </div>
-                        <button onclick="downloadStandaloneAppFile()" class="w-full py-2.5 rounded-xl font-bold text-xs text-gray-950 bg-gradient-to-r from-emerald-400 to-amber-300 flex items-center justify-center gap-1.5">
-                            <i class="ph-bold ph-download-simple"></i> Download ChromaOS-App.html
+
+                        <!-- Native Android System Settings & Wallpaper Shortcuts -->
+                        <div class="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+                            <span class="text-[10px] uppercase tracking-wider text-amber-300 font-bold block mb-1">Android System Controls</span>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="window.AndroidBridge && window.AndroidBridge.openAndroidSettings ? window.AndroidBridge.openAndroidSettings() : triggerApplyToast('Android Settings')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/15 text-white flex items-center gap-1.5 border border-white/10">
+                                    <i class="ph-fill ph-gear"></i> System Settings
+                                </button>
+                                <button onclick="window.AndroidBridge && window.AndroidBridge.openBatterySettings ? window.AndroidBridge.openBatterySettings() : openBatteryHubModal()" class="px-2.5 py-2 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/15 text-white flex items-center gap-1.5 border border-white/10">
+                                    <i class="ph-fill ph-battery-charging text-emerald-400"></i> Battery Care
+                                </button>
+                                <button onclick="window.AndroidBridge && window.AndroidBridge.openBluetoothSettings ? window.AndroidBridge.openBluetoothSettings() : triggerApplyToast('Bluetooth Settings')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/15 text-white flex items-center gap-1.5 border border-white/10">
+                                    <i class="ph-fill ph-bluetooth text-sky-400"></i> Bluetooth Hub
+                                </button>
+                                <button onclick="window.AndroidBridge && window.AndroidBridge.openHomeChooser ? window.AndroidBridge.openHomeChooser() : triggerApplyToast('Default Launcher Settings')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/15 text-white flex items-center gap-1.5 border border-white/10">
+                                    <i class="ph-fill ph-house text-amber-300"></i> Default Home
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Wallpaper & Theme Actions -->
+                        <div class="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+                            <span class="text-[10px] uppercase tracking-wider text-amber-300 font-bold block mb-1">Theme & Wallpaper</span>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="window.AndroidBridge && window.AndroidBridge.applySystemWallpaper ? window.AndroidBridge.applySystemWallpaper(state.colors[0], state.colors[1]) : triggerApplyToast('Wallpaper Applied')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 flex items-center gap-1.5 border border-emerald-400/30">
+                                    <i class="ph-bold ph-image"></i> Sync Wallpaper
+                                </button>
+                                <button onclick="window.AndroidBridge && window.AndroidBridge.pickWallpaper ? window.AndroidBridge.pickWallpaper() : triggerApplyToast('Select Wallpaper Image')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/15 text-white flex items-center gap-1.5 border border-white/10">
+                                    <i class="ph-bold ph-upload-simple"></i> Custom Photo
+                                </button>
+                            </div>
+                            <button onclick="window.AndroidBridge && window.AndroidBridge.clearAppCache ? window.AndroidBridge.clearAppCache() : triggerApplyToast('Cache Cleared')" class="w-full mt-1.5 py-2 rounded-xl text-[11px] font-bold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 flex items-center justify-center gap-1.5">
+                                <i class="ph-bold ph-trash"></i> Clear App Cache
+                            </button>
+                        </div>
+
+                        <button onclick="openReleaseNotesModal()" class="w-full py-2.5 rounded-xl font-bold text-xs text-amber-200 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 flex items-center justify-center gap-1.5">
+                            <i class="ph-bold ph-newspaper"></i> ChromaOS Release Notes & System Specs
                         </button>
                     </div>
                 `;
@@ -5211,6 +5320,16 @@
         }
 
         function triggerMasterApplyFlow() {
+            persistChromaState();
+            if (window.AndroidBridge) {
+                if (window.AndroidBridge.applySystemWallpaper && state.colors) {
+                    try { window.AndroidBridge.applySystemWallpaper(state.colors[0], state.colors[1]); } catch(e) {}
+                }
+                if (window.AndroidBridge.vibrate) {
+                    try { window.AndroidBridge.vibrate(40); } catch(e) {}
+                }
+            }
+
             const overlay = document.getElementById('applyProgressOverlay');
             const bar = document.getElementById('applyProgressBar');
             const stepText = document.getElementById('applyOverlayStep');

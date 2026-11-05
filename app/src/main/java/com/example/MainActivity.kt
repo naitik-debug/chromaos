@@ -55,6 +55,20 @@ class MainActivity : ComponentActivity() {
     private var a2dpProfile: BluetoothProfile? = null
     private var headsetProfile: BluetoothProfile? = null
 
+    private var filePathCallback: android.webkit.ValueCallback<Array<Uri>>? = null
+
+    val fileChooserLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val uri = result.data?.data
+        if (uri != null) {
+            filePathCallback?.onReceiveValue(arrayOf(uri))
+        } else {
+            filePathCallback?.onReceiveValue(null)
+        }
+        filePathCallback = null
+    }
+
     val wallpaperPickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -201,12 +215,18 @@ class MainActivity : ComponentActivity() {
             isHorizontalScrollBarEnabled = false
             setBackgroundColor(Color.parseColor("#0D0F12"))
 
+            WebView.setWebContentsDebuggingEnabled(true)
+
             settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true
                 databaseEnabled = true
                 allowFileAccess = true
                 allowContentAccess = true
+                @Suppress("DEPRECATION")
+                allowFileAccessFromFileURLs = true
+                @Suppress("DEPRECATION")
+                allowUniversalAccessFromFileURLs = true
                 useWideViewPort = true
                 loadWithOverviewMode = true
                 cacheMode = WebSettings.LOAD_DEFAULT
@@ -214,7 +234,31 @@ class MainActivity : ComponentActivity() {
                 mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             }
 
-            webChromeClient = WebChromeClient()
+            webChromeClient = object : WebChromeClient() {
+                override fun onConsoleMessage(consoleMessage: android.webkit.ConsoleMessage?): Boolean {
+                    android.util.Log.d("ChromaOS_JS", "${consoleMessage?.messageLevel()}: ${consoleMessage?.message()} (at line ${consoleMessage?.lineNumber()})")
+                    return true
+                }
+
+                override fun onShowFileChooser(
+                    view: WebView?,
+                    filePathCallback: android.webkit.ValueCallback<Array<Uri>>?,
+                    fileChooserParams: FileChooserParams?
+                ): Boolean {
+                    this@MainActivity.filePathCallback = filePathCallback
+                    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "image/*"
+                    }
+                    try {
+                        fileChooserLauncher.launch(intent)
+                        return true
+                    } catch (e: Exception) {
+                        this@MainActivity.filePathCallback = null
+                        return false
+                    }
+                }
+            }
 
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
@@ -551,22 +595,107 @@ class MainActivity : ComponentActivity() {
         fun launchApp(appId: String) {
             activity.runOnUiThread {
                 when (appId.lowercase()) {
-                    "phone" -> activity.startActivitySafe(Intent(Intent.ACTION_DIAL))
+                    "phone", "dialer" -> activity.startActivitySafe(Intent(Intent.ACTION_DIAL))
                     "settings" -> activity.startActivitySafe(Intent(Settings.ACTION_SETTINGS))
                     "camera" -> activity.startActivitySafe(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
-                    "browser" -> activity.startActivitySafe(Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com")))
-                    "messages" -> activity.startActivitySafe(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_MESSAGING))
-                    "gallery" -> activity.startActivitySafe(Intent(Intent.ACTION_VIEW).setType("image/*"))
+                    "browser", "chrome" -> activity.startActivitySafe(Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com")))
+                    "messages", "sms" -> activity.startActivitySafe(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_MESSAGING))
+                    "gallery", "photos" -> activity.startActivitySafe(Intent(Intent.ACTION_VIEW).setType("image/*"))
                     "music" -> activity.startActivitySafe(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_MUSIC))
+                    "clock", "alarm" -> activity.startActivitySafe(Intent(android.provider.AlarmClock.ACTION_SHOW_ALARMS))
+                    "calculator" -> {
+                        val calcIntent = activity.packageManager.getLaunchIntentForPackage("com.google.android.calculator")
+                            ?: activity.packageManager.getLaunchIntentForPackage("com.android.calculator2")
+                        if (calcIntent != null) activity.startActivitySafe(calcIntent)
+                        else activity.startActivitySafe(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_CALCULATOR))
+                    }
+                    "notes" -> activity.startActivitySafe(Intent(Intent.ACTION_CREATE_NOTE))
+                    "weather" -> activity.startActivitySafe(Intent(Intent.ACTION_VIEW, Uri.parse("https://weather.google.com")))
                     else -> {
                         val intent = activity.packageManager.getLaunchIntentForPackage(appId)
                         if (intent != null) {
                             activity.startActivitySafe(intent)
                         } else {
-                            Toast.makeText(activity, "App $appId not installed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, "App $appId not installed on device", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
+            }
+        }
+
+        @JavascriptInterface
+        fun getSystemInfo(): String {
+            return try {
+                val obj = JSONObject().apply {
+                    put("manufacturer", Build.MANUFACTURER)
+                    put("model", Build.MODEL)
+                    put("device", Build.DEVICE)
+                    put("androidVersion", Build.VERSION.RELEASE)
+                    put("sdkInt", Build.VERSION.SDK_INT)
+                    put("appName", "ChromaOS")
+                    put("versionName", "2.1.0")
+                    put("versionCode", 2)
+                }
+                obj.toString()
+            } catch (e: Exception) {
+                "{}"
+            }
+        }
+
+        @JavascriptInterface
+        fun getInstalledApps(): String {
+            return try {
+                val pm = activity.packageManager
+                val intent = Intent(Intent.ACTION_MAIN, null).apply {
+                    addCategory(Intent.CATEGORY_LAUNCHER)
+                }
+                val resolveInfos = pm.queryIntentActivities(intent, 0)
+                val arr = JSONArray()
+                val seen = mutableSetOf<String>()
+                for (info in resolveInfos) {
+                    val pkg = info.activityInfo.packageName
+                    if (seen.add(pkg)) {
+                        val label = info.loadLabel(pm).toString()
+                        val item = JSONObject().apply {
+                            put("packageName", pkg)
+                            put("label", label)
+                        }
+                        arr.put(item)
+                    }
+                }
+                arr.toString()
+            } catch (e: Exception) {
+                "[]"
+            }
+        }
+
+        @JavascriptInterface
+        fun vibrate(durationMs: Long) {
+            try {
+                val dur = durationMs.coerceIn(10, 500)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val vm = activity.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? android.os.VibratorManager
+                    vm?.defaultVibrator?.vibrate(android.os.VibrationEffect.createOneShot(dur, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    @Suppress("DEPRECATION")
+                    val v = activity.getSystemService(Context.VIBRATOR_SERVICE) as? android.os.Vibrator
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v?.vibrate(android.os.VibrationEffect.createOneShot(dur, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+                    } else {
+                        @Suppress("DEPRECATION")
+                        v?.vibrate(dur)
+                    }
+                }
+            } catch (e: Exception) {}
+        }
+
+        @JavascriptInterface
+        fun clearAppCache() {
+            activity.runOnUiThread {
+                try {
+                    activity.webView.clearCache(true)
+                    Toast.makeText(activity, "ChromaOS Cache Cleared", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {}
             }
         }
 
