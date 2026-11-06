@@ -25,6 +25,12 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Validate Gradle Wrapper JAR
+      run: |
+        echo "Validating gradle/wrapper/gradle-wrapper.jar integrity..."
+        jar tf gradle/wrapper/gradle-wrapper.jar > /dev/null
+        echo "Gradle Wrapper JAR is valid and intact."
+
     - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace
 
