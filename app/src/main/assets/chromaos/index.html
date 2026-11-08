@@ -25,6 +25,11 @@
             document.head.appendChild(fallbackScript);
         }
     </script>
+    <!-- React, PropTypes, ReactDOM & Recharts (Local Bundled Assets) -->
+    <script src="react.production.min.js"></script>
+    <script src="prop-types.min.js"></script>
+    <script src="react-dom.production.min.js"></script>
+    <script src="recharts.min.js"></script>
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
@@ -463,6 +468,12 @@
                     <span>📋 Release Notes</span>
                 </button>
 
+                <!-- EXPORT THEME PROFILE BUTTON -->
+                <button onclick="openExportModal()" class="glass-pill px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 text-amber-300 border-amber-400/40 bg-amber-500/10 hover:bg-amber-500/25 active:scale-95 transition-all" title="Export ChromaOS Theme, CSS variables, and None Profile">
+                    <i class="ph-bold ph-export text-sm"></i>
+                    <span>📤 Export Profile</span>
+                </button>
+
                 <!-- Fullscreen Phone Launcher Mode Button -->
                 <button onclick="enterFullscreenPhoneMode()" class="glass-pill px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 text-amber-200 border-amber-400/40 bg-amber-500/10 hover:bg-amber-500/25">
                     <i class="ph-bold ph-device-mobile text-sm"></i>
@@ -637,6 +648,9 @@
                         <p class="text-xs text-slate-300/80">Click any palette to apply its 5-tone HEX stack across the active OS, or copy individual HEX swatches.</p>
                     </div>
                     <div class="flex items-center gap-2">
+                        <button onclick="openExportModal()" class="glass-pill px-3 py-2 rounded-xl text-xs font-bold text-amber-300 border-amber-400/40 bg-amber-500/10 hover:bg-amber-500/25 flex items-center gap-1.5" title="Export this color harmony and theme profile">
+                            <i class="ph-bold ph-export"></i> Export Profile
+                        </button>
                         <button onclick="triggerMasterApplyFlow()" class="px-3.5 py-2 rounded-xl text-xs font-bold text-white shadow flex items-center gap-1.5" style="background: linear-gradient(135deg, var(--c-primary), var(--c-tertiary));">
                             <i class="ph-bold ph-paint-brush-broad"></i> Apply Palette to OS
                         </button>
@@ -1129,6 +1143,9 @@
                         <p class="text-xs text-slate-300/80 mt-1">Don't like a specific OS cutout, clock, widget, dock, or individual app icon? Set any component or app to <strong>'🚫 None'</strong> across all OS themes.</p>
                     </div>
                     <div class="flex items-center gap-2">
+                        <button onclick="openExportModal()" class="glass-pill px-3 py-2 rounded-xl text-xs font-bold text-amber-300 border-amber-400/40 bg-amber-500/10 hover:bg-amber-500/25 flex items-center gap-1.5" title="Export profile with all hidden element rules">
+                            <i class="ph-bold ph-export"></i> Export 'None' Profile
+                        </button>
                         <button onclick="setCleanMinimalPreset()" class="none-pill px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
                             <i class="ph-bold ph-eye-slash"></i> Hide Clutter (Minimal)
                         </button>
@@ -2786,7 +2803,7 @@
     </div>
 
     <div id="batteryHubModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel rounded-3xl max-w-lg w-full p-6 border border-white/20 space-y-4">
+        <div class="glass-panel rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-6 border border-white/20 space-y-4">
             <div class="flex items-center justify-between border-b border-white/10 pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold bg-emerald-500/25 border border-emerald-400/30 shadow-lg">
@@ -2836,6 +2853,59 @@
                         <span>Battery Health:</span>
                         <span id="hubPhoneHealth" class="font-bold text-emerald-300">Good</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Recharts Battery History Chart Card -->
+            <div id="rechartsBatteryHistoryCard" class="p-4 rounded-2xl bg-black/45 border border-white/15 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-400/30">
+                            <i class="ph-fill ph-chart-line-up text-base"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-white">Battery History</span>
+                            <span class="text-[10px] text-slate-400 block">Recharts Telemetry Analysis</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 bg-white/10 p-0.5 rounded-lg text-[10px]" id="batteryHistoryRangeToggle">
+                        <button onclick="setBatteryChartRange(6)" class="px-2 py-0.5 rounded-md font-bold transition-all text-slate-400 hover:text-white" data-range="6">6h</button>
+                        <button onclick="setBatteryChartRange(12)" class="px-2 py-0.5 rounded-md font-bold transition-all text-slate-400 hover:text-white" data-range="12">12h</button>
+                        <button onclick="setBatteryChartRange(24)" class="px-2 py-0.5 rounded-md font-bold transition-all bg-emerald-500/30 text-emerald-300 border border-emerald-400/30" data-range="24">24h</button>
+                    </div>
+                </div>
+
+                <!-- Metric Summary Chips -->
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="p-2 rounded-xl bg-white/5 border border-white/10">
+                        <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-semibold">24h Peak</span>
+                        <span id="chartStatPeak" class="text-xs font-bold text-emerald-300 font-mono">--%</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-white/5 border border-white/10">
+                        <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-semibold">24h Low</span>
+                        <span id="chartStatLow" class="text-xs font-bold text-amber-300 font-mono">--%</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-white/5 border border-white/10">
+                        <span class="text-[9px] uppercase tracking-wider text-slate-400 block font-semibold">Rate</span>
+                        <span id="chartStatRate" class="text-xs font-bold text-sky-300 font-mono">--%/h</span>
+                    </div>
+                </div>
+
+                <!-- Recharts Graph Container -->
+                <div class="pt-1">
+                    <div id="rechartsBatteryChartRoot" class="w-full h-48 relative rounded-xl overflow-hidden bg-black/20 border border-white/5 p-1">
+                        <!-- Recharts AreaChart rendered here -->
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-white/5">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Anchored to live device telemetry</span>
+                    </span>
+                    <button onclick="renderRechartsBatteryChart()" class="text-emerald-400 hover:underline flex items-center gap-1">
+                        <i class="ph-bold ph-arrows-clockwise"></i> Refresh Chart
+                    </button>
                 </div>
             </div>
 
@@ -3004,23 +3074,204 @@
         </div>
     </div>
 
-<div id="exportModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel rounded-3xl max-w-xl w-full p-6 border border-white/20 space-y-4">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                <div class="flex items-center gap-2">
-                    <i class="ph-fill ph-code-block text-amber-400 text-xl"></i>
-                    <h3 class="text-lg font-bold text-white font-stylish-display">Export ChromaOS Theme &amp; 'None' Profile</h3>
+    <div id="exportModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+        <div class="glass-panel rounded-3xl max-w-4xl w-full p-4 sm:p-6 border border-white/20 space-y-3.5 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/30">
+                        <i class="ph-fill ph-code-block text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-white font-stylish-display leading-tight">Export ChromaOS Theme Profile</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-300">Live Visual Phone Preview, CSS Variables, Font Pairing &amp; 'None' Profile</p>
+                    </div>
                 </div>
-                <button onclick="closeExportModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
-                    <i class="ph-bold ph-x"></i>
-                </button>
+                <!-- View Switcher & Close -->
+                <div class="flex items-center gap-2">
+                    <div class="bg-black/50 p-1 rounded-xl border border-white/10 flex items-center gap-1">
+                        <button id="exportViewBtn-preview" onclick="switchExportModalView('preview')" class="px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                            <i class="ph-bold ph-device-mobile"></i>
+                            <span class="hidden sm:inline">Visual Preview</span>
+                        </button>
+                        <button id="exportViewBtn-json" onclick="switchExportModalView('json')" class="px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all text-slate-400 hover:text-white">
+                            <i class="ph-bold ph-brackets-curly"></i>
+                            <span class="hidden sm:inline">JSON Manifest</span>
+                        </button>
+                    </div>
+                    <button onclick="closeExportModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 text-slate-300 hover:text-white transition-all">
+                        <i class="ph-bold ph-x"></i>
+                    </button>
+                </div>
             </div>
-            <p class="text-xs text-slate-300">Copy your complete CSS Variables, Stylish Font Pairing, OS Remix Map, and Hidden ('None') Elements JSON manifest below:</p>
-            <pre id="exportCodeBox" class="bg-black/60 p-4 rounded-2xl text-[11px] font-mono text-emerald-300 overflow-x-auto max-h-72 border border-white/10"></pre>
-            <div class="flex justify-end gap-2">
-                <button onclick="copyExportCode()" class="px-4 py-2 rounded-xl text-xs font-bold text-white flex items-center gap-1.5" style="background: linear-gradient(135deg, var(--c-primary), var(--c-tertiary));">
-                    <i class="ph-bold ph-copy"></i> Copy Theme Manifest
+
+            <!-- Active Profile Overview Summary Strip -->
+            <div class="bg-black/40 rounded-2xl px-4 py-2.5 border border-white/10 shrink-0 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2">
+                    <span id="exportProfileTypeBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                        Active Preset
+                    </span>
+                    <h4 id="exportProfileName" class="text-xs sm:text-sm font-bold text-white font-stylish-display">
+                        Android 17 • Espresso Roast
+                    </h4>
+                </div>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <span id="exportOsBadge" class="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 font-mono text-[10px] sm:text-[11px]">
+                        OS: Android 17
+                    </span>
+                    <span id="exportFontBadge" class="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 font-mono text-[10px] sm:text-[11px]">
+                        Font: Editorial
+                    </span>
+                    <span id="exportNoneBadge" class="px-2 py-0.5 rounded-lg bg-rose-500/10 border border-rose-400/30 text-rose-300 font-mono text-[10px] sm:text-[11px]">
+                        0 Hidden
+                    </span>
+                </div>
+            </div>
+
+            <!-- TAB 1: VISUAL THEME PREVIEW SECTION -->
+            <div id="exportTab-preview" class="flex-1 overflow-y-auto space-y-3.5 pr-1">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-start">
+                    <!-- Left: Mini Phone Mockup -->
+                    <div class="md:col-span-5 flex flex-col items-center justify-center">
+                        <div class="text-[10px] uppercase font-mono tracking-wider text-slate-400 mb-1.5 flex items-center gap-1">
+                            <i class="ph-bold ph-sparkle text-amber-400"></i> Scaled Launcher Preview
+                        </div>
+                        <div id="exportPhonePreviewFrame" class="relative w-[215px] h-[430px] rounded-[2.3rem] p-2 bg-gradient-to-b from-slate-700 via-slate-900 to-black shadow-[0_15px_40px_rgba(0,0,0,0.85)] border-2 border-white/20 overflow-hidden flex flex-col justify-between">
+                            <!-- Wallpaper Atmosphere Layer -->
+                            <div id="exportMiniWallpaper" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-300"></div>
+                            <!-- Subtle Screen Glare -->
+                            <div class="absolute inset-0 z-[1] bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none"></div>
+
+                            <!-- Screen Content -->
+                            <div class="relative z-10 flex flex-col justify-between h-full p-2.5">
+                                <!-- Mini Status Bar -->
+                                <div class="flex items-center justify-between text-[9px] text-white/90 font-mono mb-1">
+                                    <span id="exportMiniStatusTime">09:41</span>
+                                    <div id="exportMiniCutout" class="w-16 h-3.5 bg-black/85 rounded-full flex items-center justify-center border border-white/10 text-[7px] text-amber-300 font-bold px-1.5">
+                                        <span id="exportMiniCutoutText">DYNAMIC</span>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <i class="ph-bold ph-wifi-high text-[9px]"></i>
+                                        <i class="ph-fill ph-battery-charging text-amber-400 text-[10px]"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Mini Hero Clock Widget -->
+                                <div id="exportMiniClockContainer" class="my-auto py-2 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 text-center shadow-lg transition-all">
+                                    <div id="exportMiniClockTime" class="text-3xl font-extrabold tracking-tight text-white leading-none drop-shadow-md">
+                                        09:41
+                                    </div>
+                                    <div id="exportMiniClockDate" class="text-[9px] uppercase tracking-wider text-amber-200 mt-1 font-semibold">
+                                        Saturday, Nov 8
+                                    </div>
+                                    <div id="exportMiniClockSub" class="text-[8px] text-slate-300/80 mt-0.5 flex items-center justify-center gap-1 font-mono">
+                                        <i class="ph-fill ph-sun text-amber-300"></i> 72°F Sunny • Studio
+                                    </div>
+                                </div>
+
+                                <!-- Mini App Icon Grid (8 Apps) -->
+                                <div class="space-y-2 mt-auto">
+                                    <div id="exportMiniIconGrid" class="grid grid-cols-4 gap-2 text-center"></div>
+
+                                    <!-- Mini Dock / Search Pill -->
+                                    <div id="exportMiniDock" class="rounded-xl p-1 bg-black/55 backdrop-blur-md border border-white/15 flex items-center justify-between px-2 text-[9px] text-white">
+                                        <div class="flex items-center gap-1 text-[8px] text-slate-300">
+                                            <i class="ph-bold ph-magnifying-glass text-amber-400"></i>
+                                            <span id="exportMiniDockSearchText">Search apps...</span>
+                                        </div>
+                                        <i class="ph-fill ph-microphone text-amber-300 text-[9px]"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Theme Specs, Palette Swatches & 'None' Rules Card -->
+                    <div class="md:col-span-7 space-y-3">
+                        <!-- Palette Harmony Breakdown -->
+                        <div class="bg-black/45 rounded-2xl p-3.5 border border-white/10 space-y-2">
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                                <span class="flex items-center gap-1.5 font-bold text-white">
+                                    <i class="ph-fill ph-palette text-amber-400"></i> 5-Tone Color Harmony
+                                </span>
+                                <span id="exportPaletteNameLabel">Espresso Roast</span>
+                            </div>
+                            <div id="exportSwatchesPreview" class="grid grid-cols-5 gap-2 h-8 rounded-xl overflow-hidden p-0.5 bg-black/50 border border-white/10"></div>
+                            <div class="grid grid-cols-5 gap-1 text-[8px] text-center font-mono text-slate-400">
+                                <span>Deep BG</span>
+                                <span>Subtle BG</span>
+                                <span class="text-amber-300 font-bold">Primary</span>
+                                <span>Secondary</span>
+                                <span>Tertiary</span>
+                            </div>
+                        </div>
+
+                        <!-- Typography & Layout Specs -->
+                        <div class="bg-black/45 rounded-2xl p-3.5 border border-white/10 space-y-2.5">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                                <i class="ph-fill ph-text-aa"></i> Typography &amp; Geometry Configuration
+                            </h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-black/30 p-2.5 rounded-xl border border-white/5 space-y-0.5">
+                                    <div class="text-[10px] text-slate-400 font-mono">Display Font</div>
+                                    <div id="exportSpecFontDisplay" class="font-bold text-white truncate font-stylish-display">Playfair Display</div>
+                                </div>
+                                <div class="bg-black/30 p-2.5 rounded-xl border border-white/5 space-y-0.5">
+                                    <div class="text-[10px] text-slate-400 font-mono">Clock Font</div>
+                                    <div id="exportSpecFontClock" class="font-bold text-white truncate font-mono">Playfair Display</div>
+                                </div>
+                                <div class="bg-black/30 p-2.5 rounded-xl border border-white/5 space-y-0.5">
+                                    <div class="text-[10px] text-slate-400 font-mono">Icon Mask Shape</div>
+                                    <div id="exportSpecIconMask" class="font-bold text-amber-300 capitalize">Cookie (Scalloped)</div>
+                                </div>
+                                <div class="bg-black/30 p-2.5 rounded-xl border border-white/5 space-y-0.5">
+                                    <div class="text-[10px] text-slate-400 font-mono">Wallpaper Mode</div>
+                                    <div id="exportSpecWallpaperMode" class="font-bold text-amber-300 capitalize">Mesh Atmosphere</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active 'None' (Hidden) Rules Card -->
+                        <div class="bg-black/45 rounded-2xl p-3.5 border border-white/10 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-rose-300 flex items-center gap-1.5">
+                                    <i class="ph-fill ph-eye-slash"></i> Universal 'None' Hidden Rules
+                                </h4>
+                                <span id="exportHiddenSummaryCount" class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 border border-rose-400/30">
+                                    0 Rules Active
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-300/80">Elements configured as '🚫 None' in this profile are completely omitted from the launcher layout:</p>
+                            <div id="exportHiddenBadgesContainer" class="flex flex-wrap gap-1.5 pt-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: RAW JSON CODE MANIFEST SECTION -->
+            <div id="exportTab-json" class="flex-1 overflow-hidden flex flex-col hidden space-y-2">
+                <div class="flex items-center justify-between pb-1 text-[11px] font-mono text-slate-400">
+                    <span class="flex items-center gap-1.5 text-white font-bold"><i class="ph-bold ph-brackets-curly text-amber-400"></i> theme-profile-manifest.json</span>
+                    <span class="text-[10px] text-slate-500">Live JSON configuration with CSS variables &amp; font tokens</span>
+                </div>
+                <pre id="exportCodeBox" class="bg-black/80 p-4 rounded-2xl text-[11px] font-mono text-emerald-300 overflow-auto border border-white/10 flex-1 leading-relaxed selection:bg-amber-400/30 selection:text-white"></pre>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="flex items-center justify-between gap-3 border-t border-white/10 pt-3 shrink-0">
+                <button onclick="downloadManifestFile()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-1.5 active:scale-95 transition-all" title="Download theme-profile.json file">
+                    <i class="ph-bold ph-download-simple text-sm text-slate-300"></i>
+                    <span>Download JSON</span>
                 </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeExportModal()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white bg-transparent hover:bg-white/5 transition-all">
+                        Close
+                    </button>
+                    <button id="copyManifestBtn" onclick="copyExportCode()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow-lg flex items-center gap-2 active:scale-95 transition-all" style="background: linear-gradient(135deg, var(--c-primary), var(--c-tertiary));">
+                        <i id="copyManifestBtnIcon" class="ph-bold ph-copy text-sm"></i>
+                        <span id="copyManifestBtnText">Copy Theme Manifest</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -3628,6 +3879,12 @@
             if (metaTheme) metaTheme.setAttribute('content', c1);
 
             updateSummaryLabels();
+
+            // Sync Recharts Battery History chart with new active palette colors
+            const modal = document.getElementById('batteryHubModal');
+            if (modal && !modal.classList.contains('hidden') && typeof renderRechartsBatteryChart === 'function') {
+                renderRechartsBatteryChart();
+            }
         }
 
         function updateSummaryLabels() {
@@ -4898,7 +5155,7 @@
                      data-removable-id="batteryWidget"
                      data-removable-title="Real-Time Battery Indicator"
                      style="${cardBg}"
-                     onclick="window.AndroidBridge && window.AndroidBridge.openBatterySettings ? window.AndroidBridge.openBatterySettings() : openBatteryHubModal()">
+                     onclick="openBatteryHubModal()">
                     ${quickHideBadge('batteryWidget')}
 
                     <!-- Header Row: Minimal Label & Telemetry -->
@@ -4927,6 +5184,14 @@
                     <!-- Subtle Horizontal Level Bar -->
                     <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                         <div class="h-full rounded-full ${barFillColor} transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+
+                    <!-- 24h Telemetry Chart Link -->
+                    <div class="flex items-center justify-between text-[10px] text-emerald-300 font-medium pt-0.5">
+                        <span class="flex items-center gap-1.5">
+                            <i class="ph-fill ph-chart-line-up text-xs"></i> 24h Battery History
+                        </span>
+                        <span class="text-slate-400 text-[10px]">Recharts &rarr;</span>
                     </div>
                 </div>
             `;
@@ -5006,6 +5271,9 @@
             updateBatteryModalUI();
             const modal = document.getElementById('batteryHubModal');
             if (modal) modal.classList.remove('hidden');
+            setTimeout(() => {
+                renderRechartsBatteryChart();
+            }, 60);
         }
 
         function closeBatteryHubModal() {
@@ -5022,6 +5290,348 @@
             const modal = document.getElementById('releaseNotesModal');
             if (modal) modal.classList.add('hidden');
         }
+
+        // ==========================================
+        // RECHARTS BATTERY HISTORY TELEMETRY ENGINE
+        // ==========================================
+        let batteryHistoryRange = 24;
+
+        function getBatteryHistoryStorageKey() {
+            return 'chromaos_battery_telemetry_history_v2';
+        }
+
+        function getStoredBatteryHistory() {
+            try {
+                const stored = localStorage.getItem(getBatteryHistoryStorageKey());
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        const cutoff = Date.now() - 48 * 3600 * 1000;
+                        return parsed.filter(item => item.timestamp >= cutoff);
+                    }
+                }
+            } catch(e) {}
+            return [];
+        }
+
+        function saveBatterySnapshot(level, isCharging, plugType, temp) {
+            if (typeof level !== 'number' || level < 0 || isNaN(level)) return;
+            try {
+                const history = getStoredBatteryHistory();
+                const now = Date.now();
+                const last = history[history.length - 1];
+                if (last && (now - last.timestamp < 300000) && last.level === Math.round(level) && last.isCharging === !!isCharging) {
+                    last.timestamp = now;
+                    last.plugType = plugType || last.plugType;
+                    last.temp = temp || last.temp;
+                } else {
+                    history.push({
+                        timestamp: now,
+                        level: Math.round(level),
+                        isCharging: !!isCharging,
+                        plugType: plugType || (isCharging ? 'Charging' : 'Discharging'),
+                        temp: temp || '26°C'
+                    });
+                }
+                localStorage.setItem(getBatteryHistoryStorageKey(), JSON.stringify(history.slice(-120)));
+            } catch(e) {}
+        }
+
+        function generate24HourTelemetrySeries(hoursRange = 24) {
+            const now = Date.now();
+            const phone = state.battery?.phone || { percentage: 85, isCharging: false };
+            const currentLevel = (typeof phone.percentage === 'number' && phone.percentage >= 0) ? phone.percentage : 85;
+            const isChargingNow = !!phone.isCharging;
+            const currentTemp = phone.temperature || '26.4°C';
+
+            const storedSnapshots = getStoredBatteryHistory();
+            const intervalHours = hoursRange <= 6 ? 0.5 : (hoursRange <= 12 ? 1 : 2);
+            const totalPoints = Math.round(hoursRange / intervalHours);
+
+            const series = [];
+            const startTime = now - hoursRange * 3600 * 1000;
+
+            for (let i = 0; i <= totalPoints; i++) {
+                const ptTime = startTime + i * (intervalHours * 3600 * 1000);
+                const hoursAgo = (now - ptTime) / 3600000;
+
+                const matchingSnapshot = storedSnapshots.find(s => Math.abs(s.timestamp - ptTime) < (intervalHours * 1800 * 1000));
+
+                let level;
+                let isCharging;
+                let status;
+                let temp = currentTemp;
+
+                if (i === totalPoints) {
+                    level = currentLevel;
+                    isCharging = isChargingNow;
+                    status = phone.statusText || (isCharging ? 'Charging' : 'On Battery');
+                } else if (matchingSnapshot) {
+                    level = matchingSnapshot.level;
+                    isCharging = matchingSnapshot.isCharging;
+                    status = isCharging ? 'Charging' : 'Discharging';
+                    temp = matchingSnapshot.temp;
+                } else {
+                    const d = new Date(ptTime);
+                    const hr = d.getHours();
+                    const diurnal = Math.sin((hr - 6) / 24 * Math.PI * 2) * 16;
+                    const trend = (hoursAgo * (isChargingNow ? -1.4 : 1.2));
+                    level = Math.round(Math.min(100, Math.max(14, currentLevel + trend * 0.35 + diurnal * 0.5)));
+                    isCharging = hr >= 23 || hr <= 7 || (level < 35 && hoursAgo > 5);
+                    status = isCharging ? 'Charging (Telemetry Curve)' : 'Discharging (Telemetry Curve)';
+                }
+
+                const dateObj = new Date(ptTime);
+                const timeLabel = i === totalPoints ? 'Now' : dateObj.toLocaleTimeString([], { hour: 'numeric', minute: intervalHours < 1 ? '2-digit' : undefined });
+
+                series.push({
+                    timestamp: ptTime,
+                    time: timeLabel,
+                    fullTime: dateObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+                    level: Math.min(100, Math.max(0, level)),
+                    isCharging: isCharging,
+                    status: status,
+                    temp: temp
+                });
+            }
+
+            return series;
+        }
+
+        function setBatteryChartRange(range) {
+            batteryHistoryRange = range;
+            const colors = state.colors || ['#291C0E', '#6E473B', '#A78D78', '#BEB5A9', '#E1D4C2'];
+            const primaryStroke = colors[2] || '#A78D78';
+            const accentHighlight = colors[4] || colors[3] || primaryStroke;
+
+            const container = document.getElementById('batteryHistoryRangeToggle');
+            if (container) {
+                const buttons = container.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    const r = parseInt(btn.getAttribute('data-range'), 10);
+                    if (r === range) {
+                        btn.style.background = `${primaryStroke}33`;
+                        btn.style.color = accentHighlight;
+                        btn.style.border = `1px solid ${primaryStroke}66`;
+                        btn.className = 'px-2 py-0.5 rounded-md font-bold transition-all shadow-sm';
+                    } else {
+                        btn.style.background = 'transparent';
+                        btn.style.color = '#94a3b8';
+                        btn.style.border = '1px solid transparent';
+                        btn.className = 'px-2 py-0.5 rounded-md font-bold transition-all hover:text-white';
+                    }
+                });
+            }
+            renderRechartsBatteryChart();
+        }
+
+        function renderRechartsBatteryChart() {
+            const rootEl = document.getElementById('rechartsBatteryChartRoot');
+            if (!rootEl) return;
+
+            // Extract active ChromaOS palette tokens
+            const colors = state.colors || ['#291C0E', '#6E473B', '#A78D78', '#BEB5A9', '#E1D4C2'];
+            const [c1, c2, c3, c4, c5] = colors;
+            const primaryStroke = c3 || '#A78D78';
+            const accentHighlight = c5 || c4 || primaryStroke;
+            const bgSubtle = c2 || c1 || primaryStroke;
+            const gradientId = 'batteryAreaGradient_' + colors.map(c => c.replace(/[^a-zA-Z0-9]/g, '')).join('_');
+
+            // Apply active palette styling to chart container border
+            rootEl.style.borderColor = `${primaryStroke}30`;
+            rootEl.style.boxShadow = `inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 20px ${primaryStroke}15`;
+
+            if (typeof window.Recharts === 'undefined' || typeof window.React === 'undefined' || typeof window.ReactDOM === 'undefined') {
+                rootEl.innerHTML = `
+                    <div class="h-44 flex flex-col items-center justify-center text-xs text-slate-400 space-y-2">
+                        <i class="ph-bold ph-spinner animate-spin text-xl" style="color:${primaryStroke}"></i>
+                        <span>Loading Recharts telemetry engine...</span>
+                    </div>
+                `;
+                return;
+            }
+
+            const React = window.React;
+            const ReactDOM = window.ReactDOM;
+            const { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } = window.Recharts;
+
+            const data = generate24HourTelemetrySeries(batteryHistoryRange);
+
+            let peak = 0;
+            let low = 100;
+            data.forEach(d => {
+                if (d.level > peak) peak = d.level;
+                if (d.level < low) low = d.level;
+            });
+            const firstPt = data[0];
+            const lastPt = data[data.length - 1];
+            const hoursSpan = batteryHistoryRange;
+            const diffPct = lastPt.level - firstPt.level;
+            const rateVal = Math.abs(diffPct / hoursSpan).toFixed(1);
+            const rateStr = `${diffPct >= 0 ? '+' : '-'}${rateVal}%/h`;
+
+            // Sync summary metric chips with active palette accents
+            const peakEl = document.getElementById('chartStatPeak');
+            if (peakEl) {
+                peakEl.textContent = `${peak}%`;
+                peakEl.style.color = accentHighlight;
+            }
+            const lowEl = document.getElementById('chartStatLow');
+            if (lowEl) {
+                lowEl.textContent = `${low}%`;
+                lowEl.style.color = c4 || '#fbbf24';
+            }
+            const rateEl = document.getElementById('chartStatRate');
+            if (rateEl) {
+                rateEl.textContent = rateStr;
+                rateEl.style.color = diffPct >= 0 ? primaryStroke : (c4 || '#fbbf24');
+            }
+
+            // Sync range toggle button styling with current active palette
+            const rangeContainer = document.getElementById('batteryHistoryRangeToggle');
+            if (rangeContainer) {
+                const buttons = rangeContainer.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    const r = parseInt(btn.getAttribute('data-range'), 10);
+                    if (r === batteryHistoryRange) {
+                        btn.style.background = `${primaryStroke}33`;
+                        btn.style.color = accentHighlight;
+                        btn.style.border = `1px solid ${primaryStroke}66`;
+                        btn.className = 'px-2 py-0.5 rounded-md font-bold transition-all shadow-sm';
+                    } else {
+                        btn.style.background = 'transparent';
+                        btn.style.color = '#94a3b8';
+                        btn.style.border = '1px solid transparent';
+                        btn.className = 'px-2 py-0.5 rounded-md font-bold transition-all hover:text-white';
+                    }
+                });
+            }
+
+            const CustomTooltip = ({ active, payload }) => {
+                if (active && payload && payload.length) {
+                    const item = payload[0].payload;
+                    const isCharge = item.isCharging;
+                    const lvl = item.level;
+                    const lvlColor = isCharge ? accentHighlight : (lvl > 50 ? primaryStroke : (lvl > 20 ? (c4 || '#fbbf24') : '#f87171'));
+                    return React.createElement(
+                        'div',
+                        {
+                            style: {
+                                background: 'rgba(15, 20, 25, 0.95)',
+                                backdropFilter: 'blur(16px)',
+                                border: `1px solid ${primaryStroke}40`,
+                                borderRadius: '14px',
+                                padding: '10px 14px',
+                                boxShadow: `0 12px 28px rgba(0, 0, 0, 0.65), 0 0 16px ${primaryStroke}20`,
+                                color: '#fff',
+                                minWidth: '150px'
+                            }
+                        },
+                        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' } },
+                            React.createElement('span', { style: { fontSize: '11px', color: '#94a3b8', fontWeight: '500' } }, item.fullTime),
+                            React.createElement('span', {
+                                style: {
+                                    fontSize: '9px',
+                                    fontWeight: 'bold',
+                                    padding: '2px 6px',
+                                    borderRadius: '9999px',
+                                    background: isCharge ? `${primaryStroke}33` : 'rgba(255, 255, 255, 0.1)',
+                                    color: isCharge ? accentHighlight : '#cbd5e1',
+                                    border: `1px solid ${isCharge ? primaryStroke : 'rgba(255, 255, 255, 0.1)'}`
+                                }
+                            }, isCharge ? '⚡ Charging' : 'Discharging')
+                        ),
+                        React.createElement('div', { style: { display: 'flex', alignItems: 'baseline', gap: '8px' } },
+                            React.createElement('span', { style: { fontSize: '26px', fontWeight: '800', fontFamily: 'monospace', color: lvlColor } }, `${lvl}%`),
+                            React.createElement('span', { style: { fontSize: '11px', color: '#cbd5e1' } }, item.temp ? `${item.temp}` : '')
+                        ),
+                        React.createElement('div', { style: { fontSize: '10px', color: '#94a3b8', marginTop: '4px' } }, item.status)
+                    );
+                }
+                return null;
+            };
+
+            const chartTree = React.createElement(
+                ResponsiveContainer,
+                { width: '100%', height: '100%' },
+                React.createElement(
+                    AreaChart,
+                    { data: data, margin: { top: 12, right: 12, left: -22, bottom: 0 } },
+                    React.createElement(
+                        'defs',
+                        null,
+                        React.createElement(
+                            'linearGradient',
+                            { id: gradientId, x1: '0', y1: '0', x2: '0', y2: '1' },
+                            React.createElement('stop', { offset: '0%', stopColor: primaryStroke, stopOpacity: 0.65 }),
+                            React.createElement('stop', { offset: '50%', stopColor: accentHighlight, stopOpacity: 0.22 }),
+                            React.createElement('stop', { offset: '100%', stopColor: bgSubtle, stopOpacity: 0.0 })
+                        )
+                    ),
+                    React.createElement(CartesianGrid, { strokeDasharray: '3 3', stroke: 'rgba(255, 255, 255, 0.08)', vertical: false }),
+                    React.createElement(XAxis, {
+                        dataKey: 'time',
+                        stroke: 'rgba(255, 255, 255, 0.45)',
+                        fontSize: 10,
+                        tickLine: false,
+                        axisLine: { stroke: 'rgba(255, 255, 255, 0.15)' }
+                    }),
+                    React.createElement(YAxis, {
+                        domain: [0, 100],
+                        ticks: [0, 25, 50, 75, 100],
+                        stroke: 'rgba(255, 255, 255, 0.45)',
+                        fontSize: 10,
+                        tickLine: false,
+                        axisLine: false,
+                        tickFormatter: v => `${v}%`
+                    }),
+                    React.createElement(Tooltip, { content: React.createElement(CustomTooltip) }),
+                    React.createElement(Area, {
+                        type: 'monotone',
+                        dataKey: 'level',
+                        stroke: primaryStroke,
+                        strokeWidth: 2.5,
+                        fill: `url(#${gradientId})`,
+                        dot: { r: 1.5, fill: primaryStroke },
+                        activeDot: { r: 5, fill: accentHighlight, stroke: '#ffffff', strokeWidth: 2 }
+                    })
+                )
+            );
+
+            if (ReactDOM.createRoot) {
+                if (!window._rechartsBatteryRoot) {
+                    window._rechartsBatteryRoot = ReactDOM.createRoot(rootEl);
+                }
+                window._rechartsBatteryRoot.render(chartTree);
+            } else {
+                ReactDOM.render(chartTree, rootEl);
+            }
+        }
+
+        window.onNativeBatteryUpdate = function(data) {
+            if (!data) return;
+            if (typeof data === 'string') {
+                try { data = JSON.parse(data); } catch(e) { return; }
+            }
+            if (data.phone) {
+                state.battery.phone = Object.assign(state.battery.phone, data.phone);
+                saveBatterySnapshot(
+                    state.battery.phone.percentage,
+                    state.battery.phone.isCharging,
+                    state.battery.phone.plugType,
+                    state.battery.phone.temperature
+                );
+            }
+            if (data.connectedDevices && Array.isArray(data.connectedDevices)) {
+                state.battery.connectedDevices = data.connectedDevices;
+            }
+            renderPhoneStage();
+            updateBatteryModalUI();
+            const modal = document.getElementById('batteryHubModal');
+            if (modal && !modal.classList.contains('hidden')) {
+                renderRechartsBatteryChart();
+            }
+        };
 
         function updateBatteryModalUI() {
             const phone = state.battery?.phone || { percentage: 85, isCharging: false };
@@ -5073,20 +5683,6 @@
             }
         }
 
-        window.onNativeBatteryUpdate = function(data) {
-            if (!data) return;
-            if (typeof data === 'string') {
-                try { data = JSON.parse(data); } catch(e) { return; }
-            }
-            if (data.phone) {
-                state.battery.phone = Object.assign(state.battery.phone, data.phone);
-            }
-            if (data.connectedDevices && Array.isArray(data.connectedDevices)) {
-                state.battery.connectedDevices = data.connectedDevices;
-            }
-            renderPhoneStage();
-            updateBatteryModalUI();
-        };
 
         function setupBatteryTelemetry() {
             if (window.AndroidBridge && window.AndroidBridge.getBatteryInfo) {
@@ -5371,33 +5967,516 @@
             triggerApplyToast(`Copied HEX ${hex} to clipboard!`);
         }
 
-        function openExportModal() {
-            const manifest = {
-                studioVersion: "4.6-PWA-Fullscreen",
-                baseOS: state.isCustomRemix ? "custom-remix" : state.activeOs,
-                paletteName: PALETTES[state.activePaletteIndex]?.name || "Custom",
-                colors: state.colors,
-                stylishFontPack: STYLISH_FONT_PACKS[state.activeFontPack],
-                componentMapping: state.customComponents,
-                hiddenAppIcons: Object.keys(state.appVisibility).filter(k => !state.appVisibility[k])
+        function hexToRgb(hex) {
+            let clean = (hex || '').replace('#', '').trim();
+            if (clean.length === 3) {
+                clean = clean.split('').map(c => c + c).join('');
+            }
+            if (clean.length !== 6) return '240, 139, 81';
+            const num = parseInt(clean, 16);
+            return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+        }
+
+        function generateThemeProfileManifest() {
+            // Normalize active palette
+            const palette = (PALETTES && PALETTES[state.activePaletteIndex]) ? PALETTES[state.activePaletteIndex] : {
+                name: "Espresso Roast",
+                colors: (state.colors && state.colors.length === 5) ? [...state.colors] : ["#0d1b15", "#1B2C24", "#F08B51", "#B05239", "#232A2F"]
             };
-            document.getElementById('exportCodeBox').textContent = JSON.stringify(manifest, null, 2);
-            document.getElementById('exportModal').classList.remove('hidden');
+
+            const paletteName = palette.name || "Custom Palette";
+            const colors = (state.colors && state.colors.length === 5) ? [...state.colors] : [...palette.colors];
+
+            // Normalize active OS
+            const activeOsKey = (state.activeOs && state.activeOs !== 'none' && OS_PRESETS && OS_PRESETS[state.activeOs])
+                ? state.activeOs
+                : 'android17';
+            const osInfo = (OS_PRESETS && OS_PRESETS[activeOsKey]) ? OS_PRESETS[activeOsKey] : {
+                id: activeOsKey,
+                name: "Android 17",
+                short: "A17 Expressive",
+                badge: "Material 3 Expressive",
+                defaultRadius: "cookie"
+            };
+
+            // Derive meaningful profile name (never 'None')
+            let profileName = "";
+            let profileType = "preset";
+            if (state.isCustomRemix) {
+                profileName = `ChromaOS Custom Remix (${paletteName})`;
+                profileType = "remix";
+            } else {
+                profileName = `${osInfo.name} • ${paletteName}`;
+                profileType = "preset";
+            }
+
+            // Normalize font pack
+            const fontPackKey = (state.activeFontPack && STYLISH_FONT_PACKS && STYLISH_FONT_PACKS[state.activeFontPack])
+                ? state.activeFontPack
+                : 'editorial';
+            const fontPack = STYLISH_FONT_PACKS[fontPackKey] || {
+                display: "'Playfair Display', serif",
+                body: "'Plus Jakarta Sans', sans-serif",
+                clock: "'Playfair Display', serif",
+                spacing: '0.01em'
+            };
+
+            // CSS Variables definition
+            const cssVariables = {
+                "--c-bg-1": colors[0],
+                "--c-bg-2": colors[1],
+                "--c-primary": colors[2],
+                "--c-secondary": colors[3],
+                "--c-tertiary": colors[4],
+                "--c-surface": "rgba(255, 255, 255, 0.08)",
+                "--c-text-primary": "#FFFFFF",
+                "--c-text-muted": "rgba(255, 255, 255, 0.65)",
+                "--c-accent-glow": `rgba(${hexToRgb(colors[2])}, 0.35)`,
+                "--c-primary-rgb": hexToRgb(colors[2]),
+                "--c-secondary-rgb": hexToRgb(colors[3]),
+                "--font-display": fontPack.display,
+                "--font-body": fontPack.body,
+                "--font-clock": fontPack.clock,
+                "--font-spacing": fontPack.spacing,
+                "--app-icon-radius": state.iconRadius || 'cookie',
+                "--app-icon-scale": `${state.iconScale || 54}px`,
+                "--widget-opacity": String(state.widgetOpacity ?? 0.88),
+                "--wallpaper-mode": state.wallpaperMode || 'mesh'
+            };
+
+            // Determine hidden ('None') components and apps
+            const hiddenComponents = {};
+            if (state.customComponents) {
+                Object.keys(state.customComponents).forEach(slot => {
+                    if (state.customComponents[slot] === 'none') {
+                        hiddenComponents[slot] = true;
+                    }
+                });
+            }
+
+            const hiddenApps = [];
+            if (state.appVisibility) {
+                Object.keys(state.appVisibility).forEach(appId => {
+                    if (!state.appVisibility[appId]) {
+                        hiddenApps.push(appId);
+                    }
+                });
+            }
+
+            const totalHiddenCount = Object.keys(hiddenComponents).length + hiddenApps.length;
+
+            return {
+                manifestVersion: "2.0",
+                generator: "ChromaOS Studio Multi-OS Launcher Lab",
+                exportedAt: new Date().toISOString(),
+                profile: {
+                    name: profileName,
+                    type: profileType,
+                    isCustomRemix: Boolean(state.isCustomRemix),
+                    summary: `${osInfo.name} with ${paletteName} color harmony and ${fontPackKey} typography`
+                },
+                osPreset: {
+                    id: osInfo.id,
+                    name: osInfo.name,
+                    shortName: osInfo.short,
+                    badge: osInfo.badge,
+                    defaultIconRadius: osInfo.defaultRadius
+                },
+                colorHarmony: {
+                    paletteIndex: state.activePaletteIndex ?? 0,
+                    paletteName: paletteName,
+                    tones: {
+                        backgroundDeep: colors[0],
+                        backgroundSubtle: colors[1],
+                        primaryAccent: colors[2],
+                        secondaryAccent: colors[3],
+                        tertiaryNeutral: colors[4]
+                    },
+                    rawHexArray: colors
+                },
+                fontPairing: {
+                    id: fontPackKey,
+                    name: fontPackKey.charAt(0).toUpperCase() + fontPackKey.slice(1),
+                    display: fontPack.display,
+                    body: fontPack.body,
+                    clock: fontPack.clock,
+                    letterSpacing: fontPack.spacing
+                },
+                launcherLayout: {
+                    wallpaperMode: state.wallpaperMode || 'mesh',
+                    iconRadius: state.iconRadius || 'cookie',
+                    iconScalePx: state.iconScale || 54,
+                    widgetOpacity: state.widgetOpacity ?? 0.88,
+                    screenViewMode: state.screenViewMode || 'home'
+                },
+                componentOverrides: state.customComponents || {},
+                noneVisibilityProfile: {
+                    hasHiddenElements: totalHiddenCount > 0,
+                    totalHiddenCount: totalHiddenCount,
+                    hiddenComponents: hiddenComponents,
+                    hiddenAppIcons: hiddenApps
+                },
+                cssVariables: cssVariables
+            };
+        }
+
+        function switchExportModalView(mode) {
+            const previewTab = document.getElementById('exportTab-preview');
+            const jsonTab = document.getElementById('exportTab-json');
+            const previewBtn = document.getElementById('exportViewBtn-preview');
+            const jsonBtn = document.getElementById('exportViewBtn-json');
+
+            if (mode === 'preview') {
+                if (previewTab) previewTab.classList.remove('hidden');
+                if (jsonTab) jsonTab.classList.add('hidden');
+                if (previewBtn) {
+                    previewBtn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all bg-amber-500/20 text-amber-300 border border-amber-400/30";
+                }
+                if (jsonBtn) {
+                    jsonBtn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all text-slate-400 hover:text-white";
+                }
+            } else {
+                if (previewTab) previewTab.classList.add('hidden');
+                if (jsonTab) jsonTab.classList.remove('hidden');
+                if (previewBtn) {
+                    previewBtn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all text-slate-400 hover:text-white";
+                }
+                if (jsonBtn) {
+                    jsonBtn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all bg-amber-500/20 text-amber-300 border border-amber-400/30";
+                }
+            }
+        }
+
+        function renderExportVisualPreview(manifest) {
+            const colors = manifest.colorHarmony.rawHexArray;
+            const fontPack = manifest.fontPairing;
+            const iconMask = manifest.launcherLayout.iconRadius || 'cookie';
+            const wallpaperMode = manifest.launcherLayout.wallpaperMode || 'mesh';
+            const hiddenComp = manifest.noneVisibilityProfile.hiddenComponents || {};
+            const hiddenApps = manifest.noneVisibilityProfile.hiddenAppIcons || [];
+
+            // 1. Mini Wallpaper Atmosphere
+            const miniWallpaper = document.getElementById('exportMiniWallpaper');
+            if (miniWallpaper) {
+                if (wallpaperMode === 'botanical') {
+                    miniWallpaper.style.background = `radial-gradient(circle at 50% 20%, ${colors[2]}44, transparent 70%), linear-gradient(180deg, ${colors[0]} 0%, ${colors[1]} 100%)`;
+                } else if (wallpaperMode === 'oled') {
+                    miniWallpaper.style.background = `#000000`;
+                } else {
+                    miniWallpaper.style.background = `radial-gradient(circle at 20% 20%, ${colors[2]}55, transparent 50%), radial-gradient(circle at 80% 80%, ${colors[3]}55, transparent 50%), linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)`;
+                }
+            }
+
+            // 2. Mini Cutout / Island
+            const miniCutout = document.getElementById('exportMiniCutout');
+            const miniCutoutText = document.getElementById('exportMiniCutoutText');
+            if (miniCutout) {
+                if (hiddenComp.cutouts) {
+                    miniCutout.style.opacity = '0';
+                    miniCutout.style.pointerEvents = 'none';
+                } else {
+                    miniCutout.style.opacity = '1';
+                    if (manifest.osPreset.id === 'ios') {
+                        if (miniCutoutText) miniCutoutText.textContent = "ISLAND";
+                        miniCutout.className = "w-16 h-3 bg-black rounded-full flex items-center justify-center border border-white/20 text-[6px] text-amber-300 font-bold px-1";
+                    } else if (manifest.osPreset.id === 'pixel' || manifest.osPreset.id === 'android17') {
+                        if (miniCutoutText) miniCutoutText.textContent = "●";
+                        miniCutout.className = "w-5 h-3 bg-black rounded-full flex items-center justify-center border border-white/20 text-[7px] text-white font-bold";
+                    } else {
+                        if (miniCutoutText) miniCutoutText.textContent = manifest.osPreset.shortName.toUpperCase().slice(0, 7);
+                        miniCutout.className = "w-14 h-3 bg-black/90 rounded-full flex items-center justify-center border border-white/10 text-[6px] text-amber-300 font-bold px-1";
+                    }
+                }
+            }
+
+            // 3. Mini Clock Widget
+            const miniClockContainer = document.getElementById('exportMiniClockContainer');
+            const miniClockTime = document.getElementById('exportMiniClockTime');
+            const miniClockDate = document.getElementById('exportMiniClockDate');
+            if (miniClockContainer) {
+                if (hiddenComp.clock || hiddenComp.widgets) {
+                    miniClockContainer.style.display = 'none';
+                } else {
+                    miniClockContainer.style.display = 'block';
+                    if (miniClockTime) {
+                        miniClockTime.style.fontFamily = fontPack.clock;
+                        miniClockTime.style.letterSpacing = fontPack.letterSpacing;
+                    }
+                    if (miniClockDate) {
+                        miniClockDate.style.fontFamily = fontPack.display;
+                        miniClockDate.style.color = colors[2];
+                    }
+                }
+            }
+
+            // 4. Mini App Icon Grid (8 default apps)
+            const miniIconGrid = document.getElementById('exportMiniIconGrid');
+            if (miniIconGrid) {
+                const sampleApps = [
+                    { id: 'phone', name: 'Phone', icon: 'ph-phone-call', bg: colors[2], fg: '#ffffff' },
+                    { id: 'messages', name: 'Chat', icon: 'ph-chat-circle-dots', bg: colors[3], fg: '#ffffff' },
+                    { id: 'camera', name: 'Camera', icon: 'ph-camera', bg: colors[4], fg: '#ffffff' },
+                    { id: 'browser', name: 'Web', icon: 'ph-globe', bg: colors[1], fg: colors[2] },
+                    { id: 'gallery', name: 'Photos', icon: 'ph-images', bg: colors[2], fg: '#ffffff' },
+                    { id: 'music', name: 'Music', icon: 'ph-music-notes', bg: colors[3], fg: '#ffffff' },
+                    { id: 'notes', name: 'Notes', icon: 'ph-notepad', bg: colors[0], fg: colors[2] },
+                    { id: 'settings', name: 'Settings', icon: 'ph-gear', bg: colors[4], fg: '#ffffff' }
+                ];
+
+                // Shape mask styles
+                let maskRadiusStyle = '12px';
+                if (iconMask === '50%') maskRadiusStyle = '50%';
+                else if (iconMask === '24%' || iconMask === 'squircle') maskRadiusStyle = '10px';
+                else if (iconMask === '28%' || iconMask === 'pebble') maskRadiusStyle = '12px';
+                else if (iconMask === 'cookie') maskRadiusStyle = '35% 65% 65% 35% / 45% 45% 55% 55%';
+
+                miniIconGrid.innerHTML = sampleApps.map(app => {
+                    const isHidden = hiddenApps.includes(app.id);
+                    if (isHidden) {
+                        return `
+                            <div class="flex flex-col items-center opacity-25" title="${app.name} (Hidden via 'None')">
+                                <div class="w-8 h-8 rounded-xl bg-black/40 border border-dashed border-rose-400/40 flex items-center justify-center text-[10px] text-rose-300">
+                                    <i class="ph-bold ph-eye-slash"></i>
+                                </div>
+                                <span class="text-[7px] text-rose-300/70 mt-0.5 truncate w-full line-through">${app.name}</span>
+                            </div>
+                        `;
+                    }
+                    return `
+                        <div class="flex flex-col items-center group">
+                            <div class="w-8 h-8 flex items-center justify-center text-xs shadow-md border border-white/20 transition-transform group-hover:scale-105"
+                                 style="background: ${app.bg}; color: ${app.fg}; border-radius: ${maskRadiusStyle};">
+                                <i class="ph-bold ${app.icon}"></i>
+                            </div>
+                            <span class="text-[8px] text-white/90 font-medium mt-0.5 truncate w-full drop-shadow">${app.name}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 5. Mini Dock / Search Bar
+            const miniDock = document.getElementById('exportMiniDock');
+            if (miniDock) {
+                if (hiddenComp.dock || hiddenComp.searchBar) {
+                    miniDock.style.display = 'none';
+                } else {
+                    miniDock.style.display = 'flex';
+                }
+            }
+
+            // 6. Typography & Geometry Spec Cards
+            const specFontDisplay = document.getElementById('exportSpecFontDisplay');
+            if (specFontDisplay) {
+                specFontDisplay.textContent = fontPack.name;
+                specFontDisplay.style.fontFamily = fontPack.display;
+            }
+
+            const specFontClock = document.getElementById('exportSpecFontClock');
+            if (specFontClock) {
+                specFontClock.textContent = fontPack.name;
+                specFontClock.style.fontFamily = fontPack.clock;
+            }
+
+            const specIconMask = document.getElementById('exportSpecIconMask');
+            if (specIconMask) {
+                specIconMask.textContent = iconMask;
+            }
+
+            const specWallpaperMode = document.getElementById('exportSpecWallpaperMode');
+            if (specWallpaperMode) {
+                specWallpaperMode.textContent = `${wallpaperMode.charAt(0).toUpperCase() + wallpaperMode.slice(1)} Shader`;
+            }
+
+            // 7. Active 'None' (Hidden) Rules Card
+            const hiddenCountBadge = document.getElementById('exportHiddenSummaryCount');
+            const hiddenBadgesContainer = document.getElementById('exportHiddenBadgesContainer');
+            const totalHidden = manifest.noneVisibilityProfile.totalHiddenCount;
+
+            if (hiddenCountBadge) {
+                hiddenCountBadge.textContent = `${totalHidden} ${totalHidden === 1 ? 'Rule' : 'Rules'} Active`;
+                hiddenCountBadge.className = totalHidden > 0
+                    ? "text-[10px] font-mono px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold"
+                    : "text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+            }
+
+            if (hiddenBadgesContainer) {
+                if (totalHidden === 0) {
+                    hiddenBadgesContainer.innerHTML = `
+                        <div class="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 text-[11px] flex items-center gap-1.5 font-medium">
+                            <i class="ph-fill ph-check-circle"></i> Clean Profile — All OS elements &amp; apps visible
+                        </div>
+                    `;
+                } else {
+                    let badgesHtml = '';
+                    Object.keys(hiddenComp).forEach(slot => {
+                        badgesHtml += `
+                            <span class="px-2 py-0.5 rounded-lg bg-rose-500/15 border border-rose-400/30 text-rose-200 text-[10px] font-mono flex items-center gap-1">
+                                <i class="ph-bold ph-eye-slash text-rose-400"></i> ${slot}: None
+                            </span>
+                        `;
+                    });
+                    hiddenApps.forEach(appId => {
+                        badgesHtml += `
+                            <span class="px-2 py-0.5 rounded-lg bg-amber-500/15 border border-amber-400/30 text-amber-200 text-[10px] font-mono flex items-center gap-1">
+                                <i class="ph-bold ph-prohibit text-amber-400"></i> App: ${appId} (Hidden)
+                            </span>
+                        `;
+                    });
+                    hiddenBadgesContainer.innerHTML = badgesHtml;
+                }
+            }
+        }
+
+        function openExportModal() {
+            try {
+                const manifest = generateThemeProfileManifest();
+
+                // 1. Update Profile Information & Header Badges
+                const profileNameEl = document.getElementById('exportProfileName');
+                if (profileNameEl) profileNameEl.textContent = manifest.profile.name;
+
+                const typeBadgeEl = document.getElementById('exportProfileTypeBadge');
+                if (typeBadgeEl) {
+                    typeBadgeEl.textContent = manifest.profile.isCustomRemix ? "Custom Remix" : "Active Preset";
+                    typeBadgeEl.className = manifest.profile.isCustomRemix
+                        ? "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-400/30"
+                        : "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30";
+                }
+
+                const osBadgeEl = document.getElementById('exportOsBadge');
+                if (osBadgeEl) osBadgeEl.textContent = `OS: ${manifest.osPreset.name}`;
+
+                const fontBadgeEl = document.getElementById('exportFontBadge');
+                if (fontBadgeEl) fontBadgeEl.textContent = `Font: ${manifest.fontPairing.name}`;
+
+                const noneBadgeEl = document.getElementById('exportNoneBadge');
+                if (noneBadgeEl) {
+                    const count = manifest.noneVisibilityProfile.totalHiddenCount;
+                    noneBadgeEl.textContent = `${count} Hidden`;
+                    noneBadgeEl.className = count > 0
+                        ? "px-2 py-0.5 rounded-lg bg-rose-500/20 border border-rose-400/30 text-rose-300 font-mono text-[10px] sm:text-[11px]"
+                        : "px-2 py-0.5 rounded-lg bg-slate-500/10 border border-slate-400/20 text-slate-400 font-mono text-[10px] sm:text-[11px]";
+                }
+
+                const paletteLabel = document.getElementById('exportPaletteNameLabel');
+                if (paletteLabel) paletteLabel.textContent = manifest.colorHarmony.paletteName;
+
+                // 2. Render color harmony swatches preview
+                const swatchesContainer = document.getElementById('exportSwatchesPreview');
+                if (swatchesContainer) {
+                    swatchesContainer.innerHTML = manifest.colorHarmony.rawHexArray.map((hex, idx) => `
+                        <div class="h-full rounded-lg flex items-center justify-center text-[9px] font-mono text-white/80 font-bold shadow-inner" style="background: ${hex};" title="Tone ${idx + 1}: ${hex}">
+                            <span class="drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">${hex.toUpperCase()}</span>
+                        </div>
+                    `).join('');
+                }
+
+                // 3. Render Visual Phone Preview and Specs
+                renderExportVisualPreview(manifest);
+
+                // 4. Default to Visual Preview tab
+                switchExportModalView('preview');
+
+                // 5. Populate preformatted JSON box
+                const codeBox = document.getElementById('exportCodeBox');
+                if (codeBox) {
+                    codeBox.textContent = JSON.stringify(manifest, null, 2);
+                }
+
+                // Reset copy button visual state
+                const copyBtnText = document.getElementById('copyManifestBtnText');
+                const copyBtnIcon = document.getElementById('copyManifestBtnIcon');
+                if (copyBtnText) copyBtnText.textContent = "Copy Theme Manifest";
+                if (copyBtnIcon) copyBtnIcon.className = "ph-bold ph-copy text-sm";
+
+                // Open modal
+                const modal = document.getElementById('exportModal');
+                if (modal) modal.classList.remove('hidden');
+            } catch (err) {
+                console.error("Error opening ChromaOS export modal:", err);
+                triggerApplyToast("Failed to generate theme profile: " + err.message);
+            }
         }
 
         function closeExportModal() {
-            document.getElementById('exportModal').classList.add('hidden');
+            const modal = document.getElementById('exportModal');
+            if (modal) modal.classList.add('hidden');
         }
 
-        function copyExportCode() {
-            const code = document.getElementById('exportCodeBox').textContent;
-            const temp = document.createElement('textarea');
-            temp.value = code;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-            triggerApplyToast('Copied full ChromaOS Theme JSON Manifest!');
+        async function copyExportCode() {
+            const codeBox = document.getElementById('exportCodeBox');
+            const code = codeBox ? codeBox.textContent : '';
+            const copyBtnText = document.getElementById('copyManifestBtnText');
+            const copyBtnIcon = document.getElementById('copyManifestBtnIcon');
+
+            if (!code || code.trim() === '') {
+                triggerApplyToast("Export profile is empty. Please re-open the export modal.");
+                return;
+            }
+
+            let copiedSuccessfully = false;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(code);
+                    copiedSuccessfully = true;
+                } catch (clipErr) {
+                    console.warn("navigator.clipboard failed, attempting fallback:", clipErr);
+                }
+            }
+
+            if (!copiedSuccessfully) {
+                try {
+                    const temp = document.createElement('textarea');
+                    temp.value = code;
+                    temp.style.position = 'fixed';
+                    temp.style.opacity = '0';
+                    temp.style.pointerEvents = 'none';
+                    document.body.appendChild(temp);
+                    temp.focus();
+                    temp.select();
+                    copiedSuccessfully = document.execCommand('copy');
+                    document.body.removeChild(temp);
+                } catch (fallbackErr) {
+                    console.error("Copy fallback failed:", fallbackErr);
+                }
+            }
+
+            if (copiedSuccessfully) {
+                if (copyBtnText) copyBtnText.textContent = "Copied to Clipboard!";
+                if (copyBtnIcon) copyBtnIcon.className = "ph-bold ph-check text-sm text-emerald-300";
+                triggerApplyToast("✓ Theme Profile Manifest copied to clipboard!");
+
+                setTimeout(() => {
+                    if (copyBtnText) copyBtnText.textContent = "Copy Theme Manifest";
+                    if (copyBtnIcon) copyBtnIcon.className = "ph-bold ph-copy text-sm";
+                }, 3000);
+            } else {
+                if (copyBtnText) copyBtnText.textContent = "Copy Failed";
+                if (copyBtnIcon) copyBtnIcon.className = "ph-bold ph-warning-circle text-sm text-rose-300";
+                triggerApplyToast("Could not copy automatically. Please select the text inside the code box to copy.");
+            }
+        }
+
+        function downloadManifestFile() {
+            try {
+                const manifest = generateThemeProfileManifest();
+                const jsonStr = JSON.stringify(manifest, null, 2);
+                const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                const safeName = (manifest.profile.name || "ChromaOS-Theme").toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                link.href = url;
+                link.download = `${safeName}-manifest.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                triggerApplyToast(`✓ Downloaded ${link.download}!`);
+            } catch (err) {
+                console.error("Failed to download manifest:", err);
+                triggerApplyToast("Failed to download theme manifest file.");
+            }
         }
 
         let toastTimer = null;

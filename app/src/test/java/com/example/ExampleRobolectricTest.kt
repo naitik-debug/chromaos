@@ -50,4 +50,17 @@ class ExampleRobolectricTest {
     assertEquals("espresso-roast", reloaded.activePaletteId)
     assertEquals(IconMaskShape.COOKIE, reloaded.iconShape)
   }
+
+  @Test
+  fun `verify Recharts and web assets exist in chromaos assets`() {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val assets = context.assets.list("chromaos")?.toList() ?: emptyList()
+    assertNotNull(assets)
+    org.junit.Assert.assertTrue("index.html should exist", assets.contains("index.html"))
+    org.junit.Assert.assertTrue("tailwind.cdn.js should exist", assets.contains("tailwind.cdn.js"))
+    org.junit.Assert.assertTrue("recharts.min.js should exist", assets.contains("recharts.min.js"))
+    org.junit.Assert.assertTrue("react.production.min.js should exist", assets.contains("react.production.min.js"))
+    org.junit.Assert.assertTrue("react-dom.production.min.js should exist", assets.contains("react-dom.production.min.js"))
+  }
 }
+
